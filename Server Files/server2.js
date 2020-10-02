@@ -32,6 +32,10 @@ io.sockets.on('connection', (socket) => {
         removeUser(socket);
     });
 
+    function addUsername(username) {
+        // coming back to this
+    }
+
     function addUser(socket) {
         // create a new user mapping
         if (!Users.has(socket.id)) {

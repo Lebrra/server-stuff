@@ -9,12 +9,18 @@ app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');
 });
 
+var Users = new Map();  // declaring Users structure
+
+
 io.sockets.on('connection', (socket) => {
     console.log('a user connected');
 
     socket.emit('connectionmessage', {
         id: socket.id
     });
+
+    // add new user to User Map
+    addUser(socket);
 
     socket.on('buttonClicked', (number) => {
         console.log('button pressed ' + number);
@@ -23,7 +29,33 @@ io.sockets.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         console.log('user disconnected');
-    });                                                          
+        removeUser(socket);
+    });
+
+    function addUser(socket) {
+        // create a new user mapping
+        if (!Users.has(socket.id)) {
+            Users.set(
+                socket.id,
+                {
+                    username: "----",
+                    id: socket.id
+                }
+            );
+            checkUsers();
+        }
+    };
+
+    function removeUser(socket) {
+        if (Users.has(socket.id)) {
+            Users.delete(socket.id);
+            checkUsers();
+        }
+    };
+
+    function checkUsers() {
+        console.table(Users);
+    };
 });
 
 server.listen(PORT);

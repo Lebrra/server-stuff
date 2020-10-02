@@ -2,7 +2,7 @@
   "name": "heroku_server",
   "version": "1.0.0",
   "description": "starting server stuff",
-  "main": "index.js",
+  "main": "server2.js",
   "engines": {
     "node": "12.17.x"
   },

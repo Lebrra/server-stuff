@@ -1174,6 +1174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nameField: {fileID: 2072170599}
+  network: {fileID: 1159937820}
   usernameList: {fileID: 1401278233}
   textPrefab: {fileID: 7415808223899279801, guid: 335d63bcb47d2144a9db2b9080072239,
     type: 3}

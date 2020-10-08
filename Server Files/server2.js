@@ -22,6 +22,10 @@ io.sockets.on('connection', (socket) => {
     // add new user to User Map
     addUser(socket);
 
+    socket.on('updateUsername', (newName) => {
+        addUsername(newName);
+    });
+
     socket.on('buttonClicked', (number) => {
         console.log('button pressed ' + number);
         io.emit('serverMessage', { message: `button ${number}` });
@@ -40,11 +44,12 @@ io.sockets.on('connection', (socket) => {
             tempObj[property] = value;
             Users.set(socket.id, tempObj);
         }
+        checkUsers();
     }
 
-    function addUsername(username) {
+    function addUsername(newUsername) {
         // coming back to this
-
+        changeUserProperty(username, newUsername);
     }
 
     function addUser(socket) {

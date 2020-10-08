@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class UsernameActions : MonoBehaviour
 {
     public InputField nameField;
+    public nh_network network;
 
     public GameObject usernameList;
     public GameObject textPrefab;
@@ -31,6 +32,8 @@ public class UsernameActions : MonoBehaviour
             //local testing
             //removeUsername(nameField.placeholder.GetComponent<Text>().text);
             //addUsername(nameField.text);
+
+            network.newUsername(nameField.text);
 
             // maybe sets username here
             nameField.placeholder.GetComponent<Text>().text = nameField.text;

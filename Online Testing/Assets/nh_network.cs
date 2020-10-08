@@ -87,4 +87,10 @@ public class nh_network : MonoBehaviour
         JSONObject test = new JSONObject(num);
         socket.Emit("buttonClicked", test);
     }
+
+    public void newUsername(string name)
+    {
+        JSONObject test = new JSONObject(name);
+        socket.Emit("updateUsername", test);
+    }
 }

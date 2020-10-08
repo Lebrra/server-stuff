@@ -5,6 +5,9 @@ using SocketIO;
 
 public class nh_network : MonoBehaviour
 {
+    [TextArea]
+    public string serverQuickRef;
+
     SocketIOComponent socket;
 
     //public playerManager playerManager;
@@ -18,6 +21,7 @@ public class nh_network : MonoBehaviour
         // The lines below setup 'listener' functions
         socket.On("connectionmessage", onConnectionEstabilished);
         socket.On("serverMessage", serverMessage);
+        socket.On("users", loadUsers);
 
         socket.On("unityAddUser", onAddUser);
         socket.On("unityAddFBUser", onAddFBUser);
@@ -77,6 +81,9 @@ public class nh_network : MonoBehaviour
         //playerManager.playerShoot(id);
     }
 
+
+
+
     void serverMessage(SocketIOEvent evt)
     {
         Debug.Log("woot");
@@ -95,5 +102,14 @@ public class nh_network : MonoBehaviour
 
         JSONObject test = new JSONObject(name);
         socket.Emit("updateUsername", test);
+    }
+
+    void loadUsers(SocketIOEvent evt)
+    {
+        for(int i = 0; i < evt.data.Count; i++)
+        {
+            string thing = evt.data.GetField(i.ToString()).ToString();
+            Debug.Log(thing.Trim('"'));
+        }
     }
 }

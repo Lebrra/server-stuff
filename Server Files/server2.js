@@ -75,7 +75,23 @@ io.sockets.on('connection', (socket) => {
 
     function checkUsers() {
         console.table(Users);
+        listUsers();
     };
+
+    function listUsers() {
+        // console.log('...listing users.....');
+
+        let tempUsers = Array.from(Users.values());
+        var usernameObject = {};
+        for (var i = 0; i < tempUsers.length; i++) {
+            usernameObject[i] = tempUsers[i]["username"];
+        }
+        //console.table(usernameObject);
+        io.emit('users', usernameObject);
+
+        //let tempUsers = Object.fromEntries(Users);
+        //io.emit('users', tempUsers);
+    }
 });
 
 server.listen(PORT);

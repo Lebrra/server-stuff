@@ -90,6 +90,9 @@ public class nh_network : MonoBehaviour
 
     public void newUsername(string name)
     {
+        char quote = '"';
+        name = quote + name + quote;
+
         JSONObject test = new JSONObject(name);
         socket.Emit("updateUsername", test);
     }

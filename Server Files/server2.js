@@ -49,7 +49,7 @@ io.sockets.on('connection', (socket) => {
 
     function addUsername(newUsername) {
         // coming back to this
-        changeUserProperty(username, newUsername);
+        changeUserProperty('username', newUsername);
     }
 
     function addUser(socket) {

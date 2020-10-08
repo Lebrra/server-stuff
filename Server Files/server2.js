@@ -24,7 +24,7 @@ io.sockets.on('connection', (socket) => {
 
     socket.on('buttonClicked', (number) => {
         console.log('button pressed ' + number);
-        io.emit('serverMessage', {message: `button ${number}`});
+        io.emit('serverMessage', { message: `button ${number}` });
     });
 
     socket.on('disconnect', () => {
@@ -32,8 +32,19 @@ io.sockets.on('connection', (socket) => {
         removeUser(socket);
     });
 
+    function changeUserProperty(property, value) {
+        // users properties: id, username, observeallcontrol, observeallevents
+        if (Users.has(socket.id)) {
+            tempObj = Users.get(socket.id);
+            // console.log('changed current user property: ' + property);
+            tempObj[property] = value;
+            Users.set(socket.id, tempObj);
+        }
+    }
+
     function addUsername(username) {
         // coming back to this
+
     }
 
     function addUser(socket) {

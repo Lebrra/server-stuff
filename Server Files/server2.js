@@ -1,5 +1,3 @@
-const { Console } = require('console');
-
 // JavaScript source code
 var app = require('express')();
 var server = require('http').Server(app);
@@ -11,11 +9,8 @@ app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');
 });
 
-var Users = new Map(); // declaring our Users structure
+var Users = new Map();  // declaring Users structure
 
-// <socketid, { 
-//     username, socketid, playState
-// }>, <key, value>
 
 io.sockets.on('connection', (socket) => {
     console.log('a user connected');
@@ -29,13 +24,17 @@ io.sockets.on('connection', (socket) => {
 
     socket.on('buttonClicked', (number) => {
         console.log('button pressed ' + number);
-        io.emit('serverMessage', { message: `button ${number}` });
+        io.emit('serverMessage', {message: `button ${number}`});
     });
 
     socket.on('disconnect', () => {
         console.log('user disconnected');
         removeUser(socket);
     });
+
+    function addUsername(username) {
+        // coming back to this
+    }
 
     function addUser(socket) {
         // create a new user mapping
@@ -51,16 +50,16 @@ io.sockets.on('connection', (socket) => {
         }
     };
 
-    function removeUser(socket){
+    function removeUser(socket) {
         if (Users.has(socket.id)) {
             Users.delete(socket.id);
             checkUsers();
         }
-    }
+    };
 
-    function checkUsers(){
+    function checkUsers() {
         console.table(Users);
-    }
+    };
 });
 
 server.listen(PORT);

@@ -5,6 +5,8 @@ using SocketIO;
 
 public class nh_network : MonoBehaviour
 {
+    public static nh_network server;
+
     [TextArea]
     public string serverQuickRef;
 
@@ -14,6 +16,12 @@ public class nh_network : MonoBehaviour
     char quote = '"';
 
     //public playerManager playerManager;
+
+    private void Awake()
+    {
+        if (server) Destroy(gameObject);
+        else server = this;
+    }
 
     void Start()
     {
@@ -27,6 +35,8 @@ public class nh_network : MonoBehaviour
         socket.On("serverMessage", serverMessage);
         socket.On("users", loadUsers);
         socket.On("removeUser", removeUser);
+        socket.On("disableLobby", disableLobby);
+        socket.On("enableLobby", enableLobby);
 
         socket.On("unityAddUser", onAddUser);
         socket.On("unityAddFBUser", onAddFBUser);
@@ -88,17 +98,39 @@ public class nh_network : MonoBehaviour
 
 
 
+    void disableLobby(SocketIOEvent evt)
+    {
+        LobbyFunctions.inst.lobbyButtons.SetActive(false);
+    }
+    void enableLobby(SocketIOEvent evt)
+    {
+        LobbyFunctions.inst.lobbyButtons.SetActive(true);
+    }
+
 
     void serverMessage(SocketIOEvent evt)
     {
         Debug.Log("woot");
     }
 
-    public void button(int num)
+    public void createNewLobby()
     {
-        JSONObject test = new JSONObject(num);
-        socket.Emit("buttonClicked", test);
+        socket.Emit("createNewLobby");
     }
+    public void joinLobby()
+    {
+        socket.Emit("joinLobby");
+    }
+    public void leaveLobby()
+    {
+        socket.Emit("leaveLobby");
+    }
+    public void startLobby()
+    {
+        socket.Emit("startGame");
+    }
+
+    #region Username Methods
 
     public void newUsername(string name)
     {
@@ -125,4 +157,7 @@ public class nh_network : MonoBehaviour
     {
         ua.removeUsername(evt.data.GetField("id").ToString().Trim('"'));
     }
+    #endregion
+
+
 }

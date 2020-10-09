@@ -12,7 +12,7 @@ app.get('/', function (req, res) {
 });
 
 var Users = new Map();  // declaring Users structure
-
+var lobbyActive = '';
 
 io.sockets.on('connection', (socket) => {
     console.log('a user connected');
@@ -31,6 +31,38 @@ io.sockets.on('connection', (socket) => {
     socket.on('buttonClicked', (number) => {
         console.log('button pressed ' + number);
         io.emit('serverMessage', { message: `button ${number}` });
+    });
+
+    socket.on('createNewLobby', () => {
+        console.log(Users.get(socket.id)['username'] + ' has started a lobby');
+        lobbyActive = socket.id;
+        socket.emit('enableLobby');
+    });
+
+    socket.on('joinLobby', () => {
+        if (lobbyActive == '') console.log(Users.get(socket.id)['username'] + ' cannot join lobby, none exist!');
+        else {
+            console.log(Users.get(socket.id)['username'] + ' has joined the lobby');
+            socket.emit('enableLobby');
+        }
+    });
+
+    socket.on('leaveLobby', () => {
+        if (lobbyActive == socket.id) {
+            console.log('the host has left the lobby, closting lobby...');
+            lobbyActive = '';
+            io.emit('disableLobby');
+        }
+        else {
+            console.log(Users.get(socket.id)['username'] + ' has left the lobby');
+            socket.emit('disableLobby');
+        }
+    });
+
+    socket.on('startGame', () => {
+        console.log(Users.get(socket.id)['username'] + ' has started the game!');
+        lobbyActive = '';
+        io.emit('disableLobby');
     });
 
     socket.on('disconnect', () => {

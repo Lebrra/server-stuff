@@ -10,10 +10,14 @@ public class nh_network : MonoBehaviour
 
     SocketIOComponent socket;
 
+    UsernameActions ua;
+    char quote = '"';
+
     //public playerManager playerManager;
 
     void Start()
     {
+        ua = FindObjectOfType<UsernameActions>();
         socket = GetComponent<SocketIOComponent>();
 
         //playerManager = GameObject.Find("Player Manager").GetComponent<playerManager>();
@@ -22,6 +26,7 @@ public class nh_network : MonoBehaviour
         socket.On("connectionmessage", onConnectionEstabilished);
         socket.On("serverMessage", serverMessage);
         socket.On("users", loadUsers);
+        socket.On("removeUser", removeUser);
 
         socket.On("unityAddUser", onAddUser);
         socket.On("unityAddFBUser", onAddFBUser);
@@ -97,7 +102,6 @@ public class nh_network : MonoBehaviour
 
     public void newUsername(string name)
     {
-        char quote = '"';
         name = quote + name + quote;
 
         JSONObject test = new JSONObject(name);
@@ -106,10 +110,19 @@ public class nh_network : MonoBehaviour
 
     void loadUsers(SocketIOEvent evt)
     {
-        for(int i = 0; i < evt.data.Count; i++)
+        Debug.Log("loading usernames...");
+
+        for (int i = 0; i < evt.data.Count; i++)
         {
-            string thing = evt.data.GetField(i.ToString()).ToString();
-            Debug.Log(thing.Trim('"'));
+            JSONObject jsonData = evt.data.GetField(i.ToString());
+
+            Debug.Log(jsonData.GetField("username"));
+            ua.addUsername(jsonData.GetField("id").ToString().Trim('"'), jsonData.GetField("username").ToString().Trim('"'));
         }
+    }
+
+    void removeUser(SocketIOEvent evt)
+    {
+        ua.removeUsername(evt.data.GetField("id").ToString().Trim('"'));
     }
 }

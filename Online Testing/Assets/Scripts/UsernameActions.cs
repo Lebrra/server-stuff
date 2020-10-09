@@ -41,20 +41,31 @@ public class UsernameActions : MonoBehaviour
         }
     }
 
-    public void addUsername(string name)
+    public void addUsername(string id, string name)
     {
-        GameObject newText = Instantiate(textPrefab, usernameList.transform);
-        newText.GetComponent<Text>().text = name;
-        usernameTexts.Add(name, newText);
+        if (usernameTexts.ContainsKey(id))
+        {
+            usernameTexts[id].GetComponent<Text>().text = name;
+        }
+        else
+        {
+            GameObject newText = Instantiate(textPrefab, usernameList.transform);
+            newText.GetComponent<Text>().text = name;
+            usernameTexts.Add(id, newText);
+        }
     }
 
-    public void removeUsername(string name)
+    public void removeUsername(string id)
     {
-        if (usernameTexts.ContainsKey(name))
+        if (usernameTexts.ContainsKey(id))
         {
-            GameObject remove = usernameTexts[name];
-            usernameTexts.Remove(name);
+            GameObject remove = usernameTexts[id];
+            usernameTexts.Remove(id);
             Destroy(remove);
+        }
+        else
+        {
+            Debug.LogError("user not found, could not remove from list");
         }
     }
 }

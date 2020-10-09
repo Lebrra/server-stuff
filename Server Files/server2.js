@@ -1,3 +1,5 @@
+const { emit } = require('cluster');
+
 // JavaScript source code
 var app = require('express')();
 var server = require('http').Server(app);
@@ -33,6 +35,7 @@ io.sockets.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         console.log('user disconnected');
+        io.emit('removeUser', { id: socket.id });
         removeUser(socket);
     });
 
@@ -79,8 +82,8 @@ io.sockets.on('connection', (socket) => {
     };
 
     function listUsers() {
-        // console.log('...listing users.....');
 
+        /*  // Giving array of just usernames
         let tempUsers = Array.from(Users.values());
         var usernameObject = {};
         for (var i = 0; i < tempUsers.length; i++) {
@@ -88,9 +91,18 @@ io.sockets.on('connection', (socket) => {
         }
         //console.table(usernameObject);
         io.emit('users', usernameObject);
+        */
 
-        //let tempUsers = Object.fromEntries(Users);
-        //io.emit('users', tempUsers);
+            // Giving id, name pairs
+        let tempUsers = Array.from(Users.values());
+        var usernameObject = {};
+        for (var i = 0; i < tempUsers.length; i++) {
+            usernameObject[i] = {
+                username: tempUsers[i]["username"],
+                id: tempUsers[i]["id"]
+            };
+        }
+        io.emit('users', usernameObject);
     }
 });
 

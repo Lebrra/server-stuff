@@ -78,9 +78,10 @@ io.sockets.on('connection', (socket) => {
     socket.on('createRoom', () => {
         var newRoomName = generateRoomName();
         socket.join(newRoomName);
+        changeUserProperty("room", newRoomName);
         socket.emit('createdRoom', { name: newRoomName });
         //send room name to unity of the creator only 
-        //listRoomUsers();
+        listRoomUsers();
     });
 
     socket.on('joinRoom', (roomName) => {
@@ -89,10 +90,11 @@ io.sockets.on('connection', (socket) => {
         if (Rooms.includes(roomName)) {
             socket.join(roomName);
             changeUserProperty("room", roomName);
-            //console.log(socket.adapter.rooms[Users.get(socket.id).room].sockets);
+            console.log(socket.adapter.rooms[Users.get(socket.id).room].sockets);
             //console.table(Users.get(socket.id).room);
-            //listRoomUsers();
             socket.emit('createdRoom', { name: roomName });
+            console.log(Users.get(socket.id).username + ' joined room ' + roomName);
+            listRoomUsers();
         }
         else {
             // room does not exist
@@ -100,12 +102,23 @@ io.sockets.on('connection', (socket) => {
         }
     });
 
+    socket.on('leaveRoom', () => {
+        console.log(Users.get(socket.id).username + ' left their room');
+
+        var formerRoom = Users.get(socket.id).room;
+
+        socket.leave(Users.get(socket.id).room);
+        changeUserProperty("room", "");
+        console.log(socket.adapter.rooms[Users.get(socket.id).room].sockets);
+
+        updateFormerRoomList(formerRoom);
+    });
 
 
 
     // send usernames in our room
     function listRoomUsers() {
-        //console.table(socket.adapter.rooms[Users.get(socket.id).room].sockets);
+        console.table(socket.adapter.rooms[Users.get(socket.id).room].sockets);
         let _sockets = socket.adapter.rooms[Users.get(socket.id).room].sockets;
         let tempUsers = [];
         for (_socket in _sockets) {
@@ -120,7 +133,32 @@ io.sockets.on('connection', (socket) => {
             ...tempUsers
         }
 
-        io.emit('users', roomDetails);
+        console.log('--- Room Details ---');
+        console.table(roomDetails);
+        io.emit('roomUsers', roomDetails);
+    }
+
+    // update users in previous rooms
+    function updateFormerRoomList(formerRoom) {
+        console.table(socket.adapter.rooms[formerRoom].sockets);
+        let _sockets = socket.adapter.rooms[formerRoom].sockets;
+        let tempUsers = [];
+        for (_socket in _sockets) {
+            tempUsers.push(
+                {
+                    username: getUsernameFromSocketID(_socket),
+                    id: _socket
+                });
+        }
+
+        var roomDetails = {
+            ...tempUsers
+        }
+
+        console.log('--- Room Details ---');
+        console.table(roomDetails);
+        socket.to(formerRoom).emit('roomUsers', roomDetails);
+        //io.emit('roomUsers', roomDetails);
     }
 
     function getUsernameFromSocketID(socketid) {

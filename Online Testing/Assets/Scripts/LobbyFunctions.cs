@@ -56,7 +56,7 @@ public class LobbyFunctions : MonoBehaviour
     {
         if (inLobby)    // leaving lobby
         {
-            // leave server room
+            nh_network.server.leaveRoom();
             GetComponent<UsernameActions>().removeAllUsernames();
             roomNameText.text = "- Main Lobby -";
             // load main lobby usernames
@@ -66,6 +66,7 @@ public class LobbyFunctions : MonoBehaviour
         lobbyButtons.SetActive(true);
         usernameInput.SetActive(true);
         backButton.SetActive(false);
+        joinBox.SetActive(false);
     }
 
     public void enterRoom(string roomname)

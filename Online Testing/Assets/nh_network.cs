@@ -34,6 +34,7 @@ public class nh_network : MonoBehaviour
         socket.On("connectionmessage", onConnectionEstabilished);
         socket.On("serverMessage", serverMessage);
         socket.On("users", loadUsers);
+        socket.On("roomUsers", loadRoomUsers);
         socket.On("removeUser", removeUser);
         socket.On("disableLobby", disableLobby);
         socket.On("enableLobby", enableLobby);
@@ -156,6 +157,25 @@ public class nh_network : MonoBehaviour
         }
     }
 
+    void loadRoomUsers(SocketIOEvent evt)
+    {
+        Debug.Log("loading room usernames...");
+        ua.removeAllUsernames();
+
+        for (int i = 0; i < evt.data.Count; i++)
+        {
+            JSONObject jsonData = evt.data.GetField(i.ToString());
+
+            Debug.Log(jsonData.GetField("username"));
+            ua.addUsername(jsonData.GetField("id").ToString().Trim('"'), jsonData.GetField("username").ToString().Trim('"'));
+        }
+    }
+
+    public void leaveRoom()
+    {
+        socket.Emit("leaveRoom");
+    }
+
     void removeUser(SocketIOEvent evt)
     {
         ua.removeUsername(evt.data.GetField("id").ToString().Trim('"'));
@@ -165,12 +185,12 @@ public class nh_network : MonoBehaviour
     void createdRoom(SocketIOEvent evt)
     {
         Debug.Log("Created new room: " + evt.data.GetField("name"));
-        LobbyFunctions.inst.enterRoom(evt.data.GetField("name").ToString());
+        LobbyFunctions.inst.enterRoom(evt.data.GetField("name").ToString().Trim('"'));
     }
 
     void joinedRoom(SocketIOEvent evt)  // does this need to be different than createdRoom() ?
     {
         Debug.Log("Created new room: " + evt.data.GetField("name"));
-        LobbyFunctions.inst.enterRoom(evt.data.GetField("name").ToString());
+        LobbyFunctions.inst.enterRoom(evt.data.GetField("name").ToString().Trim('"'));
     }
 }

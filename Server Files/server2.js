@@ -13,6 +13,9 @@ app.get('/', function (req, res) {
 
 var Users = new Map();  // declaring Users structure
 var lobbyActive = '';
+var Rooms = [];
+
+var Animals = ['Possum', 'Frog', 'Zebra', 'Lizard', 'Beaver', 'Panda', 'Giraffe', 'Toucan', 'Pelican', 'Sloth', 'Alligator', 'Scorpion', 'Viper', 'Armadillo'];
 
 io.sockets.on('connection', (socket) => {
     console.log('a user connected');
@@ -71,6 +74,77 @@ io.sockets.on('connection', (socket) => {
         removeUser(socket);
     });
 
+    // socket event to intiate room creation
+    socket.on('createRoom', () => {
+        var newRoomName = generateRoomName();
+        socket.join(newRoomName);
+        socket.emit('createdRoom', { name: newRoomName });
+        //send room name to unity of the creator only 
+        //listRoomUsers();
+    });
+
+    socket.on('joinRoom', (roomName) => {
+        console.log('Room name given: ' + roomName);
+
+        if (Rooms.includes(roomName)) {
+            socket.join(roomName);
+            changeUserProperty("room", roomName);
+            //console.log(socket.adapter.rooms[Users.get(socket.id).room].sockets);
+            //console.table(Users.get(socket.id).room);
+            //listRoomUsers();
+            socket.emit('createdRoom', { name: roomName });
+        }
+        else {
+            // room does not exist
+            console.log("Cannot join; room does not exist.");
+        }
+    });
+
+
+
+
+    // send usernames in our room
+    function listRoomUsers() {
+        //console.table(socket.adapter.rooms[Users.get(socket.id).room].sockets);
+        let _sockets = socket.adapter.rooms[Users.get(socket.id).room].sockets;
+        let tempUsers = [];
+        for (_socket in _sockets) {
+            tempUsers.push(
+                {
+                    username: getUsernameFromSocketID(_socket),
+                    id: _socket
+                });
+        }
+
+        var roomDetails = {
+            ...tempUsers
+        }
+
+        io.emit('users', roomDetails);
+    }
+
+    function getUsernameFromSocketID(socketid) {
+        if (socketid == null) {
+            socketid = socket.id;
+        }
+        if (Users.get(socketid) != undefined || Users.get(socketid) != null) {
+            console.log('id? ' + Users.get(socket.id).username);
+            return Users.get(socketid).username;
+        } else {
+            return null;
+        }
+    }
+
+    // server generates room name
+    function generateRoomName() {
+        var animal = Math.floor(Math.random() * (Animals.length));
+        var num = Math.floor(Math.random() * 100);
+        var roomName = Animals[animal] + num.toString().padStart(2, "0");
+        Rooms.push(roomName);
+        console.table(Rooms);
+        return roomName;
+    }
+
     function changeUserProperty(property, value) {
         // users properties: id, username, observeallcontrol, observeallevents
         if (Users.has(socket.id)) {
@@ -94,7 +168,8 @@ io.sockets.on('connection', (socket) => {
                 socket.id,
                 {
                     username: "----",
-                    id: socket.id
+                    id: socket.id,
+                    room: ""
                 }
             );
             checkUsers();

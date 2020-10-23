@@ -37,6 +37,7 @@ public class nh_network : MonoBehaviour
         socket.On("removeUser", removeUser);
         socket.On("disableLobby", disableLobby);
         socket.On("enableLobby", enableLobby);
+        socket.On("createdRoom", createdRoom);
 
         socket.On("unityAddUser", onAddUser);
         socket.On("unityAddFBUser", onAddFBUser);
@@ -100,11 +101,11 @@ public class nh_network : MonoBehaviour
 
     void disableLobby(SocketIOEvent evt)
     {
-        LobbyFunctions.inst.lobbyButtons.SetActive(false);
+        //LobbyFunctions.inst.lobbyButtons.SetActive(false);
     }
     void enableLobby(SocketIOEvent evt)
     {
-        LobbyFunctions.inst.lobbyButtons.SetActive(true);
+        //LobbyFunctions.inst.lobbyButtons.SetActive(true);
     }
 
 
@@ -115,11 +116,13 @@ public class nh_network : MonoBehaviour
 
     public void createNewLobby()
     {
-        socket.Emit("createNewLobby");
+        //socket.Emit("createNewLobby");
+        socket.Emit("createRoom");
     }
-    public void joinLobby()
+    public void joinLobby(string roomName)
     {
-        socket.Emit("joinLobby");
+        //socket.Emit("joinLobby");
+        socket.Emit("joinRoom", new JSONObject(quote + roomName + quote));
     }
     public void leaveLobby()
     {
@@ -159,5 +162,15 @@ public class nh_network : MonoBehaviour
     }
     #endregion
 
+    void createdRoom(SocketIOEvent evt)
+    {
+        Debug.Log("Created new room: " + evt.data.GetField("name"));
+        LobbyFunctions.inst.enterRoom(evt.data.GetField("name").ToString());
+    }
 
+    void joinedRoom(SocketIOEvent evt)  // does this need to be different than createdRoom() ?
+    {
+        Debug.Log("Created new room: " + evt.data.GetField("name"));
+        LobbyFunctions.inst.enterRoom(evt.data.GetField("name").ToString());
+    }
 }

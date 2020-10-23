@@ -19,11 +19,6 @@ public class UsernameActions : MonoBehaviour
         //addUsername(nameField.placeholder.GetComponent<Text>().text);
     }
 
-    public void clearField()
-    {
-        nameField.text = "";
-    }
-
     public void acceptName()
     {
         if(nameField.text != "")
@@ -66,5 +61,11 @@ public class UsernameActions : MonoBehaviour
         {
             Debug.LogError("user not found, could not remove from list");
         }
+    }
+
+    public void removeAllUsernames()
+    {
+        foreach(GameObject a in usernameTexts.Values) Destroy(a);
+        usernameTexts = new Dictionary<string, GameObject>();
     }
 }

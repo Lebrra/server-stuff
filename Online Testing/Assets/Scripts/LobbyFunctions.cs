@@ -1,38 +1,79 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LobbyFunctions : MonoBehaviour
 {
     public static LobbyFunctions inst;
 
+    public bool inLobby = false;
+
+    public InputField roomInput;
+    public GameObject joinBox;
     public GameObject lobbyButtons;
+    public GameObject usernameInput;
+
+    public Text roomNameText;
+    public GameObject backButton;
 
     private void Awake()
     {
         if (inst) Destroy(gameObject);
         else inst = this;
-
-        lobbyButtons.SetActive(false);
     }
 
-    public void hostLobby()
+    public void createGameBtn()
     {
         nh_network.server.createNewLobby();
+        lobbyButtons.SetActive(false);
+        usernameInput.SetActive(false);
+        backButton.SetActive(true);
     }
 
-    public void joinLobby()
+    public void joinGameBtn()
     {
-        nh_network.server.joinLobby();
+        lobbyButtons.SetActive(false);
+        usernameInput.SetActive(false);
+        joinBox.SetActive(true);
+        backButton.SetActive(true);
     }
 
-    public void startGame()
+    public void joinLobbyInput()
     {
-        nh_network.server.startLobby();
+        if (roomInput.text != "")
+        {
+            nh_network.server.joinLobby(roomInput.text);
+        }
     }
 
-    public void leaveLobby()
+    public void clearInput(InputField field)
     {
-        nh_network.server.leaveLobby();
+        field.text = "";
+    }
+
+    public void goBack()
+    {
+        if (inLobby)    // leaving lobby
+        {
+            // leave server room
+            GetComponent<UsernameActions>().removeAllUsernames();
+            roomNameText.text = "- Main Lobby -";
+            // load main lobby usernames
+            inLobby = false;
+        }
+
+        lobbyButtons.SetActive(true);
+        usernameInput.SetActive(true);
+        backButton.SetActive(false);
+    }
+
+    public void enterRoom(string roomname)
+    {
+        if (joinBox.activeInHierarchy) joinBox.SetActive(false);
+        roomNameText.text = "Room Code: " + roomname;
+        GetComponent<UsernameActions>().removeAllUsernames();
+        // load room users
+        inLobby = true;
     }
 }

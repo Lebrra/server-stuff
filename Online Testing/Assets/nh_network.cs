@@ -12,6 +12,7 @@ public class nh_network : MonoBehaviour
 
     SocketIOComponent socket;
 
+    LobbyFunctions lf;
     UsernameActions ua;
     char quote = '"';
 
@@ -26,6 +27,7 @@ public class nh_network : MonoBehaviour
     void Start()
     {
         ua = FindObjectOfType<UsernameActions>();
+        lf = FindObjectOfType<LobbyFunctions>();
         socket = GetComponent<SocketIOComponent>();
 
         //playerManager = GameObject.Find("Player Manager").GetComponent<playerManager>();
@@ -146,14 +148,16 @@ public class nh_network : MonoBehaviour
 
     void loadUsers(SocketIOEvent evt)
     {
-        Debug.Log("loading usernames...");
+        if (!lf.inRoom) {
+            Debug.Log("loading usernames...");
 
-        for (int i = 0; i < evt.data.Count; i++)
-        {
-            JSONObject jsonData = evt.data.GetField(i.ToString());
+            for (int i = 0; i < evt.data.Count; i++)
+            {
+                JSONObject jsonData = evt.data.GetField(i.ToString());
 
-            Debug.Log(jsonData.GetField("username"));
-            ua.addUsername(jsonData.GetField("id").ToString().Trim('"'), jsonData.GetField("username").ToString().Trim('"'));
+                Debug.Log(jsonData.GetField("username"));
+                ua.addUsername(jsonData.GetField("id").ToString().Trim('"'), jsonData.GetField("username").ToString().Trim('"'));
+            } 
         }
     }
 
@@ -192,5 +196,11 @@ public class nh_network : MonoBehaviour
     {
         Debug.Log("Created new room: " + evt.data.GetField("name"));
         LobbyFunctions.inst.enterRoom(evt.data.GetField("name").ToString().Trim('"'));
+    }
+
+    public void startGame()
+    {
+        // tells server to start game
+        socket.Emit("startGame");
     }
 }

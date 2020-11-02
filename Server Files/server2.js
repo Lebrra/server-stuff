@@ -17,6 +17,13 @@ var Rooms = [];
 
 var Animals = ['Possum', 'Frog', 'Zebra', 'Lizard', 'Beaver', 'Panda', 'Giraffe', 'Toucan', 'Pelican', 'Sloth', 'Alligator', 'Scorpion', 'Viper', 'Armadillo'];
 
+const
+    states = {
+        ROOM: 'room',
+        LOBBY: 'lobby',
+        GAME: 'game'
+    }
+
 io.sockets.on('connection', (socket) => {
     console.log('a user connected');
 
@@ -62,12 +69,6 @@ io.sockets.on('connection', (socket) => {
         }
     });
 
-    socket.on('startGame', () => {
-        console.log(Users.get(socket.id)['username'] + ' has started the game!');
-        lobbyActive = '';
-        io.emit('disableLobby');
-    });
-
     socket.on('disconnect', () => {
         console.log('user disconnected');
         io.emit('removeUser', { id: socket.id });
@@ -79,6 +80,7 @@ io.sockets.on('connection', (socket) => {
         var newRoomName = generateRoomName();
         socket.join(newRoomName);
         changeUserProperty("room", newRoomName);
+        changeUserProperty("state", states.ROOM);
         socket.emit('createdRoom', { name: newRoomName });
         //send room name to unity of the creator only 
         listRoomUsers();
@@ -90,6 +92,7 @@ io.sockets.on('connection', (socket) => {
         if (Rooms.includes(roomName)) {
             socket.join(roomName);
             changeUserProperty("room", roomName);
+            changeUserProperty("state", states.ROOM);
             console.log(socket.adapter.rooms[Users.get(socket.id).room].sockets);
             //console.table(Users.get(socket.id).room);
             socket.emit('createdRoom', { name: roomName });
@@ -109,9 +112,16 @@ io.sockets.on('connection', (socket) => {
 
         socket.leave(Users.get(socket.id).room);
         changeUserProperty("room", "");
+        changeUserProperty("state", states.LOBBY);
         //console.log(socket.adapter.rooms[Users.get(socket.id).room].sockets);
 
         updateFormerRoomList(formerRoom);
+    });
+
+    socket.on('startGame', () => {
+        console.log(Users.get(socket.id)['username'] + ' has started the game!');
+        var roomStarted = Users.get(socket.id)['room'];
+        //HERE
     });
 
 
@@ -135,7 +145,7 @@ io.sockets.on('connection', (socket) => {
 
         console.log('--- Room Details ---');
         console.table(roomDetails);
-        io.in(Users.get(socket.id).room).emit('roomUsers', roomDetails);
+        io.in(Users.get(socket.id).room).emit('roomUsers', roomDetails);        // sending to all users within a room
     }
 
     // update users in previous rooms
@@ -209,7 +219,8 @@ io.sockets.on('connection', (socket) => {
                 {
                     username: "----",
                     id: socket.id,
-                    room: ""
+                    room: "",
+                    state: states.LOBBY
                 }
             );
             checkUsers();

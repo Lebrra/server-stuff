@@ -7,7 +7,7 @@ public class LobbyFunctions : MonoBehaviour
 {
     public static LobbyFunctions inst;
 
-    public bool inLobby = false;
+    public bool inRoom = false;
 
     public InputField roomInput;
     public GameObject joinBox;
@@ -16,6 +16,8 @@ public class LobbyFunctions : MonoBehaviour
 
     public Text roomNameText;
     public GameObject backButton;
+
+    public GameObject playButton;
 
     private void Awake()
     {
@@ -54,13 +56,14 @@ public class LobbyFunctions : MonoBehaviour
 
     public void goBack()
     {
-        if (inLobby)    // leaving lobby
+        if (inRoom)    // leaving lobby
         {
             nh_network.server.leaveRoom();
             GetComponent<UsernameActions>().removeAllUsernames();
             roomNameText.text = "- Main Lobby -";
             // load main lobby usernames
-            inLobby = false;
+            inRoom = false;
+            playButton.SetActive(false);
         }
 
         lobbyButtons.SetActive(true);
@@ -74,7 +77,13 @@ public class LobbyFunctions : MonoBehaviour
         if (joinBox.activeInHierarchy) joinBox.SetActive(false);
         roomNameText.text = "Room Code: " + roomname;
         GetComponent<UsernameActions>().removeAllUsernames();
-        // load room users
-        inLobby = true;
+        playButton.SetActive(true);
+        inRoom = true;
+    }
+
+    public void playGame()
+    {
+
+        nh_network.server.startGame();
     }
 }

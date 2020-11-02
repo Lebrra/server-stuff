@@ -41,13 +41,7 @@ public class nh_network : MonoBehaviour
         socket.On("disableLobby", disableLobby);
         socket.On("enableLobby", enableLobby);
         socket.On("createdRoom", createdRoom);
-
-        socket.On("unityAddUser", onAddUser);
-        socket.On("unityAddFBUser", onAddFBUser);
-        socket.On("unityRemoveUser", onRemoveUser);
-        socket.On("poop", onYes);
-        socket.On("unityShootPressed", onShootPressed);
-        socket.On("unityAvatarSelected", onAvatarSelected);
+        socket.On("loadGame", loadGame);
     }
 
     void onYes(SocketIOEvent evt){
@@ -202,5 +196,10 @@ public class nh_network : MonoBehaviour
     {
         // tells server to start game
         socket.Emit("startGame");
+    }
+
+    void loadGame(SocketIOEvent evt)
+    {
+        Debug.Log("the game has been started!");
     }
 }

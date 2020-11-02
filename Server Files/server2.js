@@ -121,7 +121,13 @@ io.sockets.on('connection', (socket) => {
     socket.on('startGame', () => {
         console.log(Users.get(socket.id)['username'] + ' has started the game!');
         var roomStarted = Users.get(socket.id)['room'];
-        //HERE
+
+        for (user in socket.adapter.rooms[Users.get(socket.id).room].sockets) {
+            changeUserPropertyWithID(user.id, 'state', states.GAME);
+        }
+        console.table(Users);
+
+        io.in(roomStarted).emit('loadGame');
     });
 
 
@@ -202,6 +208,17 @@ io.sockets.on('connection', (socket) => {
             // console.log('changed current user property: ' + property);
             tempObj[property] = value;
             Users.set(socket.id, tempObj);
+        }
+        checkUsers();
+    }
+
+    function changeUserPropertyWithID(socketID, property, value) {
+        // users properties: id, username, observeallcontrol, observeallevents
+        if (Users.has(socketID)) {
+            tempObj = Users.get(socketID);
+            // console.log('changed current user property: ' + property);
+            tempObj[property] = value;
+            Users.set(socketID, tempObj);
         }
         checkUsers();
     }

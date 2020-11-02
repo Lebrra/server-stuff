@@ -201,5 +201,6 @@ public class nh_network : MonoBehaviour
     void loadGame(SocketIOEvent evt)
     {
         Debug.Log("the game has been started!");
+        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
     }
 }

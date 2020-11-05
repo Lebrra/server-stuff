@@ -1758,9 +1758,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d88fcdf455b94993818ad849e42cf41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverQuickRef: 'serene-forest-71478.herokuapp.com
+  serverQuickRef: 'ws://serene-forest-71478.herokuapp.com/socket.io/?EIO=4&transport=websocket
 
-    localhost:3000'
+    ws://localhost:3000/socket.io/?EIO=4&transport=websocket'
 --- !u!4 &1159937821
 Transform:
   m_ObjectHideFlags: 0

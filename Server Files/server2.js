@@ -1,4 +1,5 @@
 const { emit } = require('cluster');
+const { debug } = require('console');
 
 // JavaScript source code
 var app = require('express')();
@@ -130,6 +131,9 @@ io.sockets.on('connection', (socket) => {
         console.table(Users);
 
         io.in(roomStarted).emit('loadGame');
+
+        // make new game instance here
+        var game = new Game(listRoomUsers());
     });
 
 
@@ -154,6 +158,7 @@ io.sockets.on('connection', (socket) => {
         console.log('--- Room Details ---');
         console.table(roomDetails);
         io.in(Users.get(socket.id).room).emit('roomUsers', roomDetails);        // sending to all users within a room
+        return tempUsers;
     }
 
     // update users in previous rooms
@@ -329,3 +334,96 @@ io.sockets.on('connection', (socket) => {
 });
 
 server.listen(PORT);
+
+class Game {
+
+    constructor(userInfo) {
+        // what properties are important?
+        // players -> (sockets, users, )
+        // alert players game started (debug)
+
+        // round methods:
+        // setDeck() <- resets the deck
+        // deal cards
+
+        console.log("New Game Instance created.");
+
+        this.Deck;
+        this.DiscardPile;
+        this.setDeck();
+        this.Players = new Map();    // holds: {socketid, username, hand [cards], out(bool), score(int)}
+        this.buildPlayerMap(userInfo);
+
+        this.Round = 3;              // current game round
+
+        var playersArray = Array.from(this.Players.values());
+        console.table(playersArray);
+        console.log(playersArray[(this.Round - 3) % playersArray.length].username); //(this.Round - 3) % Array.from(this.Players.keys()).length
+        // getting who starts: Players[(Round - 3) % Players.count].username == who is first this round
+    }
+
+    buildPlayerMap(userInfo) {
+        // userInfo: {[ {username: ____, id: socketid}, ... {}]}
+        for (user in userInfo) {
+            this.Players.set(
+                userInfo[user].id,
+                {
+                    id: userInfo[user].id,
+                    username: userInfo[user].username,
+                    hand: [],
+                    out: 'false',
+                    score: 0
+                }
+            );
+        }
+        console.log("Player map built.");
+        console.table(this.Players);
+        console.log(this.Players.values());
+    }
+
+    setDeck() {
+        Deck = ['Joker', 'Joker', 'Joker', 'Joker',
+            'HeartAce', 'Heart2', 'Heart3', 'Heart4', 'Heart5', 'Heart6', 'Heart7', 'Heart8', 'Heart9', 'Heart10', 'HeartJack', 'HeartQueen', 'HeartKing',
+            'HeartAce', 'Heart2', 'Heart3', 'Heart4', 'Heart5', 'Heart6', 'Heart7', 'Heart8', 'Heart9', 'Heart10', 'HeartJack', 'HeartQueen', 'HeartKing',
+            'DiamondAce', 'Diamond2', 'Diamond3', 'Diamond4', 'Diamond5', 'Diamond6', 'Diamond7', 'Diamond8', 'Diamond9', 'Diamond10', 'DiamondJack', 'DiamondQueen', 'DiamondKing',
+            'DiamondAce', 'Diamond2', 'Diamond3', 'Diamond4', 'Diamond5', 'Diamond6', 'Diamond7', 'Diamond8', 'Diamond9', 'Diamond10', 'DiamondJack', 'DiamondQueen', 'DiamondKing',
+            'SpadeAce', 'Spade2', 'Spade3', 'Spade4', 'Spade5', 'Spade6', 'Spade7', 'Spade8', 'Spade9', 'Spade10', 'SpadeJack', 'SpadeQueen', 'SpadeKing',
+            'SpadeAce', 'Spade2', 'Spade3', 'Spade4', 'Spade5', 'Spade6', 'Spade7', 'Spade8', 'Spade9', 'Spade10', 'SpadeJack', 'SpadeQueen', 'SpadeKing',
+            'ClubAce', 'Club2', 'Club3', 'Club4', 'Club5', 'Club6', 'Club7', 'Club8', 'Club9', 'Club10', 'ClubJack', 'ClubQueen', 'ClubKing',
+            'ClubAce', 'Club2', 'Club3', 'Club4', 'Club5', 'Club6', 'Club7', 'Club8', 'Club9', 'Club10', 'ClubJack', 'ClubQueen', 'ClubKing'
+        ];
+    
+        DiscardPile = [];   // draw one card to discard pile
+        DiscardPile.push(this.drawCard());
+    }
+    
+    drawCard() {
+        if (Deck.length == 0) {
+            discardToDeck();
+        }
+    
+        var rand = Math.floor(Math.random() * Deck.length);
+    
+        var swap = Deck[rand];
+        Deck[rand] = Deck[Deck.length - 1];
+        Deck[Deck.length - 1] = swap;
+    
+        var card = Deck.pop();
+    
+        return card;
+    }
+    
+    discardToDeck() {
+        var topOfDiscard = DiscardPile.pop();
+        var secondOfDiscard = DiscardPile.pop();
+    
+        DiscardPile.forEach((value, index, array) => {
+            Deck.push(value);
+        });
+    
+        DiscardPile = [secondOfDiscard, topOfDiscard];
+    
+        console.table(DiscardPile);
+        console.table(Deck);
+    }
+}

@@ -135,7 +135,7 @@ io.sockets.on('connection', (socket) => {
 
         // make new game instance here
         // var game = new Game(listRoomUsers());
-        Games[roomStarted] = new Game(listRoomUsers()); // assigned new game to Games array based on roomname
+        Games[roomStarted] = new Game(listRoomUsers(), roomStarted); // assigned new game to Games array based on roomname
     });
 
     socket.on('drawCard', () => {
@@ -297,7 +297,7 @@ server.listen(PORT);
 
 class Game {
 
-    constructor(userInfo) {
+    constructor(userInfo, roomname) {
         // what properties are important?
         // players -> (sockets, users, )
         // alert players game started (debug)
@@ -313,12 +313,14 @@ class Game {
         this.setDeck();
         this.Players = new Map();    // holds: {socketid, username, hand [cards], out(bool), score(int)}
         this.buildPlayerMap(userInfo);
+        this.Roomname = roomname;
 
         this.Round = 3;              // current game round
+        this.Turn;
 
-        var playersArray = Array.from(this.Players.values());
+        var PlayersArray = Array.from(this.Players.values());
         // console.table(playersArray);
-        console.log("Player turn: " + playersArray[(this.Round - 3) % playersArray.length].username); //(this.Round - 3) % Array.from(this.Players.keys()).length
+        console.log("Player turn: " + PlayersArray[(this.Round - 3) % PlayersArray.length].username); //(this.Round - 3) % Array.from(this.Players.keys()).length
         this.declareRound();
     }
 
@@ -357,8 +359,24 @@ class Game {
         //DiscardPile.push(this.drawCard());
     }
 
-    declareRound(){
+    declareRound() {
+        // current round
+        io.in(this.Roomname).emit('currentRound', { 'round': this.Round });
+    }
 
+    declareTurn(firstTurn) {
+        var PlayersArray = Array.from(this.Players.values());
+
+        if (firstTurn) {
+            this.Turn = (this.Round - 3) % PlayersArray.length;
+        }
+        else {
+            this.Turn++;
+            if (this.Turn == PlayersArray.length) this.Turn = 0;
+        }
+
+        console.log("Player turn: " + PlayersArray[this.Turn].username);
+        //tell everyone who's turn it is
     }
     
     drawCard() {

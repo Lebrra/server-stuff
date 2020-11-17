@@ -42,6 +42,7 @@ public class nh_network : MonoBehaviour
         socket.On("enableLobby", enableLobby);
         socket.On("createdRoom", createdRoom);
         socket.On("loadGame", loadGame);
+        socket.On("currentRound", roundInfo);
     }
 
     void onYes(SocketIOEvent evt){
@@ -202,5 +203,12 @@ public class nh_network : MonoBehaviour
     {
         Debug.Log("the game has been started!");
         UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+    }
+
+    void roundInfo(SocketIOEvent evt)
+    {
+        int round;
+        int.TryParse(evt.data.GetField("round").ToString().Trim('"'), out round);
+        Debug.Log("The current round is: " + round);
     }
 }

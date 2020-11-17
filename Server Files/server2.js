@@ -15,6 +15,7 @@ app.get('/', function (req, res) {
 var Users = new Map();  // declaring Users structure
 var lobbyActive = '';
 var Rooms = [];
+var Games = [];
 
 var Animals = ['Possum', 'Frog', 'Zebra', 'Lizard', 'Beaver', 'Panda', 'Giraffe', 'Toucan', 'Pelican', 'Sloth', 'Alligator', 'Scorpion', 'Viper', 'Armadillo'];
 var Deck;
@@ -133,10 +134,14 @@ io.sockets.on('connection', (socket) => {
         io.in(roomStarted).emit('loadGame');
 
         // make new game instance here
-        var game = new Game(listRoomUsers());
+        // var game = new Game(listRoomUsers());
+        Games[roomStarted] = new Game(listRoomUsers()); // assigned new game to Games array based on roomname
     });
 
-
+    socket.on('drawCard', () => {
+        var newCard = Games[Users.get(socket.id)['room']].drawCard();
+        socket.emit('newCard', {card: newCard});
+    })
 
     // send usernames in our room
     function listRoomUsers() {
@@ -357,9 +362,9 @@ class Game {
         this.Round = 3;              // current game round
 
         var playersArray = Array.from(this.Players.values());
-        console.table(playersArray);
+        // console.table(playersArray);
         console.log(playersArray[(this.Round - 3) % playersArray.length].username); //(this.Round - 3) % Array.from(this.Players.keys()).length
-        // getting who starts: Players[(Round - 3) % Players.count].username == who is first this round
+        declareRound();
     }
 
     buildPlayerMap(userInfo) {
@@ -395,6 +400,10 @@ class Game {
     
         DiscardPile = [];   // draw one card to discard pile
         DiscardPile.push(this.drawCard());
+    }
+
+    declareRound(){
+
     }
     
     drawCard() {

@@ -322,6 +322,10 @@ class Game {
         // console.table(playersArray);
         console.log("Player turn: " + PlayersArray[(this.Round - 3) % PlayersArray.length].username); //(this.Round - 3) % Array.from(this.Players.keys()).length
         this.declareRound();
+        this.declareTurn(true);
+
+        this.setDeck();
+        this.drawPlayerHands();
     }
 
     buildPlayerMap(userInfo) {
@@ -376,9 +380,27 @@ class Game {
         }
 
         console.log("Player turn: " + PlayersArray[this.Turn].username);
-        //tell everyone who's turn it is
+        io.in(this.Roomname).emit('currentTurn', { 'player': PlayersArray[this.Turn].username });
     }
-    
+
+    drawPlayerHands() {
+        this.Players.forEach((value, index, array) => {
+            for (var i = 0; i < this.Round; i++)
+                value.hand.push(this.drawCard());
+            console.log(value.username + "'s hand:");
+            console.table(value.hand);
+        });
+
+        /*for (var player in this.Players) {
+            for (var i = 0; i < this.Round; i++)
+                player.hand.push(drawCard());
+            console.log(player.username + "'s hand:");
+            console.table(player.hand);
+        }*/
+
+        console.log('hello?');
+    }
+
     drawCard() {
         if (Deck.length == 0) {
             discardToDeck();

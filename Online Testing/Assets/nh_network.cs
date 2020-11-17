@@ -43,6 +43,7 @@ public class nh_network : MonoBehaviour
         socket.On("createdRoom", createdRoom);
         socket.On("loadGame", loadGame);
         socket.On("currentRound", roundInfo);
+        socket.On("currentTurn", turnInfo);
     }
 
     void onYes(SocketIOEvent evt){
@@ -210,5 +211,11 @@ public class nh_network : MonoBehaviour
         int round;
         int.TryParse(evt.data.GetField("round").ToString().Trim('"'), out round);
         Debug.Log("The current round is: " + round);
+    }
+
+    void turnInfo(SocketIOEvent evt)
+    {
+        string player = evt.data.GetField("player").ToString().Trim('"');
+        Debug.Log("It is " + player + "'s turn.");
     }
 }

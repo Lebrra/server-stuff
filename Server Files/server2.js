@@ -389,6 +389,8 @@ class Game {
                 value.hand.push(this.drawCard());
             console.log(value.username + "'s hand:");
             console.table(value.hand);
+            var hand = { ...value.hand };
+            io.to(value.id).emit('playerHand', hand);
         });
 
         /*for (var player in this.Players) {
@@ -397,8 +399,6 @@ class Game {
             console.log(player.username + "'s hand:");
             console.table(player.hand);
         }*/
-
-        console.log('hello?');
     }
 
     drawCard() {

@@ -44,6 +44,7 @@ public class nh_network : MonoBehaviour
         socket.On("loadGame", loadGame);
         socket.On("currentRound", roundInfo);
         socket.On("currentTurn", turnInfo);
+        socket.On("playerHand", handInfo);
     }
 
     void onYes(SocketIOEvent evt){
@@ -217,5 +218,18 @@ public class nh_network : MonoBehaviour
     {
         string player = evt.data.GetField("player").ToString().Trim('"');
         Debug.Log("It is " + player + "'s turn.");
+    }
+
+    void handInfo(SocketIOEvent evt)
+    {
+        List<string> newHand = new List<string>();
+        Debug.Log("My hand:");
+
+        for (int i = 0; i < evt.data.Count; i++)
+        {
+            string jsonData = evt.data.GetField(i.ToString()).ToString().Trim('"');
+            newHand.Add(jsonData);
+            Debug.Log(jsonData);
+        }
     }
 }

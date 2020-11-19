@@ -138,8 +138,15 @@ io.sockets.on('connection', (socket) => {
         Games[roomStarted] = new Game(listRoomUsers(), roomStarted); // assigned new game to Games array based on roomname
     });
 
-    socket.on('drawCard', () => {
-        var newCard = Games[Users.get(socket.id)['room']].drawCard();
+    socket.on('drawCard', (fromDeck) => {
+        var newCard;
+        if (fromDeck === true) {
+            newCard = Games[Users.get(socket.id)['room']].drawCard();
+        }
+        else {
+            newCard = Games[Users.get(socket.id)['room']].drawFromDiscard();
+        }
+        console.log(newCard);
         socket.emit('newCard', {card: newCard});
     })
 
@@ -382,6 +389,7 @@ class Game {
 
         console.log("Player turn: " + PlayersArray[this.Turn].username);
         io.in(this.Roomname).emit('currentTurn', { 'player': PlayersArray[this.Turn].username });
+        io.to(PlayersArray[this.Turn].id).emit('yourTurn');
     }
 
     drawPlayerHands() {
@@ -435,5 +443,11 @@ class Game {
     addToDiscard(card) {
         DiscardPile.push(card);
         io.in(this.Roomname).emit('addToDiscard', { 'card': card });
+    }
+
+    drawFromDiscard() {
+        if (DiscardPile.length > 0)
+            return DiscardPile.pop();
+        else return 'none';
     }
 }

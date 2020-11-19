@@ -48,6 +48,8 @@ public class nh_network : MonoBehaviour
         socket.On("currentTurn", turnInfo);
         socket.On("playerHand", handInfo);
         socket.On("addToDiscard", discardInfo);
+        socket.On("newCard", newCardInfo);
+        socket.On("yourTurn", myTurn);
     }
 
     void onYes(SocketIOEvent evt){
@@ -240,5 +242,23 @@ public class nh_network : MonoBehaviour
     {
         string discard = evt.data.GetField("card").ToString().Trim('"');
         Debug.Log("Discarded " + discard);
+    }
+
+    public void drawCard(bool fromDeck)
+    {
+        JSONObject jsonObject = new JSONObject(fromDeck);
+        socket.Emit("drawCard", jsonObject);
+    }
+
+    void newCardInfo(SocketIOEvent evt)
+    {
+        string card = evt.data.GetField("card").ToString().Trim('"');
+        Debug.Log("Card selected: " + card);
+    }
+
+    void myTurn(SocketIOEvent evt)
+    {
+        Debug.Log("Its my turn!");
+        GameManager.instance.myTurn = true;
     }
 }

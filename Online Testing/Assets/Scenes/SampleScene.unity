@@ -1740,7 +1740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 961346d7e16a445ff93777573e78efd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: ws://serene-forest-71478.herokuapp.com/socket.io/?EIO=4&transport=websocket
+  url: ws://localhost:3000/socket.io/?EIO=4&transport=websocket
   autoConnect: 1
   reconnectDelay: 5000
   ackExpirationTime: 1800
@@ -1758,7 +1758,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d88fcdf455b94993818ad849e42cf41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverQuickRef: 'ws://serene-forest-71478.herokuapp.com/socket.io/?EIO=4&transport=websocket
+  serverQuickRef: 'Server:
+
+    ws://serene-forest-71478.herokuapp.com/socket.io/?EIO=4&transport=websocket
+
+
+    Local:
 
     ws://localhost:3000/socket.io/?EIO=4&transport=websocket'
 --- !u!4 &1159937821

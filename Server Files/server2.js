@@ -326,6 +326,7 @@ class Game {
 
         this.setDeck();
         this.drawPlayerHands();
+        this.addToDiscard(this.drawCard());
     }
 
     buildPlayerMap(userInfo) {
@@ -403,7 +404,7 @@ class Game {
 
     drawCard() {
         if (Deck.length == 0) {
-            discardToDeck();
+            this.discardToDeck();
         }
     
         var rand = Math.floor(Math.random() * Deck.length);
@@ -429,5 +430,10 @@ class Game {
     
         console.table(DiscardPile);
         console.table(Deck);
+    }
+
+    addToDiscard(card) {
+        DiscardPile.push(card);
+        io.in(this.Roomname).emit('addToDiscard', { 'card': card });
     }
 }

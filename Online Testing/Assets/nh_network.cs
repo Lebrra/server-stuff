@@ -7,7 +7,7 @@ public class nh_network : MonoBehaviour
 {
     public static nh_network server;
 
-    [TextArea]
+    [TextArea(3, 10)]
     public string serverQuickRef;
 
     SocketIOComponent socket;
@@ -22,6 +22,8 @@ public class nh_network : MonoBehaviour
     {
         if (server) Destroy(gameObject);
         else server = this;
+
+        DontDestroyOnLoad(gameObject);
     }
 
     void Start()
@@ -45,6 +47,7 @@ public class nh_network : MonoBehaviour
         socket.On("currentRound", roundInfo);
         socket.On("currentTurn", turnInfo);
         socket.On("playerHand", handInfo);
+        socket.On("addToDiscard", discardInfo);
     }
 
     void onYes(SocketIOEvent evt){
@@ -231,5 +234,11 @@ public class nh_network : MonoBehaviour
             newHand.Add(jsonData);
             Debug.Log(jsonData);
         }
+    }
+
+    void discardInfo(SocketIOEvent evt)
+    {
+        string discard = evt.data.GetField("card").ToString().Trim('"');
+        Debug.Log("Discarded " + discard);
     }
 }

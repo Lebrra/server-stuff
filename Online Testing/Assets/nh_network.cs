@@ -281,4 +281,10 @@ public class nh_network : MonoBehaviour
         Debug.Log(playername + " has drawn from the discard pile!");
         // update visuals of discard pile here
     }
+
+    public void discardCard(string cardname)
+    {
+        JSONObject jsonObject = new JSONObject(cardname);
+        socket.Emit("discardCard", jsonObject);
+    }
 }

@@ -160,6 +160,7 @@ io.sockets.on('connection', (socket) => {
     socket.on('discardCard', (discardInfo) => {
         console.log(getUsernameFromSocketID(socket.id) + " discarded " + discardInfo);
         Games[Users.get(socket.id)['room']].addToDiscard(discardInfo);
+        Games[Users.get(socket.id)['room']].declareTurn(false);
     });
 
     // send usernames in our room

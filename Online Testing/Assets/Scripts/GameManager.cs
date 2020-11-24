@@ -7,7 +7,9 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     nh_network server;
 
-    public bool myTurn = false;
+    public bool myTurn = false; // might not need this one
+    public bool myDraw = false;
+    public bool myDiscard = false;
 
     private void Awake()
     {
@@ -31,10 +33,20 @@ public class GameManager : MonoBehaviour
 
     public void drawCard(bool fromDeck)
     {
-        if (myTurn)
+        if (myDraw)
         {
             server.drawCard(fromDeck);
-            myTurn = false; //TEMP
+            myDraw = false;
+            myDiscard = true;
+        }
+    }
+
+    public void discardCard(string cardName)
+    {
+        if (myDiscard)
+        {
+            server.discardCard(cardName);
+            myDiscard = myTurn = false;
         }
     }
 }

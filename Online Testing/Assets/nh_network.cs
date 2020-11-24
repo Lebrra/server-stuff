@@ -261,7 +261,7 @@ public class nh_network : MonoBehaviour
     void myTurn(SocketIOEvent evt)
     {
         Debug.Log("Its my turn!");
-        GameManager.instance.myTurn = true;
+        GameManager.instance.myDraw = true;
     }
 
     public void setReady()

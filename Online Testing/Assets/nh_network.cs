@@ -284,7 +284,7 @@ public class nh_network : MonoBehaviour
 
     public void discardCard(string cardname)
     {
-        JSONObject jsonObject = new JSONObject(cardname);
+        JSONObject jsonObject = new JSONObject(quote + cardname + quote);
         socket.Emit("discardCard", jsonObject);
     }
 }

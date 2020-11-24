@@ -157,6 +157,11 @@ io.sockets.on('connection', (socket) => {
         Games[Users.get(socket.id)['room']].readyCheck(socket.id);
     });
 
+    socket.on('discardCard', (discardInfo) => {
+        console.log(getUsernameFromSocketID(socket.id) + " discarded " + discardInfo);
+        Games[Users.get(socket.id)['room']].addToDiscard(discardInfo);
+    });
+
     // send usernames in our room
     function listRoomUsers() {
         console.table(socket.adapter.rooms[Users.get(socket.id).room].sockets);

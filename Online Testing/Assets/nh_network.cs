@@ -261,4 +261,9 @@ public class nh_network : MonoBehaviour
         Debug.Log("Its my turn!");
         GameManager.instance.myTurn = true;
     }
+
+    public void setReady()
+    {
+        socket.Emit("setReady");
+    }
 }

@@ -150,6 +150,11 @@ io.sockets.on('connection', (socket) => {
         socket.emit('newCard', {card: newCard});
     })
 
+    socket.on('setReady', () => {
+        console.log('checking for all ready...');
+        Games[Users.get(socket.id)['room']].readyCheck(socket.id);
+    });
+
     // send usernames in our room
     function listRoomUsers() {
         console.table(socket.adapter.rooms[Users.get(socket.id).room].sockets);
@@ -317,23 +322,32 @@ class Game {
 
         this.Deck;
         this.DiscardPile;
-        this.setDeck();
         this.Players = new Map();    // holds: {socketid, username, hand [cards], out(bool), score(int)}
         this.buildPlayerMap(userInfo);
         this.Roomname = roomname;
 
         this.Round = 3;              // current game round
         this.Turn;
+    }
 
-        var PlayersArray = Array.from(this.Players.values());
-        // console.table(playersArray);
-        console.log("Player turn: " + PlayersArray[(this.Round - 3) % PlayersArray.length].username); //(this.Round - 3) % Array.from(this.Players.keys()).length
+    roundSetUp() {
         this.declareRound();
         this.declareTurn(true);
 
         this.setDeck();
         this.drawPlayerHands();
         this.addToDiscard(this.drawCard());
+    }
+
+    readyCheck(playerID) {
+        this.changePlayerPropertyWithID(playerID, 'ready', true);
+        console.table(this.Players);
+
+        this.Players.forEach((value, index, array) => {
+            if (value.ready == false) return;
+        });
+
+        this.roundSetUp();
     }
 
     buildPlayerMap(userInfo) {
@@ -346,13 +360,24 @@ class Game {
                     username: userInfo[user].username,
                     hand: [],
                     out: 'false',
-                    score: 0
+                    score: 0,
+                    ready: false
                 }
             );
         }
         console.log("Player map built.");
         console.table(this.Players);
         console.log(this.Players.values());
+    }
+
+    changePlayerPropertyWithID(socketID, property, value) {
+        // users properties: id, username, observeallcontrol, observeallevents
+        if (this.Players.has(socketID)) {
+            tempObj = this.Players.get(socketID);
+            // console.log('changed current user property: ' + property);
+            tempObj[property] = value;
+            this.Players.set(socketID, tempObj);
+        }
     }
 
     setDeck() {

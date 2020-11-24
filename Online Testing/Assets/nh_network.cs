@@ -50,6 +50,8 @@ public class nh_network : MonoBehaviour
         socket.On("addToDiscard", discardInfo);
         socket.On("newCard", newCardInfo);
         socket.On("yourTurn", myTurn);
+        socket.On("drewFromDeck", drewFromDeck);
+        socket.On("drewFromDiscard", drewFromDiscard);
     }
 
     void onYes(SocketIOEvent evt){
@@ -265,5 +267,18 @@ public class nh_network : MonoBehaviour
     public void setReady()
     {
         socket.Emit("setReady");
+    }
+
+    void drewFromDeck(SocketIOEvent evt)
+    {
+        string playername = evt.data.GetField("player").ToString().Trim('"');
+        Debug.Log(playername + " has drawn a card from the deck!");
+    }
+
+    void drewFromDiscard(SocketIOEvent evt)
+    {
+        string playername = evt.data.GetField("player").ToString().Trim('"');
+        Debug.Log(playername + " has drawn from the discard pile!");
+        // update visuals of discard pile here
     }
 }

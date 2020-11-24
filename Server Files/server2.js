@@ -142,9 +142,11 @@ io.sockets.on('connection', (socket) => {
         var newCard;
         if (fromDeck === true) {
             newCard = Games[Users.get(socket.id)['room']].drawCard();
+            io.in(Users.get(socket.id)['room']).emit('drewFromDeck', { player: Users.get(socket.id).username });
         }
         else {
             newCard = Games[Users.get(socket.id)['room']].drawFromDiscard();
+            io.in(Users.get(socket.id)['room']).emit('drewFromDiscard', { player: Users.get(socket.id).username });
         }
         console.log(newCard);
         socket.emit('newCard', {card: newCard});

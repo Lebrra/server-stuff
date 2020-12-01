@@ -36,12 +36,9 @@ public class nh_network : MonoBehaviour
      
         // The lines below setup 'listener' functions
         socket.On("connectionmessage", onConnectionEstabilished);
-        socket.On("serverMessage", serverMessage);
         socket.On("users", loadUsers);
         socket.On("roomUsers", loadRoomUsers);
         socket.On("removeUser", removeUser);
-        socket.On("disableLobby", disableLobby);
-        socket.On("enableLobby", enableLobby);
         socket.On("createdRoom", createdRoom);
         socket.On("loadGame", loadGame);
         socket.On("currentRound", roundInfo);
@@ -54,10 +51,7 @@ public class nh_network : MonoBehaviour
         socket.On("drewFromDiscard", drewFromDiscard);
     }
 
-    void onYes(SocketIOEvent evt){
-        //Debug.Log("OH SHIT" + evt.data.GetField("id"));
-
-    }
+    #region Connection/Room Functions
 
     // This is the listener function definition
     void onConnectionEstabilished(SocketIOEvent evt)
@@ -65,82 +59,30 @@ public class nh_network : MonoBehaviour
         Debug.Log("Player is connected: " + evt.data.GetField("id"));
     }
 
-    // this checks the data from the event, parses the two parts by their id.
-    void onAddUser(SocketIOEvent evt)
-    {
-        string id = evt.data.GetField("id").ToString();
-        string username = evt.data.GetField("username").ToString();
-        //Debug.Log("ID: " + id + " logged in as " + username);
-        //playerManager.addPlayer(id, username);
-    }
-
-    void onAddFBUser(SocketIOEvent evt)
-    {
-        string id = evt.data.GetField("id").ToString();
-        string username = evt.data.GetField("username").ToString();
-        string imageurl = evt.data.GetField("fbimageurl").ToString();
-
-        //Debug.Log("ID: " + id + " logged in as " + username);
-        print("new FB user" + imageurl);
-       // playerManager.addPlayer(id, username, imageurl);
-    }
-
-    void onRemoveUser(SocketIOEvent evt){
-        string id = evt.data.GetField("id").ToString();
-        string username = evt.data.GetField("username").ToString();
-        Debug.Log("-----ID: " + id + " disconnected. Trying to remove " + username);
-        //playerManager.removePlayer(id, username);
-        //playerManager.removePlayer(id);
-    }
-
-    void onAvatarSelected(SocketIOEvent evt){
-        string id = evt.data.GetField("id").ToString();
-        Debug.Log(id + " avatar selected");
-    }
-
-    void onShootPressed(SocketIOEvent evt){
-        string id = evt.data.GetField("id").ToString();
-        Debug.Log(id + " pressed shoot!");
-        //playerManager.playerShoot(id);
-    }
-
-
-
-    void disableLobby(SocketIOEvent evt)
-    {
-        //LobbyFunctions.inst.lobbyButtons.SetActive(false);
-    }
-    void enableLobby(SocketIOEvent evt)
-    {
-        //LobbyFunctions.inst.lobbyButtons.SetActive(true);
-    }
-
-
-    void serverMessage(SocketIOEvent evt)
-    {
-        Debug.Log("woot");
-    }
-
     public void createNewLobby()
     {
         //socket.Emit("createNewLobby");
         socket.Emit("createRoom");
     }
-    public void joinLobby(string roomName)
+
+    public void joinRoom(string roomName)
     {
         //socket.Emit("joinLobby");
         socket.Emit("joinRoom", new JSONObject(quote + roomName + quote));
     }
-    public void leaveLobby()
+
+    public void leaveRoom()
     {
-        socket.Emit("leaveLobby");
-    }
-    public void startLobby()
-    {
-        socket.Emit("startGame");
+        socket.Emit("leaveRoom");
     }
 
-    #region Username Methods
+    void createdRoom(SocketIOEvent evt)
+    {
+        Debug.Log("Created new room: " + evt.data.GetField("name"));
+        LobbyFunctions.inst.enterRoom(evt.data.GetField("name").ToString().Trim('"'));
+    }
+    #endregion
+    #region Username Functions
 
     public void newUsername(string name)
     {
@@ -179,33 +121,22 @@ public class nh_network : MonoBehaviour
         }
     }
 
-    public void leaveRoom()
-    {
-        socket.Emit("leaveRoom");
-    }
 
     void removeUser(SocketIOEvent evt)
     {
         ua.removeUsername(evt.data.GetField("id").ToString().Trim('"'));
     }
     #endregion
-
-    void createdRoom(SocketIOEvent evt)
-    {
-        Debug.Log("Created new room: " + evt.data.GetField("name"));
-        LobbyFunctions.inst.enterRoom(evt.data.GetField("name").ToString().Trim('"'));
-    }
-
-    void joinedRoom(SocketIOEvent evt)  // does this need to be different than createdRoom() ?
-    {
-        Debug.Log("Created new room: " + evt.data.GetField("name"));
-        LobbyFunctions.inst.enterRoom(evt.data.GetField("name").ToString().Trim('"'));
-    }
-
+    #region Game Functions
     public void startGame()
     {
         // tells server to start game
         socket.Emit("startGame");
+    }
+
+    public void setReady()
+    {
+        socket.Emit("setReady");
     }
 
     void loadGame(SocketIOEvent evt)
@@ -227,16 +158,24 @@ public class nh_network : MonoBehaviour
         Debug.Log("It is " + player + "'s turn.");
     }
 
+    void myTurn(SocketIOEvent evt)
+    {
+        Debug.Log("Its my turn!");
+        GameManager.instance.myDraw = true;
+    }
+
+    #region Card Functions
     void handInfo(SocketIOEvent evt)
     {
-        List<string> newHand = new List<string>();
+        //List<string> newHand = new List<string>();
         Debug.Log("My hand:");
 
         for (int i = 0; i < evt.data.Count; i++)
         {
-            string jsonData = evt.data.GetField(i.ToString()).ToString().Trim('"');
-            newHand.Add(jsonData);
-            Debug.Log(jsonData);
+            string card = evt.data.GetField(i.ToString()).ToString().Trim('"');
+            //newHand.Add(card);
+            Debug.Log(card);
+            GameManager.instance.addCardToHand(card);
         }
     }
 
@@ -256,17 +195,7 @@ public class nh_network : MonoBehaviour
     {
         string card = evt.data.GetField("card").ToString().Trim('"');
         Debug.Log("Card selected: " + card);
-    }
-
-    void myTurn(SocketIOEvent evt)
-    {
-        Debug.Log("Its my turn!");
-        GameManager.instance.myDraw = true;
-    }
-
-    public void setReady()
-    {
-        socket.Emit("setReady");
+        GameManager.instance.addCardToHand(card);
     }
 
     void drewFromDeck(SocketIOEvent evt)
@@ -287,4 +216,8 @@ public class nh_network : MonoBehaviour
         JSONObject jsonObject = new JSONObject(quote + cardname + quote);
         socket.Emit("discardCard", jsonObject);
     }
+
+    #endregion
+
+    #endregion
 }

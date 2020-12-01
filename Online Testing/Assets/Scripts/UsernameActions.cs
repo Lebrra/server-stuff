@@ -28,6 +28,7 @@ public class UsernameActions : MonoBehaviour
             //addUsername(nameField.text);
 
             nh_network.server.newUsername(nameField.text);
+            PlayerPrefs.SetString("username", nameField.text);
 
             // maybe sets username here
             nameField.placeholder.GetComponent<Text>().text = nameField.text;
@@ -43,9 +44,22 @@ public class UsernameActions : MonoBehaviour
         }
         else
         {
-            GameObject newText = Instantiate(textPrefab, usernameList.transform);
-            newText.GetComponent<Text>().text = name;
-            usernameTexts.Add(id, newText);
+            if (PlayerPrefs.HasKey("username") && name == "New User")
+            {
+                // don't take this name, set it to my username
+                if (PlayerPrefs.GetString("username") == "New User")
+                {
+                    PlayerPrefs.DeleteKey("username");
+                    addUsername(id, name);
+                }
+                else nh_network.server.newUsername(PlayerPrefs.GetString("username"));
+            }
+            else
+            {
+                GameObject newText = Instantiate(textPrefab, usernameList.transform);
+                newText.GetComponent<Text>().text = name;
+                usernameTexts.Add(id, newText);
+            }
         }
     }
 

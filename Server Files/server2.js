@@ -13,7 +13,6 @@ app.get('/', function (req, res) {
 });
 
 var Users = new Map();  // declaring Users structure
-var lobbyActive = '';
 var Rooms = [];
 var Games = [];
 
@@ -40,37 +39,6 @@ io.sockets.on('connection', (socket) => {
 
     socket.on('updateUsername', (newName) => {
         addUsername(newName);
-    });
-
-    socket.on('buttonClicked', (number) => {
-        console.log('button pressed ' + number);
-        io.emit('serverMessage', { message: `button ${number}` });
-    });
-
-    socket.on('createNewLobby', () => {
-        console.log(Users.get(socket.id)['username'] + ' has started a lobby');
-        lobbyActive = socket.id;
-        socket.emit('enableLobby');
-    });
-
-    socket.on('joinLobby', () => {
-        if (lobbyActive == '') console.log(Users.get(socket.id)['username'] + ' cannot join lobby, none exist!');
-        else {
-            console.log(Users.get(socket.id)['username'] + ' has joined the lobby');
-            socket.emit('enableLobby');
-        }
-    });
-
-    socket.on('leaveLobby', () => {
-        if (lobbyActive == socket.id) {
-            console.log('the host has left the lobby, closting lobby...');
-            lobbyActive = '';
-            io.emit('disableLobby');
-        }
-        else {
-            console.log(Users.get(socket.id)['username'] + ' has left the lobby');
-            socket.emit('disableLobby');
-        }
     });
 
     socket.on('disconnect', () => {
@@ -138,6 +106,11 @@ io.sockets.on('connection', (socket) => {
         Games[roomStarted] = new Game(listRoomUsers(), roomStarted); // assigned new game to Games array based on roomname
     });
 
+    socket.on('setReady', () => {
+        console.log('checking for all ready...');
+        Games[Users.get(socket.id)['room']].readyCheck(socket.id);
+    });
+
     socket.on('drawCard', (fromDeck) => {
         var newCard;
         if (fromDeck === true) {
@@ -152,16 +125,13 @@ io.sockets.on('connection', (socket) => {
         socket.emit('newCard', {card: newCard});
     })
 
-    socket.on('setReady', () => {
-        console.log('checking for all ready...');
-        Games[Users.get(socket.id)['room']].readyCheck(socket.id);
-    });
-
     socket.on('discardCard', (discardInfo) => {
         console.log(getUsernameFromSocketID(socket.id) + " discarded " + discardInfo);
         Games[Users.get(socket.id)['room']].addToDiscard(discardInfo);
         Games[Users.get(socket.id)['room']].declareTurn(false);
     });
+
+
 
     // send usernames in our room
     function listRoomUsers() {
@@ -266,7 +236,7 @@ io.sockets.on('connection', (socket) => {
             Users.set(
                 socket.id,
                 {
-                    username: "----",
+                    username: "New User",
                     id: socket.id,
                     room: "",
                     state: states.LOBBY
@@ -349,13 +319,14 @@ class Game {
 
     readyCheck(playerID) {
         this.changePlayerPropertyWithID(playerID, 'ready', true);
-        console.table(this.Players);
+        console.table(Array.from(this.Players.values()));
 
+        var allReady = true;
         this.Players.forEach((value, index, array) => {
-            if (value.ready == false) return;
+            if (value.ready == false) allReady = false;
         });
 
-        this.roundSetUp();
+        if (allReady) this.roundSetUp();
     }
 
     buildPlayerMap(userInfo) {
@@ -389,15 +360,15 @@ class Game {
     }
 
     setDeck() {
-        Deck = ['Joker', 'Joker', 'Joker', 'Joker',
-            'HeartAce', 'Heart2', 'Heart3', 'Heart4', 'Heart5', 'Heart6', 'Heart7', 'Heart8', 'Heart9', 'Heart10', 'HeartJack', 'HeartQueen', 'HeartKing',
-            'HeartAce', 'Heart2', 'Heart3', 'Heart4', 'Heart5', 'Heart6', 'Heart7', 'Heart8', 'Heart9', 'Heart10', 'HeartJack', 'HeartQueen', 'HeartKing',
-            'DiamondAce', 'Diamond2', 'Diamond3', 'Diamond4', 'Diamond5', 'Diamond6', 'Diamond7', 'Diamond8', 'Diamond9', 'Diamond10', 'DiamondJack', 'DiamondQueen', 'DiamondKing',
-            'DiamondAce', 'Diamond2', 'Diamond3', 'Diamond4', 'Diamond5', 'Diamond6', 'Diamond7', 'Diamond8', 'Diamond9', 'Diamond10', 'DiamondJack', 'DiamondQueen', 'DiamondKing',
-            'SpadeAce', 'Spade2', 'Spade3', 'Spade4', 'Spade5', 'Spade6', 'Spade7', 'Spade8', 'Spade9', 'Spade10', 'SpadeJack', 'SpadeQueen', 'SpadeKing',
-            'SpadeAce', 'Spade2', 'Spade3', 'Spade4', 'Spade5', 'Spade6', 'Spade7', 'Spade8', 'Spade9', 'Spade10', 'SpadeJack', 'SpadeQueen', 'SpadeKing',
-            'ClubAce', 'Club2', 'Club3', 'Club4', 'Club5', 'Club6', 'Club7', 'Club8', 'Club9', 'Club10', 'ClubJack', 'ClubQueen', 'ClubKing',
-            'ClubAce', 'Club2', 'Club3', 'Club4', 'Club5', 'Club6', 'Club7', 'Club8', 'Club9', 'Club10', 'ClubJack', 'ClubQueen', 'ClubKing'
+        Deck = ['Joker_0', 'Joker_0', 'Joker_0', 'Joker_0',
+            'Heart_1', 'Heart_2', 'Heart_3', 'Heart_4', 'Heart_5', 'Heart_6', 'Heart_7', 'Heart_8', 'Heart_9', 'Heart_10', 'Heart_11', 'Heart_12', 'Heart_13',
+            'Heart_1', 'Heart_2', 'Heart_3', 'Heart_4', 'Heart_5', 'Heart_6', 'Heart_7', 'Heart_8', 'Heart_9', 'Heart_10', 'Heart_11', 'Heart_12', 'Heart_13',
+            'Diamond_1', 'Diamond_2', 'Diamond_3', 'Diamond_4', 'Diamond_5', 'Diamond_6', 'Diamond_7', 'Diamond_8', 'Diamond_9', 'Diamond_10', 'Diamond_11', 'Diamond_12', 'Diamond_13',
+            'Diamond_1', 'Diamond_2', 'Diamond_3', 'Diamond_4', 'Diamond_5', 'Diamond_6', 'Diamond_7', 'Diamond_8', 'Diamond_9', 'Diamond_10', 'Diamond_11', 'Diamond_12', 'Diamond_13',
+            'Spade_1', 'Spade_2', 'Spade_3', 'Spade_4', 'Spade_5', 'Spade_6', 'Spade_7', 'Spade_8', 'Spade_9', 'Spade_10', 'Spade_11', 'Spade_12', 'Spade_13',
+            'Spade_1', 'Spade_2', 'Spade_3', 'Spade_4', 'Spade_5', 'Spade_6', 'Spade_7', 'Spade_8', 'Spade_9', 'Spade_10', 'Spade_11', 'Spade_12', 'Spade_13',
+            'Club_1', 'Club_2', 'Club_3', 'Club_4', 'Club_5', 'Club_6', 'Club_7', 'Club_8', 'Club_9', 'Club_10', 'Club_11', 'Club_12', 'Club_13',
+            'Club_1', 'Club_2', 'Club_3', 'Club_4', 'Club_5', 'Club_6', 'Club_7', 'Club_8', 'Club_9', 'Club_10', 'Club_11', 'Club_12', 'Club_13'
         ];
     
         DiscardPile = [];   // draw one card to discard pile

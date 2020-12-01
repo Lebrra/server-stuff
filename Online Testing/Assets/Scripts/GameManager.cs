@@ -7,9 +7,15 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     nh_network server;
 
+    [Header("Turn Bools")]
     public bool myTurn = false; // might not need this one
     public bool myDraw = false;
     public bool myDiscard = false;
+
+    [Header("Hand")]
+    public GameObject cardPrefab;
+    public Transform handObject;
+    public List<CardButton> myHand;
 
     private void Awake()
     {
@@ -48,5 +54,12 @@ public class GameManager : MonoBehaviour
             server.discardCard(cardName);
             myDiscard = myTurn = false;
         }
+    }
+
+    public void addCardToHand(string cardName)
+    {
+        GameObject newCard = Instantiate(cardPrefab, handObject);
+        newCard.GetComponent<CardButton>().MyCard(cardName);
+        myHand.Add(newCard.GetComponent<CardButton>());
     }
 }

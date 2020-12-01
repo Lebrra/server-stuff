@@ -45,7 +45,7 @@ public class LobbyFunctions : MonoBehaviour
     {
         if (roomInput.text != "")
         {
-            nh_network.server.joinLobby(roomInput.text);
+            nh_network.server.joinRoom(roomInput.text);
         }
     }
 

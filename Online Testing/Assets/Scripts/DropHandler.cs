@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 
 public class DropHandler : MonoBehaviour, IDropHandler
 {
+    public List<CardButton> cards; 
+    
     public void OnDrop(PointerEventData eventData)
     {
         Debug.Log("dropped", gameObject);
@@ -20,5 +22,20 @@ public class DropHandler : MonoBehaviour, IDropHandler
     void Update()
     {
         
+    }
+    
+    public bool checkValidDrop(CardButton card)
+    {
+        // logic check
+        
+        // number check
+        
+        // suit check
+        
+        // run check
+
+        return false;
+        
+        return true;
     }
 }

@@ -10,10 +10,11 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
     
     public Out outState;
 
+    public float reorderTime = .1f;
+
     public void OnDrop(PointerEventData eventData)
     {
         Debug.Log("dropped", gameObject);
-        // Invoke("ReorderCardObjects", 1f);
     }
 
     public bool checkValidDrop(CardButton newCard)
@@ -57,7 +58,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             if(incomingNum == cards[0].myCard.number)
             {
                 cards.Add(newCard);
-                Invoke("ReorderCardObjects", 1f);
+                Invoke("ReorderCardObjects", reorderTime);
                 // ReorderCardObjects();
                 return true;
             }
@@ -83,7 +84,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             {
                 cards.Add(newCard);
                 cards.Sort(Compare);
-                Invoke("ReorderCardObjects", 1f);
+                Invoke("ReorderCardObjects", reorderTime);
                 // ReorderCardObjects();
                 return true;
             }
@@ -135,18 +136,9 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
 
     void ReorderCardObjects()
     {
-        // int index = 1;
-        print("reordering card order...");
-        print($"drop??: {transform.childCount}");
-        for (int i = 0; i < cards.Count; i++)
+        foreach (var t in cards)
         {
-            // print($"children: {cards.transform.childCount}");
-            
-
-            // print(cards[i].name + " - " + cards[i].transform.parent.gameObject.name);
-            cards[i].transform.SetAsLastSibling();
-            // print($"setting {cardButton.myCard.number} to {cards.IndexOf(cardButton)} : {cardButton.transform.GetSiblingIndex()}");
-            // print($"{cards[i].myCard.number} : {cards[i].transform.GetSiblingIndex()}");
+            t.transform.SetAsLastSibling();
         }
     }
     

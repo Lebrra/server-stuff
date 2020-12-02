@@ -48,3 +48,10 @@ public enum Suit
     Heart,
     Joker
 }
+
+public enum Out
+{
+    None,
+    Run, 
+    Set
+}

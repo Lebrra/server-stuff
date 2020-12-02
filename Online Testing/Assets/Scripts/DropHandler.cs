@@ -29,9 +29,11 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
     
     public bool checkValidDrop(CardButton newCard)
     {
+        print("new card...");
         // first card
         if (cards.Count == 0)
         {
+            cards.Add(newCard);
             return true;
         }
         
@@ -104,6 +106,10 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             cards.Remove(card);
             print($"Removed {card} from CheckPile on {gameObject.name}");
             cards.Sort(Compare);
+            if (cards.Count == 1)
+            {
+                outState = Out.None;
+            }
             return true;
         }
         else

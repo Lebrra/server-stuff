@@ -85,6 +85,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
 
             if (!checkContingous(incomingNum))
             {
+                print($"{newCard.myCard.suit}: {newCard.myCard.number} - Card not contiguous to ");
                 return false;
             }
             else
@@ -121,7 +122,10 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
 
     bool checkContingous(int cardNum)
     {
-        return Mathf.Abs(cardNum - cards[0].myCard.number) == 1 ^
+        print("checking contiguousness:");
+        print(Mathf.Abs(cardNum - cards[0].myCard.number) );
+        print(Mathf.Abs(cardNum - cards[cards.Count - 1].myCard.number));
+        return Mathf.Abs(cardNum - cards[0].myCard.number) == 1 |
                Mathf.Abs(cardNum - cards[cards.Count - 1].myCard.number) == 1;
     }
     

@@ -679,6 +679,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cards: []
   outState: 0
+  reorderTime: 0.05
 --- !u!114 &683674151
 MonoBehaviour:
   m_ObjectHideFlags: 0

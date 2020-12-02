@@ -69,11 +69,10 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
     public void OnEndDrag(PointerEventData eventData)
     {
         GameObject dropObject = eventData.pointerCurrentRaycast.gameObject;
-        GetComponent<Image>().raycastTarget = true;
 
         if (dropObject?.GetComponent<DropHandler>())
         {
-            if (!dropObject.GetComponent<DropHandler>().checkValidDrop(this))
+            if (dropObject.GetComponent<DropHandler>().checkValidDrop(this))
             {
                 parentObject = dropObject.transform;
                 transform.SetParent(parentObject);
@@ -87,6 +86,8 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
         {
             ReturnToHand();
         }
+
+        GetComponent<Image>().raycastTarget = true;
     }
 
     void ReturnToHand()

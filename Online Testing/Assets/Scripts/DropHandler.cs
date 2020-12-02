@@ -9,24 +9,13 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
     public List<CardButton> cards; 
     
     public Out outState;
-    
+
     public void OnDrop(PointerEventData eventData)
     {
         Debug.Log("dropped", gameObject);
+        // Invoke("ReorderCardObjects", 1f);
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    
     public bool checkValidDrop(CardButton newCard)
     {
         print("new card...");
@@ -68,6 +57,8 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             if(incomingNum == cards[0].myCard.number)
             {
                 cards.Add(newCard);
+                Invoke("ReorderCardObjects", 1f);
+                // ReorderCardObjects();
                 return true;
             }
             else
@@ -85,13 +76,15 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
 
             if (!checkContingous(incomingNum))
             {
-                print($"{newCard.myCard.suit}: {newCard.myCard.number} - Card not contiguous to ");
+                print($"{newCard.myCard.suit}: {newCard.myCard.number} - Card not contiguous.");
                 return false;
             }
             else
             {
                 cards.Add(newCard);
                 cards.Sort(Compare);
+                Invoke("ReorderCardObjects", 1f);
+                // ReorderCardObjects();
                 return true;
             }
         }
@@ -107,6 +100,9 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             cards.Remove(card);
             print($"Removed {card} from CheckPile on {gameObject.name}");
             cards.Sort(Compare);
+
+            // ReorderCardObjects();
+            
             if (cards.Count == 1)
             {
                 outState = Out.None;
@@ -135,6 +131,23 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         if (x.myCard.number < y.myCard.number) return -1;
         else if (x.myCard.number > y.myCard.number) return 1;
         else return 0;
+    }
+
+    void ReorderCardObjects()
+    {
+        // int index = 1;
+        print("reordering card order...");
+        print($"drop??: {transform.childCount}");
+        for (int i = 0; i < cards.Count; i++)
+        {
+            // print($"children: {cards.transform.childCount}");
+            
+
+            // print(cards[i].name + " - " + cards[i].transform.parent.gameObject.name);
+            cards[i].transform.SetAsLastSibling();
+            // print($"setting {cardButton.myCard.number} to {cards.IndexOf(cardButton)} : {cardButton.transform.GetSiblingIndex()}");
+            // print($"{cards[i].myCard.number} : {cards[i].transform.GetSiblingIndex()}");
+        }
     }
     
 }

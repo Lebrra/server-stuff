@@ -12,6 +12,8 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
 
     public float reorderTime = .1f;
 
+    private OutHandler OutHandler;
+
     public void OnDrop(PointerEventData eventData)
     {
         Debug.Log("dropped", gameObject);
@@ -115,6 +117,11 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             print($"Trying to remove card that doesn't exist in DropHandler on {gameObject.name}");
             return false;
         }
+    }
+
+    void activateNewDropHandler()
+    {
+        
     }
 
     bool checkContingous(int cardNum)

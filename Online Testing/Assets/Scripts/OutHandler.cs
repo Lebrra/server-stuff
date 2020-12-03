@@ -94,25 +94,7 @@ public class OutHandler : MonoBehaviour
 
     void CheckForOut()
     {
-        bool canGoOut;
-
-        // check for valid dropHandlers
-        for(int i = 0; i < 4; i++)
-        {
-            if (openDrop[i])
-            {
-                if (!dropSpots[nextToOpen].checkValid())
-                {
-                    canGoOut = false;
-                }
-            }
-        }
-
-        // check hand #
-        if (handCopy.Count == 1) canGoOut = true;
-        else canGoOut = false;
-
-        if (canGoOut)
+        if (CanGoOut())
         {
             // enable a button
             goOutBtn.interactable = true;
@@ -121,5 +103,24 @@ public class OutHandler : MonoBehaviour
         {
             goOutBtn.interactable = false;
         }
+    }
+
+    bool CanGoOut()
+    {
+        // check for valid dropHandlers
+        for (int i = 0; i < 4; i++)
+        {
+            if (openDrop[i])
+            {
+                if (!dropSpots[nextToOpen].checkValid())
+                {
+                    return false;
+                }
+            }
+        }
+
+        // check hand #
+        if (handCopy.Count == 1) return true;
+        else return false;
     }
 }

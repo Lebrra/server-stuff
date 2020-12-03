@@ -26,7 +26,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         if (cards.Count == 0)
         {
             cards.Add(newCard);
-            outHandler.RemoveFromHand(card);
+            outHandler.RemoveFromHand(newCard);
             activateNewDropHandler();
             return true;
         }
@@ -62,7 +62,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             if(incomingNum == cards[0].myCard.number)
             {
                 cards.Add(newCard);
-                outHandler.RemoveFromHand(card);
+                outHandler.RemoveFromHand(newCard);
                 Invoke("ReorderCardObjects", reorderTime);
                 // ReorderCardObjects();
                 return true;
@@ -88,7 +88,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             else
             {
                 cards.Add(newCard);
-                outHandler.RemoveFromHand(card);
+                outHandler.RemoveFromHand(newCard);
                 cards.Sort(Compare);
                 Invoke("ReorderCardObjects", reorderTime);
                 // ReorderCardObjects();

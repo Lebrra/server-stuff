@@ -102,6 +102,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
 
     public bool removeCard(CardButton card)
     {
+        print("removing card");
         if (cards.Contains(card))
         {
             if (outState == Out.Set)
@@ -140,6 +141,8 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             if (cards.Count == 1)
             {
                 outState = Out.None;
+                cards.Remove(card);
+                outHandler.ReturnToHand(card);
             }
 
             if (cards.Count == 0)

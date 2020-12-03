@@ -12,7 +12,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
 
     public float reorderTime = .1f;
 
-    private OutHandler OutHandler;
+    private OutHandler outHandler;
 
     public void OnDrop(PointerEventData eventData)
     {
@@ -26,6 +26,8 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         if (cards.Count == 0)
         {
             cards.Add(newCard);
+            outHandler.RemoveFromHand(card);
+            activateNewDropHandler();
             return true;
         }
         
@@ -60,6 +62,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             if(incomingNum == cards[0].myCard.number)
             {
                 cards.Add(newCard);
+                outHandler.RemoveFromHand(card);
                 Invoke("ReorderCardObjects", reorderTime);
                 // ReorderCardObjects();
                 return true;
@@ -85,6 +88,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             else
             {
                 cards.Add(newCard);
+                outHandler.RemoveFromHand(card);
                 cards.Sort(Compare);
                 Invoke("ReorderCardObjects", reorderTime);
                 // ReorderCardObjects();
@@ -100,16 +104,49 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
     {
         if (cards.Contains(card))
         {
-            cards.Remove(card);
-            print($"Removed {card} from CheckPile on {gameObject.name}");
-            cards.Sort(Compare);
+            if (outState == Out.Set)
+            {
+                // if set
+                cards.Remove(card);
+                outHandler.ReturnToHand(card);
+                print($"Removed {card} from CheckPile on {gameObject.name}");
+                cards.Sort(Compare);
+                
+            }
 
-            // ReorderCardObjects();
-            
+            if (outState == Out.Run)
+            {
+                // if run, remove that card and the shorter side of the existing run
+                var cardIndex = cards.IndexOf(card);
+                // determine shorter side
+                if ((cardIndex+1) * 2 > cards.Count)
+                {
+                    for (int i = 0; i < cardIndex; i++)
+                    {
+                        outHandler.ReturnToHand(cards[0]);
+                        cards.RemoveAt(0);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < (cards.Count-cardIndex+1); i++)
+                    {
+                        outHandler.ReturnToHand(cards[cards.Count-1]);
+                        cards.RemoveAt(cards.Count-1);
+                    }
+                }
+            }
+
             if (cards.Count == 1)
             {
                 outState = Out.None;
             }
+
+            if (cards.Count == 0)
+            {
+                outHandler.RemoveEmptyDrop();
+            }
+
             return true;
         }
         else
@@ -119,9 +156,19 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         }
     }
 
+    public bool checkEmpty()
+    {
+        return cards.Count == 0;
+    }
+    
+    public bool checkValid()
+    {
+        return cards.Count > 2 || cards.Count == 0;
+    }
+    
     void activateNewDropHandler()
     {
-        
+        outHandler.OpenNewDrop();
     }
 
     bool checkContingous(int cardNum)

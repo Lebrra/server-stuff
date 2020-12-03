@@ -58,6 +58,7 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
         transform.SetParent(parentObject.parent);
 
         // if in drop handler, remove it from its list
+        if (parentObject.GetComponent<DropHandler>()) parentObject.GetComponent<DropHandler>().removeCard(this);
     }
 
     public void OnDrag(PointerEventData eventData)

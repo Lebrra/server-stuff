@@ -116,7 +116,7 @@ public class OutHandler : MonoBehaviour
         {
             if (openDrop[i])
             {
-                if (!dropSpots[nextToOpen].checkValid())
+                if (!dropSpots[i].checkValid())
                 {
                     return false;
                 }

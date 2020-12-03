@@ -11,8 +11,8 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
     public Out outState;
 
     public float reorderTime = .1f;
-
-    private OutHandler outHandler;
+    
+    public OutHandler outHandler;
 
     public void OnDrop(PointerEventData eventData)
     {

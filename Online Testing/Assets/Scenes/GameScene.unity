@@ -299,6 +299,7 @@ MonoBehaviour:
   cards: []
   outState: 0
   reorderTime: 0.05
+  outHandler: {fileID: 362191952}
 --- !u!114 &306900058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1132,6 +1133,7 @@ MonoBehaviour:
   cards: []
   outState: 0
   reorderTime: 0.05
+  outHandler: {fileID: 362191952}
 --- !u!114 &614202570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1259,6 +1261,7 @@ MonoBehaviour:
   cards: []
   outState: 0
   reorderTime: 0.05
+  outHandler: {fileID: 0}
 --- !u!114 &683674151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2142,6 +2145,7 @@ MonoBehaviour:
   cards: []
   outState: 0
   reorderTime: 0.05
+  outHandler: {fileID: 362191952}
 --- !u!114 &1321483031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2791,6 +2795,7 @@ MonoBehaviour:
   cards: []
   outState: 0
   reorderTime: 0.05
+  outHandler: {fileID: 362191952}
 --- !u!114 &1886110038
 MonoBehaviour:
   m_ObjectHideFlags: 0

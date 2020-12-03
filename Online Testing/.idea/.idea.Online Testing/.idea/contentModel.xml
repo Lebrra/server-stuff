@@ -7,8 +7,12 @@
       <e p="Assets" t="Include">
         <e p="nh_network.cs" t="Include" />
         <e p="Scripts" t="Include">
+          <e p="CardButton.cs" t="Include" />
+          <e p="CardParser.cs" t="Include" />
+          <e p="DropHandler.cs" t="Include" />
           <e p="GameManager.cs" t="Include" />
           <e p="LobbyFunctions.cs" t="Include" />
+          <e p="OutHandler.cs" t="Include" />
           <e p="UsernameActions.cs" t="Include" />
         </e>
         <e p="SocketIO" t="Include">
@@ -112,6 +116,34 @@
             <e p="WebSocketFrame.cs" t="Include" />
             <e p="WebSocketState.cs" t="Include" />
             <e p="WebSocketStream.cs" t="Include" />
+          </e>
+        </e>
+        <e p="TextMesh Pro" t="Include">
+          <e p="Fonts" t="Include">
+            <e p="LiberationSans - OFL.txt" t="Include" />
+          </e>
+          <e p="Resources" t="Include">
+            <e p="LineBreaking Following Characters.txt" t="Include" />
+            <e p="LineBreaking Leading Characters.txt" t="Include" />
+            <e p="Shaders" t="Include">
+              <e p="TMP_Bitmap-Custom-Atlas.shader" t="Include" />
+              <e p="TMP_Bitmap-Mobile.shader" t="Include" />
+              <e p="TMP_Bitmap.shader" t="Include" />
+              <e p="TMP_SDF Overlay.shader" t="Include" />
+              <e p="TMP_SDF-Mobile Masking.shader" t="Include" />
+              <e p="TMP_SDF-Mobile Overlay.shader" t="Include" />
+              <e p="TMP_SDF-Mobile.shader" t="Include" />
+              <e p="TMP_SDF-Surface-Mobile.shader" t="Include" />
+              <e p="TMP_SDF-Surface.shader" t="Include" />
+              <e p="TMP_SDF.shader" t="Include" />
+              <e p="TMP_Sprite.shader" t="Include" />
+              <e p="TMPro.cginc" t="Include" />
+              <e p="TMPro_Properties.cginc" t="Include" />
+              <e p="TMPro_Surface.cginc" t="Include" />
+            </e>
+          </e>
+          <e p="Sprites" t="Include">
+            <e p="EmojiOne Attribution.txt" t="Include" />
           </e>
         </e>
       </e>

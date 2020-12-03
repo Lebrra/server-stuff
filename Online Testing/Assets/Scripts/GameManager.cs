@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     public Transform handObject;
     public List<CardButton> myHand;
 
+    [Header("Panels")]
+    public GameObject outPanel;
+
     private void Awake()
     {
         if (instance) Destroy(gameObject);
@@ -61,5 +64,10 @@ public class GameManager : MonoBehaviour
         GameObject newCard = Instantiate(cardPrefab, handObject);
         newCard.GetComponent<CardButton>().MyCard(cardName);
         myHand.Add(newCard.GetComponent<CardButton>());
+    }
+
+    public void openOutPanel(bool open)
+    {
+        outPanel.SetActive(open);
     }
 }

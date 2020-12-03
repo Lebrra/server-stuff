@@ -13,9 +13,8 @@ public class OutHandler : MonoBehaviour
 
     public Button goOutBtn;
 
-    private void Start()
+    private void OnEnable()
     {
-        // temp
         OpenOutMenu();
     }
 

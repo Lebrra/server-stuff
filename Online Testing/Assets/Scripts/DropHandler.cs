@@ -129,7 +129,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
                 }
                 else
                 {
-                    for (int i = 0; i < (cards.Count-cardIndex+1); i++)
+                    for (int i = 0; i < (cards.Count-cardIndex); i++)
                     {
                         outHandler.ReturnToHand(cards[cards.Count-1]);
                         cards.RemoveAt(cards.Count-1);

@@ -41,7 +41,11 @@ public class OutHandler : MonoBehaviour
 
     public void OpenNewDrop()
     {
-        if (nextToOpen != -1) dropSpots[nextToOpen].gameObject.SetActive(true);
+        if (nextToOpen != -1)
+        {
+            dropSpots[nextToOpen].gameObject.SetActive(true);
+            openDrop[nextToOpen] = true;
+        }
         GetNextOpen();
     }
 

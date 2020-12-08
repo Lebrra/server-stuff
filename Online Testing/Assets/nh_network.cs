@@ -161,7 +161,7 @@ public class nh_network : MonoBehaviour
     void myTurn(SocketIOEvent evt)
     {
         Debug.Log("Its my turn!");
-        GameManager.instance.myDraw = true;
+        GameManager.instance.myDraw = GameManager.instance.myTurn = true;
     }
 
     #region Card Functions

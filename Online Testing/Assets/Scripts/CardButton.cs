@@ -38,6 +38,12 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
             transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().color = Color.red;
             transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().color = Color.red;
         }
+        else
+        {
+            // make texts black
+            transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().color = Color.black;
+            transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().color = Color.black;
+        }
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -82,6 +88,11 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
             {
                 ReturnToHand();
             }
+        }
+        else if (dropObject?.GetComponent<DiscardHandler>())
+        {
+            if (!dropObject.GetComponent<DiscardHandler>().DiscardCard(this))
+                ReturnToHand();
         }
         else
         {

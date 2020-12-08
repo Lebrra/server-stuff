@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     [Header("Hand")]
     public GameObject cardPrefab;
     public Transform handObject;
+    public Transform discardTransform;
     public List<CardButton> myHand;
 
     [Header("Panels")]
@@ -50,19 +51,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void discardCard(string cardName)
+    public bool discardCard(string cardName)
     {
         if (myDiscard)
         {
             server.discardCard(cardName);
             myDiscard = myTurn = false;
+            return true;
         }
+        else return false;
     }
 
     public void addCardToHand(string cardName)
     {
-        GameObject newCard = Instantiate(cardPrefab, handObject);
-        newCard.GetComponent<CardButton>().MyCard(cardName);
+        GameObject newCard = CardPooler.instance.PopCard(cardName, handObject);
         myHand.Add(newCard.GetComponent<CardButton>());
     }
 

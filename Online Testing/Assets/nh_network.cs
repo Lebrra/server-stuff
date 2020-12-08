@@ -183,6 +183,7 @@ public class nh_network : MonoBehaviour
     {
         string discard = evt.data.GetField("card").ToString().Trim('"');
         Debug.Log("Discarded " + discard);
+        GameManager.instance.addCardToDiscard(discard);
     }
 
     public void drawCard(bool fromDeck)

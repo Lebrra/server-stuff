@@ -2649,6 +2649,11 @@ PrefabInstance:
       propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7677511916407582318, guid: 30fa56892e9e48240beccfb0cbbf8c43,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7726488638238483238, guid: 30fa56892e9e48240beccfb0cbbf8c43,
         type: 3}
       propertyPath: m_IsActive
@@ -3520,8 +3525,9 @@ MonoBehaviour:
   cardPrefab: {fileID: 2824774552956895402, guid: 30fa56892e9e48240beccfb0cbbf8c43,
     type: 3}
   handObject: {fileID: 1986125028}
-  discardTransform: {fileID: 0}
   myHand: []
+  discardTransform: {fileID: 1283660260}
+  cardInDiscard: {fileID: 0}
   outPanel: {fileID: 362191950}
 --- !u!4 &1911076859
 Transform:

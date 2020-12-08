@@ -34,6 +34,7 @@ public class CardPooler : MonoBehaviour
             card = cardPool[0];
             cardPool.RemoveAt(0);
             card.transform.SetParent(parent);
+            card.transform.position = parent.transform.position;
         }
         else
         {

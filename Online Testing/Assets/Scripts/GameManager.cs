@@ -15,8 +15,11 @@ public class GameManager : MonoBehaviour
     [Header("Hand")]
     public GameObject cardPrefab;
     public Transform handObject;
-    public Transform discardTransform;
     public List<CardButton> myHand;
+
+    [Header("Discard Objects")]
+    public Transform discardTransform;
+    public GameObject cardInDiscard;
 
     [Header("Panels")]
     public GameObject outPanel;
@@ -29,16 +32,9 @@ public class GameManager : MonoBehaviour
         server = nh_network.server;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         server.setReady();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void drawCard(bool fromDeck)
@@ -66,6 +62,20 @@ public class GameManager : MonoBehaviour
     {
         GameObject newCard = CardPooler.instance.PopCard(cardName, handObject);
         myHand.Add(newCard.GetComponent<CardButton>());
+    }
+
+    public void addCardToDiscard(string cardName)
+    {
+        GameObject newCard = CardPooler.instance.PopCard(cardName, discardTransform);
+        newCard.GetComponent<CardButton>().enabled = false;
+
+        if (cardInDiscard)
+        {
+            cardInDiscard.GetComponent<CardButton>().enabled = true;
+            CardPooler.instance.PushCard(cardInDiscard);
+            cardInDiscard = null;
+        }
+        cardInDiscard = newCard;
     }
 
     public void openOutPanel(bool open)

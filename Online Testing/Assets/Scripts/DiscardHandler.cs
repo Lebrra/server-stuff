@@ -1,15 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class DiscardHandler : MonoBehaviour, IDropHandler
+public class DiscardHandler : MonoBehaviour
 {
-    public void OnDrop(PointerEventData eventData)
-    {
-        // if my turn, can send card to discard and remove it from hand
-    }
-
     /// <summary>
     /// Returns true is card is discarded
     /// </summary>

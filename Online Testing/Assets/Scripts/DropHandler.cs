@@ -14,6 +14,8 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
     
     public OutHandler outHandler;
 
+    public Card wildCard;
+
     public void OnDrop(PointerEventData eventData)
     {
         Debug.Log("dropped", gameObject);
@@ -47,7 +49,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             else if (incomingSuit == cards[0].myCard.suit)
             {
                 outState = Out.Run;
-            }
+            } 
             else
             {
                 // if the second card is not set-making nor contiguous, reject 
@@ -100,6 +102,11 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         return false;
     }
 
+    void setWildCard(Card newWild)
+    {
+        wildCard = newWild;
+    }
+
     public bool removeCard(CardButton card)
     {
         print("removing card");
@@ -112,7 +119,6 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
                 outHandler.ReturnToHand(card);
                 print($"Removed {card} from CheckPile on {gameObject.name}");
                 cards.Sort(Compare);
-                
             }
 
             if (outState == Out.Run)
@@ -176,9 +182,9 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
 
     bool checkContingous(int cardNum)
     {
-        print("checking contiguousness:");
-        print(Mathf.Abs(cardNum - cards[0].myCard.number) );
-        print(Mathf.Abs(cardNum - cards[cards.Count - 1].myCard.number));
+        // print("checking contiguousness:");
+        // print(Mathf.Abs(cardNum - cards[0].myCard.number) );
+        // print(Mathf.Abs(cardNum - cards[cards.Count - 1].myCard.number));
         return Mathf.Abs(cardNum - cards[0].myCard.number) == 1 |
                Mathf.Abs(cardNum - cards[cards.Count - 1].myCard.number) == 1;
     }

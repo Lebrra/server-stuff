@@ -38,6 +38,9 @@ public struct Card
 {
     public Suit suit;
     public int number;
+    public bool usedAsWild;
+    public Suit wildSuit;
+    public int wildNumber;
 }
 
 public enum Suit

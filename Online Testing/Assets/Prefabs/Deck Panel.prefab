@@ -118,7 +118,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5174608921731796742
 RectTransform:
   m_ObjectHideFlags: 0
@@ -253,12 +253,12 @@ Canvas:
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
-  m_OverrideSorting: 0
+  m_OverrideSorting: 1
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 987604889
+  m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &5174608921963193174
 MonoBehaviour:
@@ -295,7 +295,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
-  m_SortingLayerID: 0
+  m_SortingLayerID: 987604889
   m_SortingOrder: 10
   m_TargetDisplay: 0
 --- !u!114 &5174608921963193173
@@ -406,7 +406,7 @@ PrefabInstance:
     - target: {fileID: 6008093852982837925, guid: e27dcaf8c6bb94ef596a9f0a8e6ad91f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 104
+      value: 72.2
       objectReference: {fileID: 0}
     - target: {fileID: 6008093852982837925, guid: e27dcaf8c6bb94ef596a9f0a8e6ad91f,
         type: 3}
@@ -416,7 +416,7 @@ PrefabInstance:
     - target: {fileID: 6008093852982837925, guid: e27dcaf8c6bb94ef596a9f0a8e6ad91f,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 200
+      value: 136.3
       objectReference: {fileID: 0}
     - target: {fileID: 6008093852982837925, guid: e27dcaf8c6bb94ef596a9f0a8e6ad91f,
         type: 3}
@@ -582,7 +582,7 @@ PrefabInstance:
     - target: {fileID: 6008093852982837925, guid: e27dcaf8c6bb94ef596a9f0a8e6ad91f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 577
+      value: 609
       objectReference: {fileID: 0}
     - target: {fileID: 6008093852982837925, guid: e27dcaf8c6bb94ef596a9f0a8e6ad91f,
         type: 3}
@@ -592,7 +592,7 @@ PrefabInstance:
     - target: {fileID: 6008093852982837925, guid: e27dcaf8c6bb94ef596a9f0a8e6ad91f,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 200
+      value: 136.3
       objectReference: {fileID: 0}
     - target: {fileID: 6008093852982837925, guid: e27dcaf8c6bb94ef596a9f0a8e6ad91f,
         type: 3}

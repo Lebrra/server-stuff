@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     nh_network server;
 
+    [Header("Round Info")] public int round;
+
     [Header("Turn Bools")]
     public bool myTurn = false; // might not need this one
     public bool myDraw = false;

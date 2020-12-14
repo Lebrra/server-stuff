@@ -20,9 +20,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99022977-17a8-4c7c-b947-2c8216240d1f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/DropGuide.prefab" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/DropGuide.prefab.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/GuideDropHandler.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Online Testing/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Online Testing/.idea/contentModel.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Online Testing/.idea/indexLayout.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Online Testing/.idea/indexLayout.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Online Testing/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Online Testing/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Card.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Card.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/GameScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/GameScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/CardButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/CardButton.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/DropHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/DropHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/OutHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/OutHandler.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/SocketIO/WebsocketSharp/websocket-sharp.csproj.meta" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -33,10 +42,23 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/GuideDropHandler.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/54F20CA0-13D7-4A1F-9CF6-2CFA1D3ED12F/fd/14dce282/IDropHandler.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/DropContextController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/LayoutController.cs" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/Assets/nh_network.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/CardParser.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/GuideDropHandler.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" />
+        <option value="$PROJECT_DIR$/Assets/DropContextController.cs" />
+        <option value="$PROJECT_DIR$/Assets/LayoutController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/CardButton.cs" />
+        <option value="$PROJECT_DIR$/Assets/Scripts/OutHandler.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/DropHandler.cs" />
       </list>
     </option>
@@ -81,7 +103,10 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1607022888332</updated>
-      <workItem from="1607022902647" duration="5343000" />
+      <workItem from="1607022902647" duration="6823000" />
+      <workItem from="1607377842690" duration="7349000" />
+      <workItem from="1607541283252" duration="1242000" />
+      <workItem from="1607900313193" duration="28859000" />
     </task>
     <servers />
   </component>
@@ -104,5 +129,11 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="510" y="185" key="RiderGenerateDialog" timestamp="1607915123606">
+      <screen x="0" y="0" width="1536" height="960" />
+    </state>
+    <state x="510" y="185" key="RiderGenerateDialog/0.0.1536.960@0.0.1536.960" timestamp="1607915123606" />
   </component>
 </project>

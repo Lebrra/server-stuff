@@ -83,6 +83,7 @@ public class OutHandler : MonoBehaviour
 
     public void ReturnToHand(CardButton cardAdded)
     {
+        print($"Returning card to hand {cardAdded.myCard.suit} - {cardAdded.myCard.number}");
         handCopy.Add(cardAdded);
 
         CheckForOut();

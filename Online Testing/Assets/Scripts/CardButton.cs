@@ -102,7 +102,7 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
         GetComponent<Image>().raycastTarget = true;
     }
 
-    void ReturnToHand()
+    public void ReturnToHand()
     {
         parentObject = handObject;
         transform.SetParent(parentObject);

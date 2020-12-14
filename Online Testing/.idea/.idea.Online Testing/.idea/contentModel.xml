@@ -5,12 +5,17 @@
       <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
+        <e p="DropContextController.cs" t="Include" />
+        <e p="LayoutController.cs" t="Include" />
         <e p="nh_network.cs" t="Include" />
         <e p="Scripts" t="Include">
           <e p="CardButton.cs" t="Include" />
           <e p="CardParser.cs" t="Include" />
+          <e p="CardPooler.cs" t="Include" />
+          <e p="DiscardHandler.cs" t="Include" />
           <e p="DropHandler.cs" t="Include" />
           <e p="GameManager.cs" t="Include" />
+          <e p="GuideDropHandler.cs" t="Include" />
           <e p="LobbyFunctions.cs" t="Include" />
           <e p="OutHandler.cs" t="Include" />
           <e p="UsernameActions.cs" t="Include" />

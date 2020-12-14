@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
 {
@@ -14,7 +15,15 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
     
     public OutHandler outHandler;
 
-    public Card wildCard;
+    public List<CardButton> wildCards;
+
+    public GameObject DropGuideLeft, DropGuideRight;
+
+    public bool canDrop = true;
+
+    public CardButton lastCard;
+
+    private GameManager gameManager;
 
     public void OnDrop(PointerEventData eventData)
     {
@@ -23,13 +32,25 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
 
     public bool checkValidDrop(CardButton newCard)
     {
+        if (!canDrop)
+            return false;
+        
         print("new card...");
         // first card
         if (cards.Count == 0)
         {
+            if (newCard.myCard.suit == Suit.Joker || newCard.myCard.number == GameManager.instance.round)
+            {
+                // return false -- no wild as first card
+                // may have ui display something
+                print("Wilds can not be the first card played on a drop zone.");
+                return false;
+            }
+            
             cards.Add(newCard);
             outHandler.RemoveFromHand(newCard);
             activateNewDropHandler();
+            print("Added a new card ${newCard.myCard.suit} - ${newCard.myCard.number} to drop zone");
             return true;
         }
         
@@ -44,12 +65,22 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         {
             if (incomingNum == cards[0].myCard.number)
             {
+                print("Setting Drop Zone to Out to 'Set'");
                 outState = Out.Set;
             }
             else if (incomingSuit == cards[0].myCard.suit)
             {
+                print("Setting Drop Zone to Out to 'Run'");
                 outState = Out.Run;
             } 
+            // ~ wild
+            else if (newCard.myCard.suit == Suit.Joker || newCard.myCard.number == GameManager.instance.round)
+            {
+                print("Dropped a Wild Card, enabling Contextual Menu");
+                wildCards.Add(newCard);
+                ContextEnableOutOptions();
+                return true;
+            }
             else
             {
                 // if the second card is not set-making nor contiguous, reject 
@@ -65,53 +96,147 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             {
                 cards.Add(newCard);
                 outHandler.RemoveFromHand(newCard);
-                Invoke("ReorderCardObjects", reorderTime);
-                // ReorderCardObjects();
+                Invoke(nameof(ReorderCardObjects), reorderTime);
+                print($"Adding a new card {newCard.myCard.suit}: {newCard.myCard.number} to our set.");
                 return true;
             }
             else
             {
+                print($"Failed attempt to add a new card {newCard.myCard.suit} to our set.");
                 return false;
             }
         }
 
         if (outState == Out.Run)
         {
+            // ~ wild 
+            if (newCard.myCard.suit == Suit.Joker || newCard.myCard.number == GameManager.instance.round)
+            {
+                print("Added a wild card, contextual options should appear.");
+                ContextEnableRunOptions();
+                newCard.myCard.usedAsWild = true;
+                // cards.Add(newCard);
+                wildCards.Add(newCard);
+                outHandler.RemoveFromHand(newCard);
+                return true;
+            }
+            
             if (cardNums.Contains(incomingNum)) // this might be necessary if i adjust the contiguous
             {
+                print($"{newCard.myCard.suit}: {newCard.myCard.number} - Card already exists in run.");
                 return false;
             }
 
-            if (!checkContingous(incomingNum))
+            if (!checkContinguous(incomingNum))
             {
                 print($"{newCard.myCard.suit}: {newCard.myCard.number} - Card not contiguous.");
                 return false;
             }
-            else
-            {
-                cards.Add(newCard);
-                outHandler.RemoveFromHand(newCard);
-                cards.Sort(Compare);
-                Invoke("ReorderCardObjects", reorderTime);
-                // ReorderCardObjects();
-                return true;
-            }
+            
+            cards.Add(newCard);
+            outHandler.RemoveFromHand(newCard);
+            cards.Sort(Compare);
+            Invoke(nameof(ReorderCardObjects), reorderTime);
+            return true;
+            
         }
 
         print($"Oops something wrong with the validDropCheck on {gameObject.name}");
         return false;
     }
-
-    void setWildCard(Card newWild)
+    
+    public void ContextEnableRunOptions()
     {
-        wildCard = newWild;
+        GetComponent<LayoutController>().squeezeIn();
+        // display context options for run or sets
+        DropGuideLeft.SetActive(true);
+        DropGuideRight.SetActive(true);
+        // set context values
+        DropGuideLeft.GetComponent<DropContextController>().setHeader("<");
+        DropGuideLeft.GetComponent<Button>().onClick.AddListener(ContextSetRunFirstCard);
+        DropGuideRight.GetComponent<DropContextController>().setHeader(">");
+        DropGuideRight.GetComponent<Button>().onClick.AddListener(ContextSetRunLastCard);
+        canDrop = false;
     }
+    
+    
+    public void ContextEnableOutOptions()
+    {
+        // squeeze cards to center
+        GetComponent<LayoutController>().squeezeIn();
+        // display context options for run or sets
+        DropGuideLeft.SetActive(true);
+        DropGuideRight.SetActive(true);
+        // set context values
+        DropGuideLeft.GetComponent<DropContextController>().setHeader("Run");
+        DropGuideLeft.GetComponent<Button>().onClick.AddListener(ContextSetRun);
+        DropGuideRight.GetComponent<DropContextController>().setHeader("Set");
+        DropGuideRight.GetComponent<Button>().onClick.AddListener(ContextSetSet);
+        canDrop = false;
+    }
+
+    public void ContextDisable()
+    {
+        // remove event listeners
+        DropGuideLeft.GetComponent<Button>().onClick.RemoveAllListeners();
+        DropGuideRight.GetComponent<Button>().onClick.RemoveAllListeners();
+        // disable context options
+        DropGuideLeft.SetActive(false);
+        DropGuideRight.SetActive(false);
+    }
+
+    public void ContextSetRun()
+    {
+        outState = Out.Run;
+        canDrop = true;
+        ContextDisable();
+        // may add a flash?
+        ContextEnableRunOptions();
+    }
+    
+    public void ContextSetSet()
+    {
+        outState = Out.Set;
+        canDrop = true;
+        ContextDisable();
+    }
+
+    public void ContextSetRunFirstCard()
+    {
+        // set position
+        cards.Insert(0, wildCards.Last());
+        // set wild value
+        cards[0].myCard.wildNumber = cards[1].myCard.number - 1;
+        print($"Setting wild card to number to {cards[0].myCard.wildNumber}");
+        ContextDisable();
+        Invoke(nameof(ReorderCardObjects), reorderTime);
+        canDrop = true;
+    }
+    
+    public void ContextSetRunLastCard()
+    {
+        // set position
+        cards.Add(wildCards.Last());
+        // set wild value
+        cards.Last().myCard.wildNumber = cards[cards.Count-1].myCard.number - 1;
+        print($"Setting wild card to number to {cards.Last().myCard.wildNumber}");
+        ContextDisable();
+        Invoke(nameof(ReorderCardObjects), reorderTime);
+        canDrop = true;
+    }
+
 
     public bool removeCard(CardButton card)
     {
         print("removing card");
         if (cards.Contains(card))
         {
+            // ~ wild
+            if (card.myCard.usedAsWild)
+            {
+                wildCards.Remove(card);
+            }
+            
             if (outState == Out.Set)
             {
                 // if set
@@ -125,23 +250,31 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             {
                 // if run, remove that card and the shorter side of the existing run
                 var cardIndex = cards.IndexOf(card);
+                print($"Removing from a run at index {cardIndex}. Total number of cards is {cards.Count}.");
                 // determine shorter side
-                if ((cardIndex+1) * 2 > cards.Count)
+                if ((cardIndex+1) * 2 <= cards.Count)
                 {
+                    print("Removing from left side");
                     for (int i = 0; i < cardIndex; i++)
                     {
+                        // removing from the left side end everytime
                         outHandler.ReturnToHand(cards[0]);
+                        cards[0].ReturnToHand();
                         cards.RemoveAt(0);
                     }
                 }
                 else
                 {
+                    print("Removing from right side");
                     for (int i = 0; i < (cards.Count-cardIndex); i++)
                     {
                         outHandler.ReturnToHand(cards[cards.Count-1]);
+                        cards.Last().ReturnToHand();
                         cards.RemoveAt(cards.Count-1);
                     }
                 }
+                if(cards.Contains(card))
+                    cards.Remove(card);
             }
 
             if (cards.Count == 1)
@@ -180,13 +313,14 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         outHandler.OpenNewDrop();
     }
 
-    bool checkContingous(int cardNum)
+    bool checkContinguous(int cardNum)
     {
         // print("checking contiguousness:");
-        // print(Mathf.Abs(cardNum - cards[0].myCard.number) );
-        // print(Mathf.Abs(cardNum - cards[cards.Count - 1].myCard.number));
-        return Mathf.Abs(cardNum - cards[0].myCard.number) == 1 |
-               Mathf.Abs(cardNum - cards[cards.Count - 1].myCard.number) == 1;
+        int firstcardVal = (cards[0].myCard.usedAsWild) ? cards[0].myCard.wildNumber : cards[0].myCard.number;
+        int lastcardVal = (cards.Last().myCard.usedAsWild) ? cards.Last().myCard.wildNumber : cards.Last().myCard.number;
+
+        return cardNum - firstcardVal == -1 |
+               cardNum - lastcardVal == 1;
     }
     
     public int Compare(CardButton x, CardButton y)
@@ -204,5 +338,4 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             t.transform.SetAsLastSibling();
         }
     }
-    
 }

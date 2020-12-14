@@ -15,7 +15,6 @@
           <e p="DiscardHandler.cs" t="Include" />
           <e p="DropHandler.cs" t="Include" />
           <e p="GameManager.cs" t="Include" />
-          <e p="GuideDropHandler.cs" t="Include" />
           <e p="LobbyFunctions.cs" t="Include" />
           <e p="OutHandler.cs" t="Include" />
           <e p="UsernameActions.cs" t="Include" />

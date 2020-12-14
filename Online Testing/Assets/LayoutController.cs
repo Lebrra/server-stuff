@@ -29,7 +29,7 @@ public class LayoutController : MonoBehaviour
     private void Update()
     {
         LayoutElements = GetComponentsInChildren<LayoutElement>().Where(element => element.ignoreLayout == false).ToList();
-        print($"width: {GetComponent<RectTransform>().rect.width }");
+        // print($"width: {GetComponent<RectTransform>().rect.width }");
         layoutGroup.spacing = spacingOffset + GetComponent<RectTransform>().rect.width / LayoutElements.Count * -1;
     }
 

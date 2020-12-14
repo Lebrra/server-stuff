@@ -61,7 +61,9 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
     public void OnBeginDrag(PointerEventData eventData)
     {
         GetComponent<Image>().raycastTarget = false;
-        transform.SetParent(parentObject.parent);
+        
+        // ~- Leah I've noticed that if i disable the line below, we don't get the card bloat -- can you look at this?
+        // transform.SetParent(parentObject.parent);
 
         // if in drop handler, remove it from its list
         if (parentObject.GetComponent<DropHandler>()) parentObject.GetComponent<DropHandler>().removeCard(this);
@@ -104,6 +106,7 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
     public void ReturnToHand()
     {
+        print("return to hand");
         parentObject = handObject;
         transform.SetParent(parentObject);
     }

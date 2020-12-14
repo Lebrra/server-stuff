@@ -78,6 +78,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             {
                 print("Dropped a Wild Card, enabling Contextual Menu");
                 wildCards.Add(newCard);
+                newCard.myCard.usedAsWild = true;
                 ContextEnableOutOptions();
                 return true;
             }
@@ -218,7 +219,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         // set position
         cards.Add(wildCards.Last());
         // set wild value
-        cards.Last().myCard.wildNumber = cards[cards.Count-1].myCard.number - 1;
+        cards.Last().myCard.wildNumber = cards[cards.Count-2].myCard.number + 1;
         print($"Setting wild card to number to {cards.Last().myCard.wildNumber}");
         ContextDisable();
         Invoke(nameof(ReorderCardObjects), reorderTime);
@@ -235,6 +236,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             if (card.myCard.usedAsWild)
             {
                 wildCards.Remove(card);
+                card.myCard.usedAsWild = false;
             }
             
             if (outState == Out.Set)
@@ -326,8 +328,10 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
     public int Compare(CardButton x, CardButton y)
     {
         print("Sorting Cards...");
-        if (x.myCard.number < y.myCard.number) return -1;
-        else if (x.myCard.number > y.myCard.number) return 1;
+        int xVal = (x.myCard.usedAsWild) ? x.myCard.wildNumber : x.myCard.number;
+        int yVal = (y.myCard.usedAsWild) ? y.myCard.wildNumber : y.myCard.number;
+        if (xVal < yVal) return -1;
+        else if (xVal > yVal) return 1;
         else return 0;
     }
 

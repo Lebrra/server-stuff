@@ -20,19 +20,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99022977-17a8-4c7c-b947-2c8216240d1f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/DropGuide.prefab" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/DropGuide.prefab.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/GuideDropHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Online Testing/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Online Testing/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Online Testing/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Online Testing/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Card.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Card.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/LayoutController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LayoutController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Deck Panel.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Deck Panel.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/GameScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/GameScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/CardButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/CardButton.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/DropHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/DropHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/OutHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/OutHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/SocketIO/WebsocketSharp/websocket-sharp.csproj.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,9 +49,9 @@
         <option value="$PROJECT_DIR$/Assets/Scripts/GuideDropHandler.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/GameManager.cs" />
         <option value="$PROJECT_DIR$/Assets/DropContextController.cs" />
-        <option value="$PROJECT_DIR$/Assets/LayoutController.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/CardButton.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/OutHandler.cs" />
+        <option value="$PROJECT_DIR$/Assets/LayoutController.cs" />
         <option value="$PROJECT_DIR$/Assets/Scripts/DropHandler.cs" />
       </list>
     </option>
@@ -106,7 +99,7 @@
       <workItem from="1607022902647" duration="6823000" />
       <workItem from="1607377842690" duration="7349000" />
       <workItem from="1607541283252" duration="1242000" />
-      <workItem from="1607900313193" duration="28859000" />
+      <workItem from="1607900313193" duration="32056000" />
     </task>
     <servers />
   </component>

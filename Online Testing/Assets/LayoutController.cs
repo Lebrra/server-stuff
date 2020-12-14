@@ -13,6 +13,8 @@ public class LayoutController : MonoBehaviour
 
     private HorizontalLayoutGroup layoutGroup;
 
+    public int spacingOffset;
+
     private void Awake()
     {
         layoutGroup = GetComponent<HorizontalLayoutGroup>();
@@ -22,6 +24,13 @@ public class LayoutController : MonoBehaviour
     void Start()
     {
         LayoutElements = GetComponentsInChildren<LayoutElement>().Where(element => element.ignoreLayout == false).ToList();
+    }
+
+    private void Update()
+    {
+        LayoutElements = GetComponentsInChildren<LayoutElement>().Where(element => element.ignoreLayout == false).ToList();
+        print($"width: {GetComponent<RectTransform>().rect.width }");
+        layoutGroup.spacing = spacingOffset + GetComponent<RectTransform>().rect.width / LayoutElements.Count * -1;
     }
 
     public void fanOut()

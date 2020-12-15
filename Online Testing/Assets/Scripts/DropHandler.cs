@@ -133,7 +133,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
                 newCard.myCard.usedAsWild = true;
                 // cards.Add(newCard);
                 wildCards.Add(newCard);
-                outHandler.RemoveFromHand(newCard);
+                // outHandler.RemoveFromHand(newCard);
                 return true;
             }
             
@@ -227,6 +227,8 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         ContextDisable();
         Invoke(nameof(ReorderCardObjects), reorderTime);
         canDrop = true;
+        // check for out
+        outHandler.RemoveFromHand(cards[0]);
     }
     
     public void ContextSetRunLastCard()
@@ -239,6 +241,8 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         ContextDisable();
         Invoke(nameof(ReorderCardObjects), reorderTime);
         canDrop = true;
+        // check for out
+        outHandler.RemoveFromHand(cards.Last());
     }
 
 

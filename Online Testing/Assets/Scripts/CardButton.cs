@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -64,6 +65,9 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
         
         // ~- Leah I've noticed that if i disable the line below, we don't get the card bloat -- can you look at this?
         // transform.SetParent(parentObject.parent);
+        transform.localScale = transform.localScale;
+        
+        print("DRAG BEGIN: " + transform.parent);
 
         // if in drop handler, remove it from its list
         if (parentObject.GetComponent<DropHandler>()) parentObject.GetComponent<DropHandler>().removeCard(this);
@@ -73,6 +77,8 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
     {
         // move card image with mouse/finger
         transform.position = Input.mousePosition;
+
+        print("DRAGGING: " + transform.parent);
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -88,6 +94,7 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
             }
             else
             {
+                print("failed valid drop");
                 ReturnToHand();
             }
         }
@@ -98,6 +105,7 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
         }
         else
         {
+            print("did not drag card to a droppable object");
             ReturnToHand();
         }
 
@@ -109,6 +117,11 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
         print("return to hand");
         parentObject = handObject;
         transform.SetParent(parentObject);
+        if (transform.parent.GetComponent<HorizontalOrVerticalLayoutGroup>())
+        {
+            transform.parent.GetComponent<HorizontalOrVerticalLayoutGroup>().enabled = false;
+            transform.parent.GetComponent<HorizontalOrVerticalLayoutGroup>().enabled = true;
+        }
     }
 
     void ShrinkCard()

@@ -101,6 +101,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
                 print($"Dropped a Wild Card to set of {cards[0].myCard.suit}");
                 if(!wildCards.Contains(newCard))
                     wildCards.Add(newCard);   
+                cards.Add(newCard);
                 newCard.myCard.usedAsWild = true;
                 outHandler.RemoveFromHand(newCard);
                 return true;

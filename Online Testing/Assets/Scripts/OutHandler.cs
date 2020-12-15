@@ -91,8 +91,12 @@ public class OutHandler : MonoBehaviour
 
     public void ReturnToHand(CardButton cardAdded)
     {
-        print($"Returning card to hand {cardAdded.myCard.suit} - {cardAdded.myCard.number}");
-        handCopy.Add(cardAdded);
+        if (!handCopy.Contains(cardAdded))
+        {
+            print($"Returning card to hand {cardAdded.myCard.suit} - {cardAdded.myCard.number}");
+            handCopy.Add(cardAdded);
+        }
+        else Debug.LogWarning("Card already exists in hand", cardAdded.gameObject);
 
         CheckForOut();
     }
@@ -100,7 +104,7 @@ public class OutHandler : MonoBehaviour
     public void RemoveFromHand(CardButton cardRemoved)
     {
         if (handCopy.Contains(cardRemoved)) handCopy.Remove(cardRemoved);
-        else Debug.LogError("Invalid Card", gameObject);
+        else Debug.LogWarning("Card not found in hand", cardRemoved.gameObject);
 
         CheckForOut();
     }

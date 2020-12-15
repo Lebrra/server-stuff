@@ -308,7 +308,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
                 outHandler.ReturnToHand(card);
             }
 
-            else if (cards.Count == 0)
+            if (cards.Count == 0)
             {
                 outHandler.RemoveEmptyDrop();
             }

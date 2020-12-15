@@ -8,6 +8,7 @@
         <e p="DropContextController.cs" t="Include" />
         <e p="LayoutController.cs" t="Include" />
         <e p="nh_network.cs" t="Include" />
+        <e p="NotificationManager.cs" t="Include" />
         <e p="Scripts" t="Include">
           <e p="CardButton.cs" t="Include" />
           <e p="CardParser.cs" t="Include" />

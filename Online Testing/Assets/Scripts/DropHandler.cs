@@ -33,8 +33,11 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
     public bool checkValidDrop(CardButton newCard)
     {
         if (!canDrop)
+        {
+            print("This DropZone is droppable");
             return false;
-        
+        }
+
         print("new card...");
         // first card
         if (cards.Count == 0)
@@ -353,5 +356,13 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         {
             t.transform.SetAsLastSibling();
         }
+    }
+
+    public void clearDropZone()
+    {
+        cards.Clear();
+        wildCards.Clear();
+        outState = Out.None;
+        canDrop = true;
     }
 }

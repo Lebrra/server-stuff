@@ -18,6 +18,11 @@ public class OutHandler : MonoBehaviour
         OpenOutMenu();
     }
 
+    private void OnDisable()
+    {
+        CloseOutMenu();
+    }
+
     public void OpenOutMenu()
     {
         for (int i = 0; i < 4; i++)

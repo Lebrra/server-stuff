@@ -37,6 +37,9 @@ public class OutHandler : MonoBehaviour
     public void CloseOutMenu()
     {
         // reset everything
+        foreach (DropHandler d in dropSpots) d.clearDropZone();
+        handCopy.Clear();
+        foreach (CardButton c in GameManager.instance.myHand) c.ReturnToHand();
     }
 
     public void OpenNewDrop()

@@ -77,8 +77,10 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             else if (newCard.myCard.suit == Suit.Joker | newCard.myCard.number == GameManager.instance.round)
             {
                 print("Dropped a Wild Card, enabling Contextual Menu");
-                wildCards.Add(newCard);
+                if(!wildCards.Contains(newCard))
+                    wildCards.Add(newCard);   
                 newCard.myCard.usedAsWild = true;
+                outHandler.RemoveFromHand(newCard);
                 ContextEnableOutOptions();
                 return true;
             }

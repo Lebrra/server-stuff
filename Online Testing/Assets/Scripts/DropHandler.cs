@@ -83,7 +83,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
                 if(!wildCards.Contains(newCard))
                     wildCards.Add(newCard);   
                 newCard.myCard.usedAsWild = true;
-                outHandler.RemoveFromHand(newCard);
+                // outHandler.RemoveFromHand(newCard);
                 ContextEnableOutOptions();
                 return true;
             }

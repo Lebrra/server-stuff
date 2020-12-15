@@ -214,6 +214,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
     {
         outState = Out.Set;
         canDrop = true;
+        cards.Add(wildCards.Last());
         ContextDisable();
     }
 

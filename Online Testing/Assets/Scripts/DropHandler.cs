@@ -95,7 +95,16 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         // 2 or more cards...
         if (outState == Out.Set)
         {
-            if(incomingNum == cards[0].myCard.number)
+            // ~ wild
+            if (newCard.myCard.suit == Suit.Joker | newCard.myCard.number == GameManager.instance.round)
+            {
+                print($"Dropped a Wild Card to set of {cards[0].myCard.suit}");
+                if(!wildCards.Contains(newCard))
+                    wildCards.Add(newCard);   
+                newCard.myCard.usedAsWild = true;
+                outHandler.RemoveFromHand(newCard);
+                return true;
+            } else if(incomingNum == cards[0].myCard.number)
             {
                 cards.Add(newCard);
                 outHandler.RemoveFromHand(newCard);

@@ -267,9 +267,10 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
                 outHandler.ReturnToHand(card);
                 print($"Removed {card} from CheckPile on {gameObject.name}");
                 cards.Sort(Compare);
+                return true;
             }
 
-            if (outState == Out.Run)
+            else if (outState == Out.Run)
             {
                 // if run, remove that card and the shorter side of the existing run
                 var cardIndex = cards.IndexOf(card);
@@ -300,14 +301,14 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
                     cards.Remove(card);
             }
 
-            if (cards.Count == 1)
+            else if (cards.Count == 1)
             {
                 outState = Out.None;
                 cards.Remove(card);
                 outHandler.ReturnToHand(card);
             }
 
-            if (cards.Count == 0)
+            else if (cards.Count == 0)
             {
                 outHandler.RemoveEmptyDrop();
             }

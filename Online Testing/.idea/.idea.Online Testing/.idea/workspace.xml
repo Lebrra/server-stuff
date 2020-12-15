@@ -19,14 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="99022977-17a8-4c7c-b947-2c8216240d1f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Online Testing/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Online Testing/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Card.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Card.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/DropGuide.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/DropGuide.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/GameScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/GameScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/DropHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/DropHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/nh_network.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/nh_network.cs" afterDir="false" />
-    </list>
+    <list default="true" id="99022977-17a8-4c7c-b947-2c8216240d1f" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -99,7 +92,7 @@
       <workItem from="1607022902647" duration="6823000" />
       <workItem from="1607377842690" duration="7349000" />
       <workItem from="1607541283252" duration="1242000" />
-      <workItem from="1607900313193" duration="44598000" />
+      <workItem from="1607900313193" duration="45065000" />
     </task>
     <servers />
   </component>

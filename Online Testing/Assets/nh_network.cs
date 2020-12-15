@@ -149,6 +149,7 @@ public class nh_network : MonoBehaviour
     {
         int round;
         int.TryParse(evt.data.GetField("round").ToString().Trim('"'), out round);
+        GameManager.instance.round = round;
         Debug.Log("The current round is: " + round);
     }
 

@@ -74,7 +74,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
                 outState = Out.Run;
             } 
             // ~ wild
-            else if (newCard.myCard.suit == Suit.Joker || newCard.myCard.number == GameManager.instance.round)
+            else if (newCard.myCard.suit == Suit.Joker | newCard.myCard.number == GameManager.instance.round)
             {
                 print("Dropped a Wild Card, enabling Contextual Menu");
                 wildCards.Add(newCard);

@@ -72,15 +72,19 @@ public class NotificationManager : MonoBehaviour
 
     public bool addNotification(Notification newNotification)
     {
+        // if nofication is meant to interrupt, add it the top of the list and start notifying
         if (newNotification.Interrupt)
         {
-            StopCoroutine(notify());
+            StopAllCoroutines();
             Notifications.Insert(0, newNotification);
             StartCoroutine(notify());
             return true;
         }
         
+        // add regular notification to the end of the list
         Notifications.Add(newNotification);
+        
+        // if not already notifying, start notifying
         if (!isNotifying)
         {
             StartCoroutine(notify());
@@ -91,23 +95,31 @@ public class NotificationManager : MonoBehaviour
     private IEnumerator notify()
     {
         isNotifying = true;
-        while (Notifications.Count > 0)
+        while(Notifications.Count > 0)
         {
-            var currentNotification = Notifications.First();
+            print(Notifications.Count);
+            var currentNotification = Notifications[0];
 
             notificationsText.text = currentNotification.Message;
             notificationsText.color = currentNotification.Color;
             yield return new WaitForSeconds(currentNotification.Duration);
             // wait for completion of message to remove it
             Notifications.RemoveAt(0);
+            yield return false;
+            // if (Notifications.Count <= 0)
+            // {
+            //     notificationsText.text = "";
+            //     print("no more nots");
+            //     break;
+            // }
 
             // pause time?
             notificationsText.text = "";
             yield return new WaitForSeconds(1);
             yield return false;
-        }
+        } 
 
-        print("Notifications finised");
+        print("Notifications finished");
         isNotifying = false;
         yield return true;
     }

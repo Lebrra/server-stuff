@@ -163,6 +163,8 @@ public class nh_network : MonoBehaviour
     {
         Debug.Log("Its my turn!");
         GameManager.instance.myDraw = GameManager.instance.myTurn = true;
+        var notification = new Notification("It is your turn", 20, true, Color.black );
+        NotificationManager.instance.addNotification(notification);
     }
 
     #region Card Functions
@@ -185,6 +187,8 @@ public class nh_network : MonoBehaviour
         string discard = evt.data.GetField("card").ToString().Trim('"');
         Debug.Log("Discarded " + discard);
         GameManager.instance.addCardToDiscard(discard);
+        var notification = new Notification($"Discarded {discard}", 3, true, Color.black );
+        NotificationManager.instance.addNotification(notification);
     }
 
     public void drawCard(bool fromDeck)
@@ -198,12 +202,16 @@ public class nh_network : MonoBehaviour
         string card = evt.data.GetField("card").ToString().Trim('"');
         Debug.Log("Card selected: " + card);
         GameManager.instance.addCardToHand(card);
+        var notification = new Notification($"Drew {card}", 3, true, Color.black );
+        NotificationManager.instance.addNotification(notification);
     }
 
     void drewFromDeck(SocketIOEvent evt)
     {
         string playername = evt.data.GetField("player").ToString().Trim('"');
         Debug.Log(playername + " has drawn a card from the deck!");
+        var notification = new Notification(playername + " has drawn a card from the deck!", 3, true, Color.black );
+        NotificationManager.instance.addNotification(notification);
     }
 
     void drewFromDiscard(SocketIOEvent evt)
@@ -211,6 +219,8 @@ public class nh_network : MonoBehaviour
         string playername = evt.data.GetField("player").ToString().Trim('"');
         Debug.Log(playername + " has drawn from the discard pile!");
         // update visuals of discard pile here
+        var notification = new Notification(playername + " has drawn from the discard pile!", 3, true, Color.black );
+        NotificationManager.instance.addNotification(notification);
     }
 
     public void discardCard(string cardname)

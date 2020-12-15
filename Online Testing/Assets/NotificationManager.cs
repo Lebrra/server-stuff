@@ -106,7 +106,7 @@ public class NotificationManager : MonoBehaviour
             // wait for completion of message to remove it
             Notifications.RemoveAt(0);
             yield return false;
-            // sometimes depending on loop structure, it's catastrophic to items in containers at certain points in looped execution...
+            // sometimes depending on loop structure, it's catastrophic remove to items in containers at certain points in looped execution...
             // if (Notifications.Count <= 0)
             // {
             //     notificationsText.text = "";

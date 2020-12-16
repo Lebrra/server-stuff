@@ -5,6 +5,7 @@
       <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
+        <e p="ConnectionIndicator.cs" t="Include" />
         <e p="DropContextController.cs" t="Include" />
         <e p="LayoutController.cs" t="Include" />
         <e p="nh_network.cs" t="Include" />

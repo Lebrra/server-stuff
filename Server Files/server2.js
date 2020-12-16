@@ -54,7 +54,7 @@ io.sockets.on('connection', (socket) => {
         changeUserProperty("room", newRoomName);
         changeUserProperty("state", states.ROOM);
         socket.emit('createdRoom', { name: newRoomName });
-        //send room name to unity of the creator only 
+        //send room name to unity of the creator only
         listRoomUsers();
     });
 
@@ -285,6 +285,10 @@ io.sockets.on('connection', (socket) => {
 
 server.listen(PORT);
 
+setInterval(function () {
+  io.emit('ping');
+}, 1000);
+
 class Game {
 
     constructor(userInfo, roomname) {
@@ -370,7 +374,7 @@ class Game {
             'Club_1', 'Club_2', 'Club_3', 'Club_4', 'Club_5', 'Club_6', 'Club_7', 'Club_8', 'Club_9', 'Club_10', 'Club_11', 'Club_12', 'Club_13',
             'Club_1', 'Club_2', 'Club_3', 'Club_4', 'Club_5', 'Club_6', 'Club_7', 'Club_8', 'Club_9', 'Club_10', 'Club_11', 'Club_12', 'Club_13'
         ];
-    
+
         DiscardPile = [];   // draw one card to discard pile
         //DiscardPile.push(this.drawCard());
     }
@@ -418,28 +422,28 @@ class Game {
         if (Deck.length == 0) {
             this.discardToDeck();
         }
-    
+
         var rand = Math.floor(Math.random() * Deck.length);
-    
+
         var swap = Deck[rand];
         Deck[rand] = Deck[Deck.length - 1];
         Deck[Deck.length - 1] = swap;
-    
+
         var card = Deck.pop();
-    
+
         return card;
     }
-    
+
     discardToDeck() {
         var topOfDiscard = DiscardPile.pop();
         var secondOfDiscard = DiscardPile.pop();
-    
+
         DiscardPile.forEach((value, index, array) => {
             Deck.push(value);
         });
-    
+
         DiscardPile = [secondOfDiscard, topOfDiscard];
-    
+
         console.table(DiscardPile);
         console.table(Deck);
     }

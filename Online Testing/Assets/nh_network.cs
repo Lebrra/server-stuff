@@ -49,6 +49,8 @@ public class nh_network : MonoBehaviour
         socket.On("yourTurn", myTurn);
         socket.On("drewFromDeck", drewFromDeck);
         socket.On("drewFromDiscard", drewFromDiscard);
+        
+        socket.On("ping", ping);
     }
 
     #region Connection/Room Functions
@@ -141,7 +143,7 @@ public class nh_network : MonoBehaviour
 
     void loadGame(SocketIOEvent evt)
     {
-        Debug.Log("the game has been started!");
+        Debug.Log("The game has been started!");
         UnityEngine.SceneManagement.SceneManager.LoadScene(1);
     }
 
@@ -227,6 +229,12 @@ public class nh_network : MonoBehaviour
     {
         JSONObject jsonObject = new JSONObject(quote + cardname + quote);
         socket.Emit("discardCard", jsonObject);
+    }
+
+    public void ping(SocketIOEvent socketIOEvent)
+    {
+        Debug.Log("Ping");
+        ConnectionIndicator.instance?.Ping();
     }
 
     #endregion

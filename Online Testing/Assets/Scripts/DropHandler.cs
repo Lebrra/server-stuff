@@ -7,23 +7,26 @@ using UnityEngine.UI;
 
 public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
 {
+    public bool canDrop = true;
+    
+    [Header("Cards Dropped")]
     public List<CardButton> cards; 
-    
-    public Out outState;
-
-    public float reorderTime = .1f;
-    
-    public OutHandler outHandler;
-
     public List<CardButton> wildCards;
+    
+    [Header("Out")]
+    public Out outState;
+    public Suit outSuit;
 
+    [Header("Refs")]
+
+    public OutHandler outHandler;
+    
     public GameObject DropGuideLeft, DropGuideRight;
 
-    public bool canDrop = true;
-
-    public CardButton lastCard;
-
     private GameManager gameManager;
+    
+    [Header("Misc")]
+    public float reorderTime = .1f;
 
     public void OnDrop(PointerEventData eventData)
     {

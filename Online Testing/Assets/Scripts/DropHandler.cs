@@ -101,6 +101,9 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         // 2 or more cards...
         if (outState == Out.Set)
         {
+            // set out suit
+            outSuit = cards[0].myCard.suit;
+                            
             // ~ wild
             if (newCard.myCard.suit == Suit.Joker | newCard.myCard.number == GameManager.instance.round)
             {

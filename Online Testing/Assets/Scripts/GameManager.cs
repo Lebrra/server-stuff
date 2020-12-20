@@ -64,6 +64,10 @@ public class GameManager : MonoBehaviour
     {
         GameObject newCard = CardPooler.instance.PopCard(cardName, handObject);
         myHand.Add(newCard.GetComponent<CardButton>());
+        
+        // notification
+        var notification = new Notification($"Discarded {newCard.GetComponent<CardButton>().myCard.ToString()}", 3, true, Color.black);
+        NotificationManager.instance.addNotification(notification);
     }
 
     public void addCardToDiscard(string cardName)
@@ -77,6 +81,11 @@ public class GameManager : MonoBehaviour
             CardPooler.instance.PushCard(cardInDiscard);
             cardInDiscard = null;
         }
+
+        // notification
+        var notification = new Notification($"Discarded {newCard.GetComponent<CardButton>().myCard.ToString()}", 3, true, Color.black);
+        NotificationManager.instance.addNotification(notification);
+
         cardInDiscard = newCard;
     }
 

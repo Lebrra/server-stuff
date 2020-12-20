@@ -291,8 +291,8 @@ public class nh_network : MonoBehaviour
             else Debug.LogWarning("invalid enum parse: " + array[0].ToString());
         }
 
-        Debug.Log(outTypes);
-        Debug.Log(outCards);
+        Debug.Log(outTypes[0] + " " + outTypes[1]);
+        Debug.Log(outCards[0]);
     }
 
     void firstOutPlayer(SocketIOEvent evt)

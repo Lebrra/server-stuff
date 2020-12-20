@@ -114,9 +114,13 @@ public class NotificationManager : MonoBehaviour
             //     break;
             // }
 
-            // pause time?
-            notificationsText.text = "";
-            yield return new WaitForSeconds(1);
+            // add a second of pause if there are more notifications
+            if (Notifications.Count > 0)
+            {
+                notificationsText.text = "";
+                yield return new WaitForSeconds(1);
+            }
+
             yield return false;
         } 
 

@@ -165,7 +165,7 @@ public class nh_network : MonoBehaviour
     {
         Debug.Log("Its my turn!");
         GameManager.instance.myDraw = GameManager.instance.myTurn = true;
-        var notification = new Notification("It is your turn", 20, true, Color.black );
+        var notification = new Notification("It is your turn", 3, true, Color.black );
         NotificationManager.instance.addNotification(notification);
     }
 
@@ -189,14 +189,16 @@ public class nh_network : MonoBehaviour
         string discard = evt.data.GetField("card").ToString().Trim('"');
         Debug.Log("Discarded " + discard);
         GameManager.instance.addCardToDiscard(discard);
-        var notification = new Notification($"Discarded {discard}", 3, true, Color.black );
-        NotificationManager.instance.addNotification(notification);
+        
+        // NOTIFICATION HAPPENS IN GAMEMANAGER
     }
 
     public void drawCard(bool fromDeck)
     {
         JSONObject jsonObject = new JSONObject(fromDeck);
         socket.Emit("drawCard", jsonObject);
+        
+        // NOTIFICATION HAPPENS IN GAMEMANAGER
     }
 
     void newCardInfo(SocketIOEvent evt)

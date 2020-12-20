@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SocketIO;
@@ -49,6 +50,8 @@ public class nh_network : MonoBehaviour
         socket.On("yourTurn", myTurn);
         socket.On("drewFromDeck", drewFromDeck);
         socket.On("drewFromDiscard", drewFromDiscard);
+        socket.On("firstOut", receiveFirstOut);
+        socket.On("firstOutPlayer", firstOutPlayer);
         
         socket.On("ping", ping);
 
@@ -242,7 +245,7 @@ public class nh_network : MonoBehaviour
 
     public void SendFirstOut(JSONObject outDeck)
     {
-        JSONObject cardArr = JSONObject.Create(JSONObject.Type.ARRAY);
+        /*JSONObject cardArr = JSONObject.Create(JSONObject.Type.ARRAY);
         print("type? " + cardArr.type);
         cardArr.Add(Out.Run.ToString());
         cardArr.Add("joker_2");
@@ -253,9 +256,50 @@ public class nh_network : MonoBehaviour
         JSONObject OutDeck = new JSONObject();
         OutDeck.AddField("out1", cardArr);
         OutDeck.AddField("out2", cardArr);
-        print("test? - " + OutDeck);
+        print("test? - " + OutDeck);*/
 
         socket.Emit("dictionaryTest", outDeck);
+    }
+
+    void receiveFirstOut(SocketIOEvent evt)
+    {
+        Out[] outTypes = new Out[4];
+        List<string>[] outCards = new List<string>[4];
+
+        //takes in outDeck object
+        for (int i = 0; i < evt.data.Count; i++)
+        {
+            JSONObject array = JSONObject.Create(JSONObject.Type.ARRAY);
+            array = evt.data.GetField("out" + i.ToString());
+            //var outList = evt.data.GetField("out" + i.ToString());
+
+            Out outtype;
+            List<string> cardList = new List<string>();
+            if (Enum.TryParse(array[0].ToString().Trim('"'), out outtype))
+            {
+                if (outtype != Out.None)
+                {
+                    for (int j = 1; j < array.Count; j++)
+                    {
+                        cardList.Add(array[j].ToString().Trim('"'));
+                    }
+                }
+
+                outTypes[i] = outtype;
+                outCards[i] = cardList;
+            }
+        }
+
+        Debug.Log(outTypes);
+        Debug.Log(outCards);
+    }
+
+    void firstOutPlayer(SocketIOEvent evt)
+    {
+        string playerName = evt.data.GetField("player").ToString().Trim('"');
+
+        var notification = new Notification(playerName + " has drawn from the discard pile!", 3, true, Color.black);
+        NotificationManager.instance.addNotification(notification);
     }
 
     #endregion

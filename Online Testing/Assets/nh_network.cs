@@ -51,6 +51,7 @@ public class nh_network : MonoBehaviour
         socket.On("drewFromDiscard", drewFromDiscard);
         
         socket.On("ping", ping);
+
     }
 
     #region Connection/Room Functions
@@ -237,6 +238,24 @@ public class nh_network : MonoBehaviour
     {
         Debug.Log("Ping");
         ConnectionIndicator.instance?.Ping();
+    }
+
+    public void SendFirstOut(JSONObject outDeck)
+    {
+        JSONObject cardArr = JSONObject.Create(JSONObject.Type.ARRAY);
+        print("type? " + cardArr.type);
+        cardArr.Add(Out.Run.ToString());
+        cardArr.Add("joker_2");
+        cardArr.Add("Club_3");
+        cardArr.Add("Club_4");
+        print("contents? - " + cardArr);
+
+        JSONObject OutDeck = new JSONObject();
+        OutDeck.AddField("out1", cardArr);
+        OutDeck.AddField("out2", cardArr);
+        print("test? - " + OutDeck);
+
+        socket.Emit("dictionaryTest", outDeck);
     }
 
     #endregion

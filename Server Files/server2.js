@@ -132,6 +132,12 @@ io.sockets.on('connection', (socket) => {
     });
 
 
+    socket.on("dictionaryTest", (outDeck) => {
+        console.table(outDeck);
+        //console.table(Array.from(outDeck['out1']));
+        
+    });
+
 
     // send usernames in our room
     function listRoomUsers() {

@@ -143,4 +143,38 @@ public class OutHandler : MonoBehaviour
         if (handCopy.Count == 1) return true;
         else return false;
     }
+
+    public void SendFirstOut()
+    {
+        JSONObject OutDeck = new JSONObject();
+
+        for (int i = 0; i < 4; i++)
+        {
+            JSONObject cardArr = JSONObject.Create(JSONObject.Type.ARRAY);
+            //print("type? " + cardArr.type);
+
+            cardArr.Add(dropSpots[i].outState.ToString());
+
+            if (dropSpots[i].outState != Out.None)
+            {
+                foreach (CardButton c in dropSpots[i].cards)
+                {
+                    cardArr.Add(CardParser.deparseCard(c.myCard));
+                }
+            }
+
+            //cardArr.Add(Out.Run.ToString());
+            //cardArr.Add("joker_2");
+            //cardArr.Add("Club_3");
+            //cardArr.Add("Club_4");
+            //print("contents? - " + cardArr);
+
+            OutDeck.AddField("out" + i, cardArr);
+        }
+
+        //OutDeck.AddField("out1", cardArr);
+        //OutDeck.AddField("out2", cardArr);
+        print("test? - " + OutDeck);
+        nh_network.server.SendFirstOut(OutDeck);
+    }
 }

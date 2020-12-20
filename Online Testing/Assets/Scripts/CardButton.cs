@@ -64,7 +64,7 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
         GetComponent<Image>().raycastTarget = false;
         
         // ~- Leah I've noticed that if i disable the line below, we don't get the card bloat -- can you look at this?
-        // transform.SetParent(parentObject.parent);
+        transform.SetParent(handObject);
         transform.localScale = transform.localScale;
         
         print("DRAG BEGIN: " + transform.parent);

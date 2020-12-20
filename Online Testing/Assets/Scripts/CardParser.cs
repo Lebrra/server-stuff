@@ -41,6 +41,12 @@ public struct Card
     public bool usedAsWild;
     public Suit wildSuit;
     public int wildNumber;
+
+    public new string ToString()
+    {
+        if (suit == Suit.Joker) return suit.ToString();
+        return number + " of " + suit.ToString();
+    }
 }
 
 public enum Suit

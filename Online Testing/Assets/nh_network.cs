@@ -288,6 +288,7 @@ public class nh_network : MonoBehaviour
                 outTypes[i] = outtype;
                 outCards[i] = cardList;
             }
+            else Debug.LogWarning("invalid enum parse: " + array[0].ToString());
         }
 
         Debug.Log(outTypes);
@@ -298,7 +299,7 @@ public class nh_network : MonoBehaviour
     {
         string playerName = evt.data.GetField("player").ToString().Trim('"');
 
-        var notification = new Notification(playerName + " has drawn from the discard pile!", 3, true, Color.black);
+        var notification = new Notification(playerName + " has gone out!", 3, true, Color.green);
         NotificationManager.instance.addNotification(notification);
     }
 

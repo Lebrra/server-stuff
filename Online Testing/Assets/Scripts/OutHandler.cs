@@ -81,6 +81,9 @@ public class OutHandler : MonoBehaviour
                 else
                 {
                     //remove at i because i is larger
+                    foreach (CardButton c in dropSpots[i].cards) c.ReturnToHand();
+                    dropSpots[i].clearDropZone();
+
                     dropSpots[i].gameObject.SetActive(false);
                     openDrop[i] = false;
                     GetNextOpen();

@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
         myHand.Add(newCard.GetComponent<CardButton>());
         
         // notification
-        var notification = new Notification($"Discarded {newCard.GetComponent<CardButton>().myCard.ToString()}", 3, true, Color.black);
+        var notification = new Notification($"Drew {newCard.GetComponent<CardButton>().myCard.ToString()}", 3, true, Color.black);
         NotificationManager.instance.addNotification(notification);
     }
 

@@ -4615,7 +4615,7 @@ MonoBehaviour:
   firstOutPanel: {fileID: 926284772}
   firstOutButton: {fileID: 1139792342}
   outButton: {fileID: 998809154}
-  outDeckHandler: {fileID: 0}
+  outDeckHandler: {fileID: 1830344064}
 --- !u!4 &1911076859
 Transform:
   m_ObjectHideFlags: 0

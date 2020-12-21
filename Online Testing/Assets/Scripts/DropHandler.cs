@@ -33,7 +33,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         Debug.Log("dropped", gameObject);
     }
 
-    public bool checkValidDrop(CardButton newCard)
+    public virtual bool checkValidDrop(CardButton newCard)
     {
         if (!canDrop)
         {

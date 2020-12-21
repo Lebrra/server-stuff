@@ -33,7 +33,7 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
     //     Debug.Log("dropped", gameObject);
     // }
 
-    public new bool checkValidDrop(CardButton newCard)
+    public override bool  checkValidDrop(CardButton newCard)
     {
         if (!canDrop)
         {

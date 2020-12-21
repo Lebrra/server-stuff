@@ -54,8 +54,6 @@ public class GameManager : MonoBehaviour
             server.drawCard(fromDeck);
             myDraw = false;
             myDiscard = true;
-
-            if (lastRound) outDeckHandler.FillHandCopy(myHand);
         }
     }
 
@@ -79,6 +77,8 @@ public class GameManager : MonoBehaviour
         // notification
         var notification = new Notification($"Drew {newCard.GetComponent<CardButton>().myCard.ToString()}", 3, true, Color.black);
         NotificationManager.instance.addNotification(notification);
+
+        if (lastRound) outDeckHandler.FillHandCopy(myHand);
     }
     public void addCardToHand(string cardName, bool notifications)
     {

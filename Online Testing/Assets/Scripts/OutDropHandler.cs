@@ -19,7 +19,7 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
 
     [Header("Refs")]
 
-    public OutHandler outHandler;
+    public OutDeckHandler outDeckHandler;
     
     // public GameObject DropGuideLeft, DropGuideRight;
 
@@ -81,12 +81,12 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
                     wildCards.Add(newCard);   
                 cards.Add(newCard);
                 newCard.myCard.usedAsWild = true;
-                outHandler.RemoveFromHand(newCard);
+                outDeckHandler.RemoveFromHand(newCard);
                 return true;
             } else if(incomingNum == cards[0].myCard.number)
             {
                 cards.Add(newCard);
-                outHandler.RemoveFromHand(newCard);
+                outDeckHandler.RemoveFromHand(newCard);
                 Invoke(nameof(ReorderCardObjects), reorderTime);
                 print($"Adding a new card {newCard.myCard.suit}: {newCard.myCard.number} to our set.");
                 return true;
@@ -125,7 +125,7 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
             }
             
             cards.Add(newCard);
-            outHandler.RemoveFromHand(newCard);
+            outDeckHandler.RemoveFromHand(newCard);
             cards.Sort(Compare);
             print($"Added new card: {newCard.myCard.suit}: {newCard.myCard.number} - to run.");
             Invoke(nameof(ReorderCardObjects), reorderTime);
@@ -143,6 +143,7 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
     public void setOutState(Out state)
     {
         outState = state;
+        print($"Setting outstate of OutDropHandler: + {state}");
     }
     
     /// <summary>

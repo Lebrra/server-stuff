@@ -290,11 +290,10 @@ public class nh_network : MonoBehaviour
             }
             else Debug.LogWarning("invalid enum parse: " + array[0].ToString());
         }
-
+        Debug.Log("sending first out deck to gm...");
         GameManager.instance.sendOutDeck(outCards, outTypes);
 
-        Debug.Log(outTypes[0] + " " + outTypes[1]);
-        Debug.Log(outCards[0]);
+        Debug.Log("finished adding first out deck");
     }
 
     void firstOutPlayer(SocketIOEvent evt)

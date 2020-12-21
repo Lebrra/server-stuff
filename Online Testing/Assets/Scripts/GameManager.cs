@@ -127,9 +127,11 @@ public class GameManager : MonoBehaviour
         firstOutButton.SetActive(true);
 
         openFirstOutPanel(true);
+        Debug.Log("sending first out to outDeckHandler...");
         outDeckHandler.setOutDeck(cards, outTypes);
         openFirstOutPanel(false);
 
         lastRound = true;
+        Debug.Log("finished");
     }
 }

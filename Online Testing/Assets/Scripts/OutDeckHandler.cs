@@ -15,6 +15,8 @@ public class OutDeckHandler : MonoBehaviour
     {
         for (int i = 0; i < 4; i++)
         {
+            Debug.Log("loading index " + i);
+
             //default state is off
             if (outTypes[i] != Out.None)
             {
@@ -22,7 +24,9 @@ public class OutDeckHandler : MonoBehaviour
                 firstTitleTexts[i].text = outTypes[i].ToString();
                 firstOutDrops[i].setOutState(outTypes[i]);
 
-                foreach(string card in cards[i])
+                Debug.Log("loading cards...");
+
+                foreach (string card in cards[i])
                 {
                     GameObject newCard = CardPooler.instance.PopCard(card, firstOutDrops[i].transform);
                     newCard.GetComponent<CardButton>().interactable = false;

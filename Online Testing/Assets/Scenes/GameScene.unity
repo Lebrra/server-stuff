@@ -1110,7 +1110,7 @@ MonoBehaviour:
   DropGuideRight: {fileID: 493514744}
   reorderTime: 0.1
   canDrop: 1
-  outDeckHandler: {fileID: 0}
+  outDeckHandler: {fileID: 1830344064}
 --- !u!1 &522755177
 GameObject:
   m_ObjectHideFlags: 0
@@ -1508,7 +1508,7 @@ MonoBehaviour:
   DropGuideRight: {fileID: 544364003}
   reorderTime: 0.1
   canDrop: 1
-  outDeckHandler: {fileID: 0}
+  outDeckHandler: {fileID: 1830344064}
 --- !u!1 &545781998
 GameObject:
   m_ObjectHideFlags: 0
@@ -2509,7 +2509,7 @@ MonoBehaviour:
   DropGuideRight: {fileID: 764095495}
   reorderTime: 0.1
   canDrop: 1
-  outDeckHandler: {fileID: 0}
+  outDeckHandler: {fileID: 1830344064}
 --- !u!1 &923738817
 GameObject:
   m_ObjectHideFlags: 0
@@ -4348,7 +4348,7 @@ MonoBehaviour:
   DropGuideRight: {fileID: 1836569144}
   reorderTime: 0.1
   canDrop: 1
-  outDeckHandler: {fileID: 0}
+  outDeckHandler: {fileID: 1830344064}
 --- !u!1001 &1853030757
 PrefabInstance:
   m_ObjectHideFlags: 0

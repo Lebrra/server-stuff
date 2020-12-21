@@ -152,6 +152,7 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
     /// <param name="newCard">CardButton type</param>
     public void addOutDeckCard(CardButton newCard)
     {
+        print("Receiving the Out Deck infos...");
         if (outState == Out.Run)
         {
             // check if current card is a wild
@@ -202,6 +203,11 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
                     break;
                 }
             }
+        }
+
+        else
+        {
+            Debug.LogWarning($"ERROR:: outState of OutDropHandler on {gameObject.name} not set");
         }
     }
     

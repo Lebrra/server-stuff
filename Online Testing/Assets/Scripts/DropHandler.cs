@@ -167,7 +167,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         return false;
     }
     
-    public void ContextEnableRunOptions()
+    public virtual void ContextEnableRunOptions()
     {
         GetComponent<LayoutController>().squeezeIn();
         // display context options for run or sets
@@ -182,7 +182,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
     }
     
     
-    public void ContextEnableOutOptions()
+    public virtual void ContextEnableOutOptions()
     {
         // squeeze cards to center
         GetComponent<LayoutController>().squeezeIn();
@@ -197,7 +197,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         canDrop = false;
     }
 
-    public void ContextDisable()
+    public virtual void ContextDisable()
     {
         // remove event listeners
         DropGuideLeft.GetComponent<Button>().onClick.RemoveAllListeners();
@@ -225,7 +225,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         ContextDisable();
     }
 
-    public void ContextSetRunFirstCard()
+    public virtual void ContextSetRunFirstCard()
     {
         // set position
         cards.Insert(0, wildCards.Last());
@@ -239,7 +239,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         outHandler.RemoveFromHand(cards[0]);
     }
     
-    public void ContextSetRunLastCard()
+    public virtual void ContextSetRunLastCard()
     {
         // set position
         cards.Add(wildCards.Last());

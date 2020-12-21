@@ -7,31 +7,11 @@ using UnityEngine.UI;
 
 public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
 {
-    public bool canDrop = true;
-    
-    // [Header("Cards Dropped")]
-    // public List<CardButton> cards; 
-    // public List<CardButton> wildCards;
-    
-    // [Header("Out")]
-    // public Out outState;
-    // public Suit outSuit;
-
     [Header("Refs")]
 
     public OutDeckHandler outDeckHandler;
-    
-    // public GameObject DropGuideLeft, DropGuideRight;
 
     private GameManager gameManager;
-    
-    // [Header("Misc")]
-    // public float reorderTime = .1f;
-
-    // public new void OnDrop(PointerEventData eventData)
-    // {
-    //     Debug.Log("dropped", gameObject);
-    // }
 
     public override bool  checkValidDrop(CardButton newCard)
     {
@@ -42,25 +22,7 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
         }
 
         print("new card...");
-        // // first card
-        // if (cards.Count == 0)
-        // {
-        //     if (newCard.myCard.suit == Suit.Joker || newCard.myCard.number == GameManager.instance.round)
-        //     {
-        //         // return false -- no wild as first card
-        //         // may have ui display something
-        //         print("Wilds can not be the first card played on a drop zone.");
-        //         return false;
-        //     }
-        //     
-        //     cards.Add(newCard);
-        //     outHandler.RemoveFromHand(newCard);
-        //     // activateNewDropHandler();
-        //     print("Added a new card ${newCard.myCard.suit} - ${newCard.myCard.number} to out drop zone, building ");
-        //     return true;
-        // }
-        //
-        // second card
+        
         int incomingNum = newCard.myCard.number;
         Suit incomingSuit = newCard.myCard.suit;
         List<int> cardNums = cards.Select(acard => acard.myCard.number).ToList();
@@ -208,19 +170,19 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
         }
     }
     
-    // public void ContextEnableRunOptions()
-    // {
-    //     GetComponent<LayoutController>().squeezeIn();
-    //     // display context options for run or sets
-    //     DropGuideLeft.SetActive(true);
-    //     DropGuideRight.SetActive(true);
-    //     // set context values
-    //     DropGuideLeft.GetComponent<DropContextController>().setHeader("<");
-    //     DropGuideLeft.GetComponent<Button>().onClick.AddListener(ContextSetRunFirstCard);
-    //     DropGuideRight.GetComponent<DropContextController>().setHeader(">");
-    //     DropGuideRight.GetComponent<Button>().onClick.AddListener(ContextSetRunLastCard);
-    //     canDrop = false;
-    // }
+    public override void ContextEnableRunOptions()
+    {
+        GetComponent<LayoutController>().squeezeIn();
+        // display context options for run or sets
+        DropGuideLeft.SetActive(true);
+        DropGuideRight.SetActive(true);
+        // set context values
+        DropGuideLeft.GetComponent<DropContextController>().setHeader("<");
+        DropGuideLeft.GetComponent<Button>().onClick.AddListener(ContextSetRunFirstCard);
+        DropGuideRight.GetComponent<DropContextController>().setHeader(">");
+        DropGuideRight.GetComponent<Button>().onClick.AddListener(ContextSetRunLastCard);
+        canDrop = false;
+    }
     
     // public void ContextEnableOutOptions()
     // {
@@ -265,33 +227,33 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
     //     ContextDisable();
     // }
 
-    // public void ContextSetRunFirstCard()
-    // {
-    //     // set position
-    //     cards.Insert(0, wildCards.Last());
-    //     // set wild value
-    //     cards[0].myCard.wildNumber = cards[1].myCard.number - 1;
-    //     print($"Setting wild card to number to {cards[0].myCard.wildNumber}");
-    //     ContextDisable();
-    //     Invoke(nameof(ReorderCardObjects), reorderTime);
-    //     canDrop = true;
-    //     // check for out
-    //     outHandler.RemoveFromHand(cards[0]);
-    // }
+    public override void ContextSetRunFirstCard()
+    {
+        // set position
+        cards.Insert(0, wildCards.Last());
+        // set wild value
+        cards[0].myCard.wildNumber = cards[1].myCard.number - 1;
+        print($"Setting wild card to number to {cards[0].myCard.wildNumber}");
+        ContextDisable();
+        Invoke(nameof(ReorderCardObjects), reorderTime);
+        canDrop = true;
+        // check for out
+        outDeckHandler.RemoveFromHand(cards[0]);
+    }
     //
-    // public void ContextSetRunLastCard()
-    // {
-    //     // set position
-    //     cards.Add(wildCards.Last());
-    //     // set wild value
-    //     cards.Last().myCard.wildNumber = cards[cards.Count-2].myCard.number + 1;
-    //     print($"Setting wild card to number to {cards.Last().myCard.wildNumber}");
-    //     ContextDisable();
-    //     Invoke(nameof(ReorderCardObjects), reorderTime);
-    //     canDrop = true;
-    //     // check for out
-    //     outHandler.RemoveFromHand(cards.Last());
-    // }
+    public override void ContextSetRunLastCard()
+    {
+        // set position
+        cards.Add(wildCards.Last());
+        // set wild value
+        cards.Last().myCard.wildNumber = cards[cards.Count-2].myCard.number + 1;
+        print($"Setting wild card to number to {cards.Last().myCard.wildNumber}");
+        ContextDisable();
+        Invoke(nameof(ReorderCardObjects), reorderTime);
+        canDrop = true;
+        // check for out
+        outDeckHandler.RemoveFromHand(cards.Last());
+    }
 
 
     // public bool removeCard(CardButton card)

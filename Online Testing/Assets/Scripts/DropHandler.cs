@@ -338,7 +338,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         return cards.Count > 2 || cards.Count == 0;
     }
     
-    void activateNewDropHandler()
+    protected void activateNewDropHandler()
     {
         outHandler.OpenNewDrop();
     }
@@ -363,7 +363,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         else return 0;
     }
 
-    void ReorderCardObjects()
+    protected void ReorderCardObjects()
     {
         foreach (var t in cards)
         {

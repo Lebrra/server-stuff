@@ -254,7 +254,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
     }
 
 
-    public bool removeCard(CardButton card)
+    public virtual bool removeCard(CardButton card)
     {
         print("removing card");
         if (cards.Contains(card))
@@ -333,7 +333,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         return cards.Count == 0;
     }
     
-    public bool checkValid()
+    public virtual bool checkValid()
     {
         return cards.Count > 2 || cards.Count == 0;
     }

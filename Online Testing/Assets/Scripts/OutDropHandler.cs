@@ -70,9 +70,6 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
         // 2 or more cards...
         if (outState == Out.Set)
         {
-            // set out suit
-            // outSuit = cards[0].myCard.suit;
-                            
             // ~ wild
             if (newCard.myCard.suit == Suit.Joker | newCard.myCard.number == GameManager.instance.round)
             {
@@ -376,7 +373,7 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
         return cards.Count == 0;
     }
     
-    public new bool checkValid()
+    public override bool checkValid()
     {
         return cards.Count > 0;
         // return cards.Count > 2 || cards.Count == 0;

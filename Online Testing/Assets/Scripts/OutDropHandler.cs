@@ -153,6 +153,8 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
     public void addOutDeckCard(CardButton newCard)
     {
         print("Receiving the Out Deck infos...");
+        cards.Add(newCard);
+   
         if (outState == Out.Run)
         {
             // check if current card is a wild
@@ -161,7 +163,6 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
                 wildCards.Add(newCard);
                 newCard.myCard.usedAsWild = true;
                 newCard.myCard.wildNumber = -1;
-                cards.Add(newCard);
                 return;
             }
 
@@ -188,7 +189,6 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
                 wildCards.Add(newCard);
                 newCard.myCard.usedAsWild = true;
                 // newCard.myCard.wildSuit = ;
-                cards.Add(newCard);
                 return;
             }
             

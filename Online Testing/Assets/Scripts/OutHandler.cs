@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class OutHandler : MonoBehaviour
 {
+    public bool hasGoneOut = false;
+
     List<CardButton> handCopy;
 
     public DropHandler[] dropSpots;
@@ -15,12 +17,12 @@ public class OutHandler : MonoBehaviour
 
     private void OnEnable()
     {
-        OpenOutMenu();
+        if (!hasGoneOut) OpenOutMenu();
     }
 
     private void OnDisable()
     {
-        CloseOutMenu();
+        if (!hasGoneOut) CloseOutMenu();
     }
 
     public void OpenOutMenu()
@@ -176,5 +178,10 @@ public class OutHandler : MonoBehaviour
         //OutDeck.AddField("out2", cardArr);
         print("test? - " + OutDeck);
         nh_network.server.SendFirstOut(OutDeck);
+
+        hasGoneOut = true;
+        GameManager.instance.outButton.SetActive(false);
+
+        GameManager.instance.openOutPanel(false);
     }
 }

@@ -184,7 +184,7 @@ public class nh_network : MonoBehaviour
             string card = evt.data.GetField(i.ToString()).ToString().Trim('"');
             //newHand.Add(card);
             Debug.Log(card);
-            GameManager.instance.addCardToHand(card);
+            GameManager.instance.addCardToHand(card, false);
         }
     }
 
@@ -210,8 +210,8 @@ public class nh_network : MonoBehaviour
         string card = evt.data.GetField("card").ToString().Trim('"');
         Debug.Log("Card selected: " + card);
         GameManager.instance.addCardToHand(card);
-        var notification = new Notification($"Drew {card}", 3, true, Color.black );
-        NotificationManager.instance.addNotification(notification);
+        //var notification = new Notification($"Drew {card}", 3, true, Color.black );
+        //NotificationManager.instance.addNotification(notification);
     }
 
     void drewFromDeck(SocketIOEvent evt)
@@ -290,6 +290,8 @@ public class nh_network : MonoBehaviour
             }
             else Debug.LogWarning("invalid enum parse: " + array[0].ToString());
         }
+
+        GameManager.instance.sendOutDeck(outCards, outTypes);
 
         Debug.Log(outTypes[0] + " " + outTypes[1]);
         Debug.Log(outCards[0]);

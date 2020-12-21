@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     public bool myDraw = false;
     public bool myDiscard = false;
 
+    public bool lastRound = false;
+
     [Header("Hand")]
     public GameObject cardPrefab;
     public Transform handObject;
@@ -25,6 +27,12 @@ public class GameManager : MonoBehaviour
 
     [Header("Panels")]
     public GameObject outPanel;
+    public GameObject firstOutPanel;
+
+    [Header("Out Objects")]
+    public GameObject firstOutButton;
+    public GameObject outButton;
+    public OutDeckHandler outDeckHandler;
 
     private void Awake()
     {
@@ -46,6 +54,8 @@ public class GameManager : MonoBehaviour
             server.drawCard(fromDeck);
             myDraw = false;
             myDiscard = true;
+
+            if (lastRound) outDeckHandler.FillHandCopy(myHand);
         }
     }
 
@@ -55,6 +65,7 @@ public class GameManager : MonoBehaviour
         {
             server.discardCard(cardName);
             myDiscard = myTurn = false;
+
             return true;
         }
         else return false;
@@ -68,6 +79,18 @@ public class GameManager : MonoBehaviour
         // notification
         var notification = new Notification($"Drew {newCard.GetComponent<CardButton>().myCard.ToString()}", 3, true, Color.black);
         NotificationManager.instance.addNotification(notification);
+    }
+    public void addCardToHand(string cardName, bool notifications)
+    {
+        GameObject newCard = CardPooler.instance.PopCard(cardName, handObject);
+        myHand.Add(newCard.GetComponent<CardButton>());
+
+        // notification
+        if (notifications)
+        {
+            var notification = new Notification($"Drew {newCard.GetComponent<CardButton>().myCard.ToString()}", 3, true, Color.black);
+            NotificationManager.instance.addNotification(notification);
+        }
     }
 
     public void addCardToDiscard(string cardName)
@@ -92,5 +115,21 @@ public class GameManager : MonoBehaviour
     public void openOutPanel(bool open)
     {
         outPanel.SetActive(open);
+    }
+
+    public void openFirstOutPanel(bool open)
+    {
+        firstOutPanel.SetActive(open);
+    }
+
+    public void sendOutDeck(List<string>[] cards, Out[] outTypes)
+    {
+        firstOutButton.SetActive(true);
+
+        openFirstOutPanel(true);
+        outDeckHandler.setOutDeck(cards, outTypes);
+        openFirstOutPanel(false);
+
+        lastRound = true;
     }
 }

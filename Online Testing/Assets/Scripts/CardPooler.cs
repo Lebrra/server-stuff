@@ -53,6 +53,7 @@ public class CardPooler : MonoBehaviour
     /// </summary>
     public void PushCard(GameObject card)
     {
+        card.GetComponent<CardButton>().interactable = true;
         card.SetActive(false);
         cardPool.Add(card);
     }

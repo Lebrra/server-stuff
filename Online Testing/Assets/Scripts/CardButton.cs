@@ -14,6 +14,8 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
     bool waitForClick = false;
 
+    public bool interactable = true;
+
     private void Update()
     {
         if(waitForClick && Input.GetMouseButtonDown(0))
@@ -28,7 +30,7 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
         handObject = parentObject = transform.parent;
 
         //set texts
-        char cardText = valueToChar(myCard.number);
+        char cardText = CardParser.valueToChar(myCard.number);
         if (cardText == '0') transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = "10";
         else transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = cardText.ToString();
         transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = myCard.suit.ToString();
@@ -61,6 +63,8 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (!interactable) return;
+
         GetComponent<Image>().raycastTarget = false;
         
         // ~- Leah I've noticed that if i disable the line below, we don't get the card bloat -- can you look at this?
@@ -75,14 +79,19 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
     public void OnDrag(PointerEventData eventData)
     {
-        // move card image with mouse/finger
-        transform.position = Input.mousePosition;
+        if (interactable)
+        {
+            // move card image with mouse/finger
+            transform.position = Input.mousePosition;
 
-        print("DRAGGING: " + transform.parent);
+            print("DRAGGING: " + transform.parent);
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (!interactable) return;
+
         GameObject dropObject = eventData.pointerCurrentRaycast.gameObject;
 
         if (dropObject?.GetComponent<DropHandler>())
@@ -129,27 +138,5 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
         transform.localScale /= 2;
         Debug.Log("card shrunk");
         waitForClick = false;
-    }
-
-    char valueToChar(int num)
-    {
-        switch (num)
-        {
-            case 0: return 'J';
-            case 1: return 'A';
-            case 2: return '2';
-            case 3: return '3';
-            case 4: return '4';
-            case 5: return '5';
-            case 6: return '6';
-            case 7: return '7';
-            case 8: return '8';
-            case 9: return '9';
-            case 10: return '0';
-            case 11: return 'J';
-            case 12: return 'Q';
-            case 13: return 'K';
-            default: return '0';
-        }
     }
 }

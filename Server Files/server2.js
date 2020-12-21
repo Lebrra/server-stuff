@@ -135,7 +135,7 @@ io.sockets.on('connection', (socket) => {
     socket.on("dictionaryTest", (outDeck) => {
         console.table(outDeck);
         
-        socket.to(Users.get(socket.id)['room']).emit('firstOut', outDeck);
+        io.in(Users.get(socket.id)['room']).emit('firstOut', outDeck);
         io.in(Users.get(socket.id)['room']).emit('firstOutPlayer', { player: Users.get(socket.id).username });
     });
 

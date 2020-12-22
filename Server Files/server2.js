@@ -134,7 +134,7 @@ io.sockets.on('connection', (socket) => {
 
     socket.on("firstOut", () => {
         io.in(Users.get(socket.id)['room']).emit('firstOutPlayer', { player: Users.get(socket.id).username });
-        Games[users.get(socket.id)['room']].OutPlayer = Games[users.get(socket.id)['room']].Turn;
+        Games[Users.get(socket.id)['room']].OutPlayer = Games[Users.get(socket.id)['room']].Turn;
     });
 
     socket.on("updateOutDeck", (outDeck) => {
@@ -143,7 +143,7 @@ io.sockets.on('connection', (socket) => {
     });
 
     socket.on("receiveScore", (score) => {
-        Games[users.get(socket.id)['room']].updatePlayerScore(score);
+        Games[Users.get(socket.id)['room']].updatePlayerScore(socket.id, score);
     });
 
 
@@ -334,7 +334,7 @@ class Game {
     roundSetUp() {
         this.declareRound();
 
-        this.ScoreCard[this.Round - 3] = new Array(this.Player.length);
+        this.ScoreCard[this.Round - 3] = new Array(Array.from(this.Players.values()).length);
         this.ScoreCard[this.Round - 3].forEach((value, index, array) => {
             value = -1;
         });
@@ -489,9 +489,9 @@ class Game {
         else return 'none';
     }
 
-    updatePlayerScore(score) {
-        var playerArray = Array.from(Players.keys);
-        var playerIndex = playerArray.indexOf(socket.id);
+    updatePlayerScore(playerID, score) {
+        var playerArray = Array.from(this.Players.keys());
+        var playerIndex = playerArray.indexOf(playerID);
         console.log("player index: " + playerIndex);
 
         this.ScoreCard[this.Round - 3][playerIndex] = score;

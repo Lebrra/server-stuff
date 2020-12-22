@@ -126,4 +126,16 @@ public class OutDeckHandler : MonoBehaviour
 
         nh_network.server.SendFirstOut(OutDeck);
     }
+
+    public int CalculateScore()
+    {
+        int score = 0;
+        foreach(CardButton c in myCurrentHand)
+        {
+            if (c.myCard.suit == Suit.Joker) score += 15;
+            else score += c.myCard.number;
+        }
+
+        return score;
+    }
 }

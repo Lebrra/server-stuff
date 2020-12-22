@@ -132,12 +132,21 @@ io.sockets.on('connection', (socket) => {
     });
 
 
-    socket.on("dictionaryTest", (outDeck) => {
-        console.table(outDeck);
-        
-        io.in(Users.get(socket.id)['room']).emit('firstOut', outDeck);
+    socket.on("firstOut", () => {
         io.in(Users.get(socket.id)['room']).emit('firstOutPlayer', { player: Users.get(socket.id).username });
+        Games[users.get(socket.id)['room']].OutPlayer = Games[users.get(socket.id)['room']].Turn;
     });
+
+    socket.on("updateOutDeck", (outDeck) => {
+        console.table(outDeck);
+        io.in(Users.get(socket.id)['room']).emit('updateOutDeck', outDeck);
+    });
+
+    socket.on("receiveScore", (score) => {
+        Games[users.get(socket.id)['room']].updatePlayerScore(score);
+    });
+
+
 
 
     // send usernames in our room
@@ -317,10 +326,19 @@ class Game {
 
         this.Round = 3;              // current game round
         this.Turn;
+        this.OutPlayer = -1;
+
+        this.ScoreCard = new Array(10);
     }
 
     roundSetUp() {
         this.declareRound();
+
+        this.ScoreCard[this.Round - 3] = new Array(this.Player.length);
+        this.ScoreCard[this.Round - 3].forEach((value, index, array) => {
+            value = -1;
+        });
+
         this.declareTurn(true);
 
         this.setDeck();
@@ -402,6 +420,11 @@ class Game {
             if (this.Turn == PlayersArray.length) this.Turn = 0;
         }
 
+        if (this.Turn == this.OutPlayer) {
+            //round has ended!
+            
+        }
+
         console.log("Player turn: " + PlayersArray[this.Turn].username);
         io.in(this.Roomname).emit('currentTurn', { 'player': PlayersArray[this.Turn].username });
         io.to(PlayersArray[this.Turn].id).emit('yourTurn');
@@ -464,5 +487,15 @@ class Game {
         if (DiscardPile.length > 0)
             return DiscardPile.pop();
         else return 'none';
+    }
+
+    updatePlayerScore(score) {
+        var playerArray = Array.from(Players.keys);
+        var playerIndex = playerArray.indexOf(socket.id);
+        console.log("player index: " + playerIndex);
+
+        this.ScoreCard[this.Round - 3][playerIndex] = score;
+        //update client scorecards
+        io.in(this.Roomname).emit('sendNewScore', {'score': score});
     }
 }

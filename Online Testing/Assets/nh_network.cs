@@ -50,8 +50,9 @@ public class nh_network : MonoBehaviour
         socket.On("yourTurn", myTurn);
         socket.On("drewFromDeck", drewFromDeck);
         socket.On("drewFromDiscard", drewFromDiscard);
-        socket.On("firstOut", receiveFirstOut);
+        socket.On("updateOutDeck", updateOutDeck);
         socket.On("firstOutPlayer", firstOutPlayer);
+        socket.On("sendNewScore", receiveNewScore);
         
         socket.On("ping", ping);
 
@@ -239,7 +240,7 @@ public class nh_network : MonoBehaviour
 
     public void ping(SocketIOEvent socketIOEvent)
     {
-        Debug.Log("Ping");
+        //Debug.Log("Ping");
         ConnectionIndicator.instance?.Ping();
     }
 
@@ -258,10 +259,11 @@ public class nh_network : MonoBehaviour
         OutDeck.AddField("out2", cardArr);
         print("test? - " + OutDeck);*/
 
-        socket.Emit("dictionaryTest", outDeck);
+        socket.Emit("firstOut");
+        socket.Emit("updateOutDeck", outDeck);
     }
 
-    void receiveFirstOut(SocketIOEvent evt)
+    void updateOutDeck(SocketIOEvent evt)
     {
         Out[] outTypes = new Out[4];
         List<string>[] outCards = new List<string>[4];
@@ -305,6 +307,19 @@ public class nh_network : MonoBehaviour
     }
 
     #endregion
+
+    public void sendMyScore(int score)
+    {
+        //send score to server
+        JSONObject scoreObj = new JSONObject(quote + score.ToString() + quote);
+        socket.Emit("receiveScore", scoreObj);
+    }
+
+    void receiveNewScore(SocketIOEvent evt)
+    {
+        string score = evt.data.GetField("score").ToString().Trim('"');
+        Debug.Log("New score received: " + score);
+    }
 
     #endregion
 }

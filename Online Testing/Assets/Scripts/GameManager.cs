@@ -146,11 +146,13 @@ public class GameManager : MonoBehaviour
             {
                 //calulate score
                 Debug.Log("I should calculate the score here, card count: " + outDeckHandler.myCurrentHand.Count);
+                nh_network.server.sendMyScore(outDeckHandler.CalculateScore());
             }
             else
             {
                 //score = 0
                 Debug.Log("Your score is 0");
+                nh_network.server.sendMyScore(0);
             }
         }
     }

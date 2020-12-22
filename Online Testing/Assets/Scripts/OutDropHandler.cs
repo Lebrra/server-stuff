@@ -15,6 +15,18 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
 
     public override bool  checkValidDrop(CardButton newCard)
     {
+        if (!GameManager.instance.myTurn)
+        {
+            print("You can not drop because it's not your turn.");
+            return false;
+        }
+        
+        if (GameManager.instance.myDraw)
+        {
+            print("You can not drop because it is your turn but you must draw first");
+            return false;
+        }
+        
         if (!canDrop)
         {
             print("This DropZone is droppable");
@@ -41,6 +53,20 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
                 cards.Add(newCard);
                 newCard.myCard.usedAsWild = true;
                 outDeckHandler.RemoveFromHand(newCard);
+                
+                // check for first normal card
+                CardButton refCard = cards.FirstOrDefault(t => !t.myCard.usedAsWild);
+
+                if (refCard == null)
+                {
+                    Debug.Log($"Tried to update incoming wild card's number to a ref card's number, but coud not find a value reference card...");
+                    return true;
+                }
+                newCard.myCard.number = refCard.myCard.number;
+                newCard.myCard.wildNumber = refCard.myCard.number;
+                Debug.Log($"Updating incoming wild card's number to {newCard.myCard.number}");
+
+                //
                 return true;
             } else if(incomingNum == cards[0].myCard.number)
             {
@@ -113,54 +139,70 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
     {
         print("Receiving the Out Deck infos...");
         cards.Add(newCard);
-   
-        if (outState == Out.Run)
+        if (newCard.myCard.suit != Suit.Joker && newCard.myCard.number != GameManager.instance.round) return;
+        switch (outState)
         {
-            // check if current card is a wild
-            if (newCard.myCard.suit == Suit.Joker || newCard.myCard.number == GameManager.instance.round)
-            {
+            case Out.Run:
                 wildCards.Add(newCard);
                 newCard.myCard.usedAsWild = true;
                 newCard.myCard.wildNumber = -1;
                 return;
-            }
+            case Out.Set:
+                wildCards.Add(newCard);
+                newCard.myCard.usedAsWild = true;
+                return;
+            case Out.None:
+            default:
+                Debug.LogWarning($"ERROR:: outState of OutDropHandler on {gameObject.name} not set");
+                break;
+        }
+    }
 
-            int j = 1;
-            for (int i = cards.IndexOf(newCard) - 1; i > 0; i--)
+    public void completeOutDeck()
+    {
+        if (cards.Select(card => !card.myCard.usedAsWild).ToList().Count < 1)
+        {
+            Debug.Log("No Wilds in Cards List?: " + cards);
+            return;
+        }
+        
+        CardButton refCard = cards.FirstOrDefault(t => !t.myCard.usedAsWild);
+        
+        // check for first normal card
+        if (refCard == null)
+        {
+            Debug.Log("NO non-wild cards in Cards List");
+            return;
+        }
+
+
+        if (outState == Out.Run)
+        {
+            // sweep right
+            for (int i = cards.IndexOf(refCard); i  < cards.Count; i++)
             {
-                if (cards[i].myCard.wildNumber == -1)
+                if (cards[i].myCard.usedAsWild)
                 {
-                    cards[i].myCard.wildNumber = newCard.myCard.number - j;
-                    j++;
+                    cards[i].myCard.wildNumber = refCard.myCard.number + (i - cards.IndexOf(refCard)) ;
                 }
-                else
+            }
+            
+            // sweep left 
+            for (int i = cards.IndexOf(refCard); i  > 0; i--)
+            {
+                if (cards[i].myCard.usedAsWild)
                 {
-                    break;
+                    cards[i].myCard.wildNumber = refCard.myCard.number + (cards.IndexOf(refCard) - i) ;
                 }
             }
         }
 
         if (outState == Out.Set)
         {
-            // check if current card is a wild
-            if (newCard.myCard.suit == Suit.Joker || newCard.myCard.number == GameManager.instance.round)
+            foreach (var card in cards.Where(c => c.myCard.usedAsWild))
             {
-                wildCards.Add(newCard);
-                newCard.myCard.usedAsWild = true;
-                // newCard.myCard.wildSuit = ;
-                return;
-            }
-            
-            for (int i = cards.IndexOf(newCard) - 1; i > 0; i--)
-            {
-                if (cards[i].myCard.usedAsWild)
-                {
-                    cards[i].myCard.wildSuit = newCard.myCard.wildSuit;
-                }
-                else
-                {
-                    break;
-                }
+                card.myCard.wildNumber = refCard.myCard.number;
+                card.myCard.number = refCard.myCard.number;
             }
         }
 
@@ -337,8 +379,8 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
     
     public override bool checkValid()
     {
-        return cards.Count > 0;
-        // return cards.Count > 2 || cards.Count == 0;
+        // return cards.Count > 0;
+        return cards.Count > 2 || cards.Count == 0;
     }
     
     // void activateNewDropHandler()
@@ -374,13 +416,18 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
         }
     }
 
-    // public void clearDropZone()
-    // {
-    //     cards.Clear();
-    //     wildCards.Clear();
-    //     outState = Out.None;
-    //     canDrop = true;
-    // }
+    public override void clearDropZone()
+    {
+        foreach (var card in cards)
+        {
+            card.gameObject.transform.parent = null;
+            card.ReturnToHand();
+        }
+        cards.Clear();
+        wildCards.Clear();
+        outState = Out.None;
+        canDrop = true;
+    }
 
     public void OutValues()
     {

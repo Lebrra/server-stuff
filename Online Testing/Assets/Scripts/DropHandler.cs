@@ -371,7 +371,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         }
     }
 
-    public void clearDropZone()
+    public virtual void clearDropZone()
     {
         cards.Clear();
         wildCards.Clear();

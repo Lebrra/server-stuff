@@ -191,7 +191,7 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
             {
                 if (cards[i].myCard.usedAsWild)
                 {
-                    cards[i].myCard.wildNumber = refCard.myCard.number + (cards.IndexOf(refCard) - i) ;
+                    cards[i].myCard.wildNumber = refCard.myCard.number - (cards.IndexOf(refCard) - i) ;
                 }
             }
         }

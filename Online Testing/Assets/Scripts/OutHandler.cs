@@ -17,36 +17,77 @@ public class OutHandler : MonoBehaviour
 
     private void OnEnable()
     {
-        if (!hasGoneOut) OpenOutMenu();
+        if (GameManager.instance.lastTurn && !hasGoneOut)
+        {
+            hasGoneOut = true;
+            goOutBtn.gameObject.SetActive(false);
+        }
+
+        OpenOutMenu();
     }
 
     private void OnDisable()
     {
-        if (!hasGoneOut) CloseOutMenu();
+        CloseOutMenu();
     }
 
     public void OpenOutMenu()
     {
-        for (int i = 0; i < 4; i++)
+        if (!hasGoneOut)
         {
-            dropSpots[i].gameObject.SetActive(false);
-            openDrop[i] = false;
+            for (int i = 0; i < 4; i++)
+            {
+                dropSpots[i].gameObject.SetActive(false);
+                openDrop[i] = false;
+            }
+
+            dropSpots[0].gameObject.SetActive(true);
+            openDrop[0] = true;
+            nextToOpen = 1;
+
+            handCopy = new List<CardButton>();
+            foreach (CardButton c in GameManager.instance.myHand) handCopy.Add(c);
         }
-
-        dropSpots[0].gameObject.SetActive(true);
-        openDrop[0] = true;
-        nextToOpen = 1;
-
-        handCopy = new List<CardButton>();
-        foreach (CardButton c in GameManager.instance.myHand) handCopy.Add(c);
+        else
+        {
+            bool checkForNone = false;
+            foreach (bool b in openDrop) if (b) checkForNone = true;
+            if (!checkForNone)
+            {
+                //none are open, open first one
+                dropSpots[0].gameObject.SetActive(true);
+                openDrop[0] = true;
+                nextToOpen = 1;
+            }
+        }
     }
 
     public void CloseOutMenu()
     {
-        // reset everything
-        foreach (DropHandler d in dropSpots) d.clearDropZone();
-        handCopy.Clear();
-        foreach (CardButton c in GameManager.instance.myHand) c.ReturnToHand();
+        if (!hasGoneOut || !GameManager.instance.myTurn)
+        {
+            // reset everything
+            foreach (DropHandler d in dropSpots) d.clearDropZone();
+            handCopy.Clear();
+            foreach (CardButton c in GameManager.instance.myHand) c.ReturnToHand();
+        }
+        else
+        {
+            foreach (DropHandler d in dropSpots)
+            {
+                if (!d.checkValid())
+                {
+                    //remove all cards
+                    foreach (CardButton c in d.cards) c.ReturnToHand();
+                    d.clearDropZone();
+                }
+                else if (d.cards.Count > 0)
+                {
+                    foreach (CardButton c in d.cards)
+                        GameManager.instance.outDeckHandler.RemoveFromHand(c);
+                }
+            }
+        }
     }
 
     public void OpenNewDrop()
@@ -96,34 +137,43 @@ public class OutHandler : MonoBehaviour
 
     public void ReturnToHand(CardButton cardAdded)
     {
-        if (!handCopy.Contains(cardAdded))
+        if (!hasGoneOut)
         {
-            print($"Returning card to hand {cardAdded.myCard.suit} - {cardAdded.myCard.number}");
-            handCopy.Add(cardAdded);
-        }
-        else Debug.LogWarning("Card already exists in hand", cardAdded.gameObject);
+            if (!handCopy.Contains(cardAdded))
+            {
+                print($"Returning card to hand {cardAdded.myCard.suit} - {cardAdded.myCard.number}");
+                handCopy.Add(cardAdded);
+            }
+            else Debug.LogWarning("Card already exists in hand", cardAdded.gameObject);
 
-        CheckForOut();
+            CheckForOut();
+        }
     }
 
     public void RemoveFromHand(CardButton cardRemoved)
     {
-        if (handCopy.Contains(cardRemoved)) handCopy.Remove(cardRemoved);
-        else Debug.LogWarning("Card not found in hand", cardRemoved.gameObject);
+        if (!hasGoneOut)
+        {
+            if (handCopy.Contains(cardRemoved)) handCopy.Remove(cardRemoved);
+            else Debug.LogWarning("Card not found in hand", cardRemoved.gameObject);
 
-        CheckForOut();
+            CheckForOut();
+        }
     }
 
     void CheckForOut()
     {
-        if (CanGoOut())
+        if (GameManager.instance.myTurn && !GameManager.instance.myDraw)
         {
-            // enable a button
-            goOutBtn.interactable = true;
-        }
-        else
-        {
-            goOutBtn.interactable = false;
+            if (CanGoOut())
+            {
+                // enable a button
+                goOutBtn.interactable = true;
+            }
+            else
+            {
+                goOutBtn.interactable = false;
+            }
         }
     }
 
@@ -148,6 +198,12 @@ public class OutHandler : MonoBehaviour
 
     public void SendFirstOut()
     {
+        if (!GameManager.instance.myTurn)
+        {
+            Debug.LogWarning("It is not your turn, you cannot go out!");
+            return;
+        }
+
         JSONObject OutDeck = new JSONObject();
 
         for (int i = 0; i < 4; i++)

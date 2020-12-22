@@ -165,16 +165,15 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
             Debug.Log("No Wilds in Cards List?: " + cards);
             return;
         }
-        
+
+        // check for first normal card
         CardButton refCard = cards.FirstOrDefault(t => !t.myCard.usedAsWild);
         
-        // check for first normal card
         if (refCard == null)
         {
             Debug.Log("NO non-wild cards in Cards List");
             return;
         }
-
 
         if (outState == Out.Run)
         {

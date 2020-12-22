@@ -420,7 +420,7 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
         foreach (var card in cards)
         {
             card.gameObject.transform.parent = null;
-            card.ReturnToHand();
+            CardPooler.instance.PushCard(card.gameObject);
         }
         cards.Clear();
         wildCards.Clear();

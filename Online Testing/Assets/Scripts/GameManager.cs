@@ -145,7 +145,7 @@ public class GameManager : MonoBehaviour
             if (outDeckHandler.RemoveFromHand(discarded))
             {
                 //calulate score
-                Debug.Log("I should calculate the score here");
+                Debug.Log("I should calculate the score here, card count: " + outDeckHandler.myCurrentHand.Count);
             }
             else
             {

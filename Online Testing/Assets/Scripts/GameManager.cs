@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public bool myDraw = false;
     public bool myDiscard = false;
 
-    public bool lastRound = false;
+    public bool lastTurn = false;
 
     [Header("Hand")]
     public GameObject cardPrefab;
@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
         var notification = new Notification($"Drew {newCard.GetComponent<CardButton>().myCard.ToString()}", 3, true, Color.black);
         NotificationManager.instance.addNotification(notification);
 
-        if (lastRound) outDeckHandler.FillHandCopy(myHand);
+        if (lastTurn) outDeckHandler.FillHandCopy(myHand);
     }
     public void addCardToHand(string cardName, bool notifications)
     {
@@ -131,7 +131,27 @@ public class GameManager : MonoBehaviour
         outDeckHandler.setOutDeck(cards, outTypes);
         openFirstOutPanel(false);
 
-        lastRound = true;
+        lastTurn = true;
         Debug.Log("finished");
+    }
+
+    public void finishFinalTurn(CardButton discarded)
+    {
+        if (lastTurn)
+        {
+            outDeckHandler.CheckForUpdatedOut();
+
+            // scoring
+            if (outDeckHandler.RemoveFromHand(discarded))
+            {
+                //calulate score
+                Debug.Log("I should calculate the score here");
+            }
+            else
+            {
+                //score = 0
+                Debug.Log("Your score is 0");
+            }
+        }
     }
 }

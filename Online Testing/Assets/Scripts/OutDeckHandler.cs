@@ -5,6 +5,9 @@ using TMPro;
 
 public class OutDeckHandler : MonoBehaviour
 {
+    public bool filled = false;
+    public int outCardCount = 0;
+
     public List<CardButton> myCurrentHand;
 
     public OutDropHandler[] firstOutDrops;
@@ -13,6 +16,8 @@ public class OutDeckHandler : MonoBehaviour
 
     public void setOutDeck(List<string>[] cards, Out[] outTypes)
     {
+        if (filled) resetOutPanel();
+
         for (int i = 0; i < 4; i++)
         {
             Debug.Log("loading index " + i);
@@ -31,20 +36,26 @@ public class OutDeckHandler : MonoBehaviour
                     GameObject newCard = CardPooler.instance.PopCard(card, firstOutDrops[i].transform);
                     newCard.GetComponent<CardButton>().interactable = false;
                     firstOutDrops[i].addOutDeckCard(newCard.GetComponent<CardButton>());
+                    outCardCount++;
                 }
+                //new method
             }
         }
 
+        filled = true;
         Debug.Log("First out panel loaded.");
     }
 
-    public void resetOutPanel()     //needed?
+    public void resetOutPanel()
     {
-        foreach(DropHandler d in firstOutDrops)
+        outCardCount = 0;
+
+        foreach(OutDropHandler d in firstOutDrops)
         {
-            //reset data in each drop
+            d.clearDropZone();
             d.gameObject.SetActive(false);
         }
+        Debug.Log("Cleared current out deck.");
     }
 
     public void FillHandCopy(List<CardButton> hand)
@@ -76,8 +87,43 @@ public class OutDeckHandler : MonoBehaviour
                 // they were first out
             if (myCurrentHand.Count == 0) return false;
 
-            Debug.LogError("Card " + card.name + " not found in hand copy.", card.gameObject);
+            Debug.LogWarning("Card " + card.name + " not found in hand copy.", card.gameObject);
             return false;
         }
+    }
+
+    public void CheckForUpdatedOut()
+    {
+        int cardCount = 0;
+        foreach(OutDropHandler d in firstOutDrops) cardCount += d.cards.Count;
+
+        if(cardCount != outCardCount)
+        {
+            Debug.Log("Out deck has been updated, sending it now...");
+            SendUpdatedOutDeck();
+        }
+    }
+
+    public void SendUpdatedOutDeck()
+    {
+        JSONObject OutDeck = new JSONObject();
+
+        for (int i = 0; i < 4; i++)
+        {
+            JSONObject cardArr = JSONObject.Create(JSONObject.Type.ARRAY);
+            cardArr.Add(firstOutDrops[i].outState.ToString());
+
+            if (firstOutDrops[i].outState != Out.None)
+            {
+                foreach (CardButton c in firstOutDrops[i].cards)
+                {
+                    cardArr.Add(CardParser.deparseCard(c.myCard));
+                }
+            }
+
+            OutDeck.AddField("out" + i, cardArr);
+        }
+
+        nh_network.server.SendFirstOut(OutDeck);
     }
 }

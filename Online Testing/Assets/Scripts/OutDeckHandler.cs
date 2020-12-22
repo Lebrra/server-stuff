@@ -38,7 +38,7 @@ public class OutDeckHandler : MonoBehaviour
                     firstOutDrops[i].addOutDeckCard(newCard.GetComponent<CardButton>());
                     outCardCount++;
                 }
-                //new method
+                firstOutDrops[i].completeOutDeck();
             }
         }
 

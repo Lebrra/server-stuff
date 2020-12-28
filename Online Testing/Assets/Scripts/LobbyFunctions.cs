@@ -68,7 +68,7 @@ public class LobbyFunctions : MonoBehaviour
         }
 
         lobbyButtons.SetActive(true);
-        usernameInput.SetActive(true);
+        //usernameInput.SetActive(true);
         backButton.SetActive(false);
         joinBox.SetActive(false);
     }

@@ -422,7 +422,7 @@ class Game {
 
         if (this.Turn == this.OutPlayer) {
             //round has ended!
-            
+            console.log("~~ the round has ended! ~~");
         }
 
         console.log("Player turn: " + PlayersArray[this.Turn].username);
@@ -495,7 +495,8 @@ class Game {
         console.log("player index: " + playerIndex);
 
         this.ScoreCard[this.Round - 3][playerIndex] = score;
+        console.table(this.ScoreCard);
         //update client scorecards
-        io.in(this.Roomname).emit('sendNewScore', {'score': score});
+        //io.in(this.Roomname).emit('sendNewScore', {'score': score});
     }
 }

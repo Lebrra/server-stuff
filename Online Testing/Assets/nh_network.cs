@@ -318,15 +318,35 @@ public class nh_network : MonoBehaviour
 
     void scorecardNames(SocketIOEvent evt)
     {
-        var obj = evt.data.GetField("players");
-        Debug.Log(obj);
-        Debug.Log(obj.IsArray);
-        string[] names;
+        var nameObject = evt.data.GetField("players");
+        string[] names = new string[nameObject.Count];
+        for(int i = 0; i < nameObject.Count; i++)
+        {
+            names[i] = nameObject[i].ToString().Trim('"');
+        }
+
+        ScorecardLoader.inst.DisableWait();
+        ScorecardLoader.inst.LoadNames(names);
     }
 
     void scorecardValues(SocketIOEvent evt)
     {
-        
+        var scorecard = evt.data.GetField("scorecard");
+        int[][] allValues = new int[scorecard.Count][];
+
+        for(int i = 0; i < scorecard.Count; i++)
+        {
+            allValues[i] = new int[scorecard[i].Count];
+            for(int j = 0; j < scorecard[i].Count; j++)
+            {
+                int parsedNum;
+                if (int.TryParse(scorecard[i][j].ToString().Trim('"'), out parsedNum))
+                    allValues[i][j] = parsedNum;
+                else allValues[i][j] = -2;
+            }
+        }
+
+        ScorecardLoader.inst.LoadScores(allValues);
     }
 
     #endregion

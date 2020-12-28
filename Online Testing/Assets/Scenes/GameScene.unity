@@ -651,6 +651,78 @@ MonoBehaviour:
   - {fileID: 1550169221}
   - {fileID: 1854253215}
   - {fileID: 64054080}
+  scorecardTexts:
+  - roundRow:
+    - {fileID: 944631527}
+    - {fileID: 4747352}
+    - {fileID: 401470506}
+    - {fileID: 539018717}
+    - {fileID: 1229346855}
+    - {fileID: 2058063409}
+  - roundRow:
+    - {fileID: 113041338}
+    - {fileID: 659499749}
+    - {fileID: 2083787664}
+    - {fileID: 1885032752}
+    - {fileID: 119078226}
+    - {fileID: 1811215474}
+  - roundRow:
+    - {fileID: 458241164}
+    - {fileID: 1680169761}
+    - {fileID: 449877997}
+    - {fileID: 555503861}
+    - {fileID: 1689017599}
+    - {fileID: 1033113444}
+  - roundRow:
+    - {fileID: 842322331}
+    - {fileID: 1720353565}
+    - {fileID: 1405417519}
+    - {fileID: 1524364855}
+    - {fileID: 1052066035}
+    - {fileID: 410874364}
+  - roundRow:
+    - {fileID: 1669430909}
+    - {fileID: 1546694343}
+    - {fileID: 886564355}
+    - {fileID: 749326776}
+    - {fileID: 430446706}
+    - {fileID: 998545232}
+  - roundRow:
+    - {fileID: 1807997819}
+    - {fileID: 1458272256}
+    - {fileID: 511219897}
+    - {fileID: 1592646719}
+    - {fileID: 1737639591}
+    - {fileID: 2091688352}
+  - roundRow:
+    - {fileID: 35140321}
+    - {fileID: 751362048}
+    - {fileID: 1938521575}
+    - {fileID: 139269081}
+    - {fileID: 96803552}
+    - {fileID: 1055159237}
+  - roundRow:
+    - {fileID: 919674461}
+    - {fileID: 98243414}
+    - {fileID: 1927881004}
+    - {fileID: 1473976680}
+    - {fileID: 1778532407}
+    - {fileID: 1283318739}
+  - roundRow:
+    - {fileID: 852297142}
+    - {fileID: 938990035}
+    - {fileID: 2048354668}
+    - {fileID: 766684774}
+    - {fileID: 1125287967}
+    - {fileID: 744782428}
+  - roundRow:
+    - {fileID: 708200962}
+    - {fileID: 83536846}
+    - {fileID: 612132302}
+    - {fileID: 415798968}
+    - {fileID: 1374007137}
+    - {fileID: 1821004667}
+  - roundRow: []
   totalScores:
   - {fileID: 256534961}
   - {fileID: 105479011}

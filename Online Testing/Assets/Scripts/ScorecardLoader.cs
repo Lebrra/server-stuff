@@ -5,6 +5,8 @@ using TMPro;
 
 public class ScorecardLoader : MonoBehaviour
 {
+    public static ScorecardLoader inst;
+
     [Header("Waiting")]
     public GameObject waitingPopup;
     public TextMeshProUGUI waitingScore;
@@ -12,10 +14,15 @@ public class ScorecardLoader : MonoBehaviour
     [Header("Scorecard")]
     public GameObject scoreCard;
     public TextMeshProUGUI[] nameTexts;
-    public TextMeshProUGUI[][] scorecardTexts;
+    public ScorecardTexts[] scorecardTexts;
     public TextMeshProUGUI[] totalScores;
 
     int[][] loadedScores;
+
+    private void Awake()
+    {
+        inst = this;
+    }
 
     public void EnableWait(int score)
     {
@@ -39,6 +46,13 @@ public class ScorecardLoader : MonoBehaviour
 
     public void LoadScores(int[][] scores)
     {
-
+        Debug.Log("loading all values...");
+        Debug.Log("first value: " + scores[0][0]);
     }
+}
+
+[System.Serializable]
+public struct ScorecardTexts
+{
+    public TextMeshProUGUI[] roundRow;
 }

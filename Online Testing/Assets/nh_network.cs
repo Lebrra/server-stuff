@@ -331,6 +331,8 @@ public class nh_network : MonoBehaviour
 
     void scorecardValues(SocketIOEvent evt)
     {
+        Debug.Log("loading scores...");
+
         var scorecard = evt.data.GetField("scorecard");
         int[][] allValues = new int[scorecard.Count][];
 

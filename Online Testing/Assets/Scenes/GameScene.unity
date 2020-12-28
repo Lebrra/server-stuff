@@ -641,6 +641,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f98435faeb6fff24b8d6074cf7e54fd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  WinnerColor:
+    serializedVersion: 2
+    rgba: 4278214144
   waitingPopup: {fileID: 2143432958}
   waitingScore: {fileID: 747486731}
   scoreCard: {fileID: 1185665169}

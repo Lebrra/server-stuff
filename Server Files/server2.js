@@ -329,7 +329,7 @@ class Game {
         this.OutPlayer = -1;
         this.roundOver = false;
 
-        this.ScoreCard = new Array(10);
+        this.ScoreCard = new Array();
     }
 
     roundSetUp() {

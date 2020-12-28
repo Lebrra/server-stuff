@@ -13,8 +13,10 @@ Players.set(
     }
 );
 
-var newArray = Array.from(Players.keys());
-
+// var newArray = Array.from(Players.keys());
+var newArray = Array.from(Players.values()).map(p => p['id']);
+// newArray = newArray.filter(player => player.id);
+var newArray2 = newArray.map(p => p['id']);
 console.table(newArray);
 
-console.log(newArray.indexOf ("123"));
+// console.log(newArray.indexOf ("123"));

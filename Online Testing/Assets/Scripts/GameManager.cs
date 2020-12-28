@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
     public GameObject firstOutButton;
     public GameObject outButton;
     public OutDeckHandler outDeckHandler;
+    public GameObject endRoundScreen;
 
     private void Awake()
     {
@@ -140,13 +141,16 @@ public class GameManager : MonoBehaviour
         if (lastTurn)
         {
             outDeckHandler.CheckForUpdatedOut();
+            endRoundScreen.SetActive(true);
+            int score = 0;
 
             // scoring
             if (outDeckHandler.RemoveFromHand(discarded))
             {
                 //calulate score
                 Debug.Log("I should calculate the score here, card count: " + outDeckHandler.myCurrentHand.Count);
-                nh_network.server.sendMyScore(outDeckHandler.CalculateScore());
+                score = outDeckHandler.CalculateScore();
+                nh_network.server.sendMyScore(score);
             }
             else
             {
@@ -154,6 +158,8 @@ public class GameManager : MonoBehaviour
                 Debug.Log("Your score is 0");
                 nh_network.server.sendMyScore(0);
             }
+
+            endRoundScreen.GetComponent<ScorecardLoader>().EnableWait(score);
         }
     }
 }

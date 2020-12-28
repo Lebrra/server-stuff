@@ -7,6 +7,20 @@
       <e p="Assets" t="Include">
         <e p="ConnectionIndicator.cs" t="Include" />
         <e p="DropContextController.cs" t="Include" />
+        <e p="Fonts" t="Include">
+          <e p="Alex_Brush" t="Include">
+            <e p="OFL.txt" t="Include" />
+          </e>
+          <e p="Krub" t="Include">
+            <e p="OFL.txt" t="Include" />
+          </e>
+          <e p="Patrick_Hand" t="Include">
+            <e p="OFL.txt" t="Include" />
+          </e>
+          <e p="Sue_Ellen_Francisco" t="Include">
+            <e p="OFL.txt" t="Include" />
+          </e>
+        </e>
         <e p="LayoutController.cs" t="Include" />
         <e p="nh_network.cs" t="Include" />
         <e p="NotificationManager.cs" t="Include" />

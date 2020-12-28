@@ -62,7 +62,7 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
                     Debug.Log($"Tried to update incoming wild card's number to a ref card's number, but coud not find a value reference card...");
                     return true;
                 }
-                newCard.myCard.number = refCard.myCard.number;
+                // newCard.myCard.number = refCard.myCard.number;
                 newCard.myCard.wildNumber = refCard.myCard.number;
                 Debug.Log($"Updating incoming wild card's number to {newCard.myCard.number}");
 
@@ -200,7 +200,7 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
         {
             foreach (var card in cards.Where(c => c.myCard.usedAsWild))
             {
-                card.myCard.wildNumber = refCard.myCard.number;
+                // card.myCard.wildNumber = refCard.myCard.number;
                 card.myCard.number = refCard.myCard.number;
             }
         }

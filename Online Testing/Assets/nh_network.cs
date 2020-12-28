@@ -338,13 +338,11 @@ public class nh_network : MonoBehaviour
 
         for(int i = 0; i < scorecard.Count; i++)
         {
-            Debug.Log("in i row: " + i);
-            Debug.Log(scorecard[i].IsArray);
+            if (!scorecard[i].IsArray) break;
 
             allValues[i] = new int[scorecard[i].Count];
             for(int j = 0; j < scorecard[i].Count; j++)
             {
-                Debug.Log("in j row: " + j);
                 int parsedNum;
                 if (int.TryParse(scorecard[i][j].ToString().Trim('"'), out parsedNum))
                     allValues[i][j] = parsedNum;

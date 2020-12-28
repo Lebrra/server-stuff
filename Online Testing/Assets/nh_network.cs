@@ -52,7 +52,8 @@ public class nh_network : MonoBehaviour
         socket.On("drewFromDiscard", drewFromDiscard);
         socket.On("updateOutDeck", updateOutDeck);
         socket.On("firstOutPlayer", firstOutPlayer);
-        socket.On("sendNewScore", receiveNewScore);
+        socket.On("playernamesInRoom", scorecardNames);
+        socket.On("updateScoreCard", scorecardValues);
         
         socket.On("ping", ping);
 
@@ -315,10 +316,17 @@ public class nh_network : MonoBehaviour
         socket.Emit("receiveScore", scoreObj);
     }
 
-    void receiveNewScore(SocketIOEvent evt)
+    void scorecardNames(SocketIOEvent evt)
     {
-        string score = evt.data.GetField("score").ToString().Trim('"');
-        Debug.Log("New score received: " + score);
+        var obj = evt.data.GetField("players");
+        Debug.Log(obj);
+        Debug.Log(obj.IsArray);
+        string[] names;
+    }
+
+    void scorecardValues(SocketIOEvent evt)
+    {
+        
     }
 
     #endregion

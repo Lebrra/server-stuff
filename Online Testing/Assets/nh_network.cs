@@ -305,6 +305,10 @@ public class nh_network : MonoBehaviour
 
         var notification = new Notification(playerName + " has gone out!", 3, true, Color.green);
         NotificationManager.instance.addNotification(notification);
+
+        int playerindex;
+        int.TryParse(evt.data.GetField("playerIndex").ToString().Trim('"'), out playerindex);
+        ScorecardLoader.inst.firstoutplayer = playerindex;
     }
 
     #endregion

@@ -133,8 +133,11 @@ io.sockets.on('connection', (socket) => {
 
 
     socket.on("firstOut", () => {
-        io.in(Users.get(socket.id)['room']).emit('firstOutPlayer', { player: Users.get(socket.id).username });
+        io.in(Users.get(socket.id)['room']).emit('firstOutPlayer', { player: Users.get(socket.id).username, playerIndex: Games[Users.get(socket.id)['room']].Turn });
         Games[Users.get(socket.id)['room']].OutPlayer = Games[Users.get(socket.id)['room']].Turn;
+
+        //send firstout index to all players:
+        //io.in(Users.get(socket.id)['room']).emit('firstOutPlayerIndex', { playerIndex: Games[Users.get(socket.id)['room']].OutPlayer });
     });
 
     socket.on("updateOutDeck", (outDeck) => {

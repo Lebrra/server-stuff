@@ -7,7 +7,7 @@ public class ScorecardLoader : MonoBehaviour
 {
     public static ScorecardLoader inst;
 
-    public bool firstout = false;
+    public int firstoutplayer = -1;
     public Color32 WinnerColor;
 
     [Header("Waiting")]
@@ -25,6 +25,7 @@ public class ScorecardLoader : MonoBehaviour
     private void Awake()
     {
         inst = this;
+        gameObject.SetActive(false);
     }
 
     public void EnableWait(int score)
@@ -57,7 +58,8 @@ public class ScorecardLoader : MonoBehaviour
             {
                 if(scores[i][j] == 0)
                 {
-                    if (firstout) scorecardTexts[i].roundRow[j].text = "X";
+                    Debug.Log("who was first out? " + firstoutplayer);
+                    if (firstoutplayer == j) scorecardTexts[i].roundRow[j].text = "X";
                     else scorecardTexts[i].roundRow[j].text = "-";
                 }
                 else scorecardTexts[i].roundRow[j].text = scores[i][j].ToString();
@@ -69,14 +71,16 @@ public class ScorecardLoader : MonoBehaviour
 
     public void CalculateTotals(int[][] scores)
     {
-        int[] totals = new int[scores.Length];
+        Debug.Log("calculating totals...");
+
+        int[] totals = new int[scores[0].Length];
         for (int i = 0; i < totals.Length; i++) totals[i] = 0;
 
         for (int i = 0; i < scores.Length; i++)
         {
             if (scores[i] == null) break;
 
-            for (int j = 0; j < scores[i].Length; j++)
+            for (int j = 0; j < scores[0].Length; j++)
             {
                 totals[j] += scores[i][j];
             }

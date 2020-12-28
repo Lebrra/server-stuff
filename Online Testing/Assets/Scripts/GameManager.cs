@@ -156,7 +156,6 @@ public class GameManager : MonoBehaviour
             {
                 //score = 0
                 Debug.Log("Your score is 0");
-                ScorecardLoader.inst.firstout = true;
                 nh_network.server.sendMyScore(0);
             }
 

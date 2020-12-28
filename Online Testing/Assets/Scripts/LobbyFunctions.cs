@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+//using UnityEngine.UI;
+using TMPro;
 
 public class LobbyFunctions : MonoBehaviour
 {
@@ -9,12 +10,12 @@ public class LobbyFunctions : MonoBehaviour
 
     public bool inRoom = false;
 
-    public InputField roomInput;
+    public TMP_InputField roomInput;
     public GameObject joinBox;
     public GameObject lobbyButtons;
     public GameObject usernameInput;
 
-    public Text roomNameText;
+    public TextMeshProUGUI roomNameText;
     public GameObject backButton;
 
     public GameObject playButton;
@@ -49,7 +50,7 @@ public class LobbyFunctions : MonoBehaviour
         }
     }
 
-    public void clearInput(InputField field)
+    public void clearInput(TMP_InputField field)
     {
         field.text = "";
     }
@@ -85,5 +86,10 @@ public class LobbyFunctions : MonoBehaviour
     {
 
         nh_network.server.startGame();
+    }
+
+    public void openUsernamePanel(bool open)
+    {
+        usernameInput.SetActive(open);
     }
 }

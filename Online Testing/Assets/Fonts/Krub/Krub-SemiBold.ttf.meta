@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 812e61eedac1be6449b5bc309332e426
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Krub
+  fontNames:
+  - Krub
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 30b34664742a87c498728287d8fecc35, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

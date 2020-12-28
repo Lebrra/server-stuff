@@ -252,7 +252,7 @@ io.sockets.on('connection', (socket) => {
             Users.set(
                 socket.id,
                 {
-                    username: "New User",
+                    username: "New Player",
                     id: socket.id,
                     room: "",
                     state: states.LOBBY

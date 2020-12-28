@@ -423,6 +423,7 @@ class Game {
         if (this.Turn == this.OutPlayer) {
             //round has ended!
             console.log("~~ the round has ended! ~~");
+            this.updateScoreCard();
         }
 
         console.log("Player turn: " + PlayersArray[this.Turn].username);
@@ -498,5 +499,19 @@ class Game {
         console.table(this.ScoreCard);
         //update client scorecards
         //io.in(this.Roomname).emit('sendNewScore', {'score': score});
+    }
+
+    updateScoreCard(){
+        // get only the playernames
+        let playerNames = Array.from(this.Players.values()).map(player => player['username']);
+        // send player names to all clients
+        io.in(this.Roomname).emit('playernamesInRoom', {'players': playerNames});
+        console.log("Sending Player Names: ");
+        console.table(playerNames);
+
+        // send score card to all room clients
+        io.in(this.Roomname).emit('updateScoreCard', {'scorecard': this.ScoreCard});
+        console.log("Sending Score Card: ");
+        console.table(this.ScoreCard);
     }
 }

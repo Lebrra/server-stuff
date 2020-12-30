@@ -263,19 +263,19 @@ io.sockets.on('connection', (socket) => {
             );
             checkUsers();
         }
-    };
+    }
 
     function removeUser(socket) {
         if (Users.has(socket.id)) {
             Users.delete(socket.id);
             checkUsers();
         }
-    };
+    }
 
     function checkUsers() {
         console.table(Users);
         listUsers();
-    };
+    }
 
     function listUsers() {
 
@@ -529,7 +529,6 @@ class Game {
         console.log("Sending Score Card: ");
         console.table(this.ScoreCard);
 
-        if(this.Round >= 13)
         //reset round method
         this.resetRound();
     }

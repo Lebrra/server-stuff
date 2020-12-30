@@ -508,6 +508,15 @@ class Game {
         var playerIndex = playerArray.indexOf(playerID);
         console.log("player index: " + playerIndex);
 
+        //
+        if (this.Round == 12){
+            console.log("doubling score");
+            score *= 2;
+        } else if(this.Round == 12){
+            console.log("tripling score");
+            score *= 3;
+        }
+
         this.ScoreCard[this.Round - 3][playerIndex] = score;
         console.table(this.ScoreCard);
         //update client scorecards
@@ -530,7 +539,11 @@ class Game {
         console.table(this.ScoreCard);
 
         //reset round method
-        this.resetRound();
+        if(this.Round < 14) {
+            this.resetRound();
+        } else {
+            console.log("GAME OVER, just finished round 13.");
+        }
     }
 
     resetRound() {

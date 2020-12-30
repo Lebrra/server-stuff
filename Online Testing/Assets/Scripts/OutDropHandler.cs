@@ -371,10 +371,6 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
     //     }
     // }
 
-    public bool checkEmpty()
-    {
-        return cards.Count == 0;
-    }
     
     public override bool checkValid()
     {
@@ -382,10 +378,6 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
         return cards.Count > 2 || cards.Count == 0;
     }
     
-    // void activateNewDropHandler()
-    // {
-    //     outHandler.OpenNewDrop();
-    // }
 
     bool checkContinguous(int cardNum)
     {
@@ -407,14 +399,6 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
     //     else return 0;
     // }
 
-    void ReorderCardObjects()
-    {
-        foreach (var t in cards)
-        {
-            t.transform.SetAsLastSibling();
-        }
-    }
-
     public override void clearDropZone()
     {
         foreach (var card in cards)
@@ -427,11 +411,5 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
         outState = Out.None;
         canDrop = true;
     }
-
-    public void OutValues()
-    {
-        // Values to go to OutHandler
-        // outsuit
-        // run - ends
-    }
+    
 }

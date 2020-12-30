@@ -378,11 +378,4 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         outState = Out.None;
         canDrop = true;
     }
-
-    public void OutValues()
-    {
-        // Values to go to OutHandler
-        // outsuit
-        // run - ends
-    }
 }

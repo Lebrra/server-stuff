@@ -521,12 +521,21 @@ class Game {
         console.table(this.ScoreCard);
 
         //reset round method
+        this.resetRound();
     }
 
     resetRound() {
+        console.log(`resetting round... Next round will be ${this.Round+1}`);
         // increment round
+        this.Round++;
         // set all ready to false
+        // this.Players.foreach(player => this.changePlayerPropertyWithID(player, 'ready', false));
+        this.Players.foreach(player => player.ready = false);
+        console.log("are all players 'ready' = false?");
+        console.table(Array.from(this.Players.values()));
         // set outplayer to -1
+        this.OutPlayer = -1;
+        // set roundOver to false
         this.roundOver = false;
     }
 }

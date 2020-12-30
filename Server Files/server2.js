@@ -519,5 +519,14 @@ class Game {
         io.in(this.Roomname).emit('updateScoreCard', {'scorecard': this.ScoreCard});
         console.log("Sending Score Card: ");
         console.table(this.ScoreCard);
+
+        //reset round method
+    }
+
+    resetRound() {
+        // increment round
+        // set all ready to false
+        // set outplayer to -1
+        this.roundOver = false;
     }
 }

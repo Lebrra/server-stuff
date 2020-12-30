@@ -163,4 +163,15 @@ public class GameManager : MonoBehaviour
             ScorecardLoader.inst.EnableWait(score);
         }
     }
+
+    public void resetAll()
+    {
+        myTurn = myDraw = myDiscard = lastTurn = false;
+
+        outDeckHandler.resetOutPanel();
+        firstOutButton.SetActive(false);
+
+        openOutPanel(true);
+        outPanel.GetComponent<OutHandler>().resetOut();
+    }
 }

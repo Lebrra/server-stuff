@@ -49,6 +49,7 @@ public class OutDeckHandler : MonoBehaviour
     public void resetOutPanel()
     {
         outCardCount = 0;
+        myCurrentHand.Clear();
 
         foreach(OutDropHandler d in firstOutDrops)
         {
@@ -56,6 +57,7 @@ public class OutDeckHandler : MonoBehaviour
             d.gameObject.SetActive(false);
         }
         Debug.Log("Cleared current out deck.");
+        filled = false;
     }
 
     public void FillHandCopy(List<CardButton> hand)

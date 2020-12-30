@@ -240,4 +240,12 @@ public class OutHandler : MonoBehaviour
 
         GameManager.instance.openOutPanel(false);
     }
+
+    public void resetOut()
+    {
+        hasGoneOut = false;
+        goOutBtn.gameObject.SetActive(true);
+        CloseOutMenu();
+        gameObject.SetActive(false);
+    }
 }

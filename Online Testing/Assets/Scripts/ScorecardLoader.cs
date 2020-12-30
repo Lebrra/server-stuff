@@ -73,11 +73,7 @@ public class ScorecardLoader : MonoBehaviour
         }
 
         CalculateTotals(scores);
-
-        //ready box
-        gameObject.GetComponent<UnityEngine.UI.Image>().enabled = false;
-        readycheck.SetActive(true);
-        readyText.text = "Tap anywhere to start next round!";
+        StartCoroutine(DelayReadyButton());
     }
 
     public void CalculateTotals(int[][] scores)
@@ -133,6 +129,15 @@ public class ScorecardLoader : MonoBehaviour
         ready = false;
         readycheck.SetActive(false);
         gameObject.GetComponent<UnityEngine.UI.Image>().enabled = true;
+    }
+
+    IEnumerator DelayReadyButton()
+    {
+        yield return new WaitForSeconds(5F);
+
+        gameObject.GetComponent<UnityEngine.UI.Image>().enabled = false;
+        readycheck.SetActive(true);
+        readyText.text = "Tap anywhere to start next round!";
     }
 }
 

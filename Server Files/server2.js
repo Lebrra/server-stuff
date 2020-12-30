@@ -454,6 +454,14 @@ class Game {
         }*/
     }
 
+    clearPlayerHands(){
+        console.log(`Clear each player's hand...`);
+        this.Players.forEach(player => {
+            player.hand = [];
+            console.table(`${player.hand}`);
+        });
+    }
+
     drawCard() {
         if (Deck.length == 0) {
             this.discardToDeck();
@@ -521,6 +529,7 @@ class Game {
         console.log("Sending Score Card: ");
         console.table(this.ScoreCard);
 
+        if(this.Round >= 13)
         //reset round method
         this.resetRound();
     }
@@ -534,6 +543,10 @@ class Game {
         this.Players.forEach(player => player.ready = false);
         // console.log("are all players 'ready' = false?");
         // console.table(Array.from(this.Players.values()));
+
+        // clear players hands
+        this.clearPlayerHands();
+
         // set outplayer to -1
         this.OutPlayer = -1;
         // set roundOver to false

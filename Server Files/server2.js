@@ -409,6 +409,7 @@ class Game {
     }
 
     declareRound() {
+        console.log(`Starting round ${this.Round}`);
         // current round
         io.in(this.Roomname).emit('currentRound', { 'round': this.Round });
     }
@@ -530,9 +531,9 @@ class Game {
         this.Round++;
         // set all ready to false
         // this.Players.foreach(player => this.changePlayerPropertyWithID(player, 'ready', false));
-        this.Players.foreach(player => player.ready = false);
-        console.log("are all players 'ready' = false?");
-        console.table(Array.from(this.Players.values()));
+        this.Players.forEach(player => player.ready = false);
+        // console.log("are all players 'ready' = false?");
+        // console.table(Array.from(this.Players.values()));
         // set outplayer to -1
         this.OutPlayer = -1;
         // set roundOver to false

@@ -237,6 +237,7 @@ public class OutHandler : MonoBehaviour
 
         hasGoneOut = true;
         GameManager.instance.outButton.SetActive(false);
+        goOutBtn.interactable = false;
 
         GameManager.instance.openOutPanel(false);
     }

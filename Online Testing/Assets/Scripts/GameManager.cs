@@ -178,6 +178,7 @@ public class GameManager : MonoBehaviour
 
             outDeckHandler.resetOutPanel();
             firstOutButton.SetActive(false);
+            outButton.SetActive(true);
 
             openOutPanel(true);
             outPanel.GetComponent<OutHandler>().resetOut();

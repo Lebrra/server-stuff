@@ -21,6 +21,9 @@ public class ScorecardLoader : MonoBehaviour
     public ScorecardTexts[] scorecardTexts;
     public TextMeshProUGUI[] totalScores;
 
+    public GameObject showScoreBtn;
+    public GameObject closeScoreBtn;
+
     [Header("Ready Checking")]
     public GameObject readycheck;
     public TextMeshProUGUI readyText;
@@ -73,6 +76,7 @@ public class ScorecardLoader : MonoBehaviour
         }
 
         CalculateTotals(scores);
+        gameObject.GetComponent<UnityEngine.UI.Image>().enabled = false;
         StartCoroutine(DelayReadyButton());
     }
 
@@ -128,16 +132,30 @@ public class ScorecardLoader : MonoBehaviour
     {
         ready = false;
         readycheck.SetActive(false);
-        gameObject.GetComponent<UnityEngine.UI.Image>().enabled = true;
+        scoreCard.SetActive(false);
+        gameObject.SetActive(false);
+
+        if (!showScoreBtn.activeInHierarchy) showScoreBtn.SetActive(true);
     }
 
     IEnumerator DelayReadyButton()
     {
         yield return new WaitForSeconds(5F);
 
-        gameObject.GetComponent<UnityEngine.UI.Image>().enabled = false;
         readycheck.SetActive(true);
         readyText.text = "Tap anywhere to start next round!";
+    }
+
+    public void OpenScoreCard()
+    {
+        scoreCard.SetActive(true);
+        closeScoreBtn.SetActive(true);
+    }
+
+    public void CloseScoreCard()
+    {
+        closeScoreBtn.SetActive(false);
+        scoreCard.SetActive(false);
     }
 }
 

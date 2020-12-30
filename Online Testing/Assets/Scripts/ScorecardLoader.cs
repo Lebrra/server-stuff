@@ -8,6 +8,7 @@ public class ScorecardLoader : MonoBehaviour
     public static ScorecardLoader inst;
 
     public int firstoutplayer = -1;
+    public Color32 defaultColor;
     public Color32 WinnerColor;
 
     [Header("Waiting")]
@@ -19,6 +20,11 @@ public class ScorecardLoader : MonoBehaviour
     public TextMeshProUGUI[] nameTexts;
     public ScorecardTexts[] scorecardTexts;
     public TextMeshProUGUI[] totalScores;
+
+    [Header("Ready Checking")]
+    public GameObject readycheck;
+    public TextMeshProUGUI readyText;
+    public bool ready;
 
     int[][] loadedScores;
 
@@ -67,10 +73,17 @@ public class ScorecardLoader : MonoBehaviour
         }
 
         CalculateTotals(scores);
+
+        //ready box
+        gameObject.GetComponent<UnityEngine.UI.Image>().enabled = false;
+        readycheck.SetActive(true);
+        readyText.text = "Tap anywhere to start next round!";
     }
 
     public void CalculateTotals(int[][] scores)
     {
+        foreach (TextMeshProUGUI t in totalScores) t.color = defaultColor;
+
         Debug.Log("calculating totals...");
 
         int[] totals = new int[scores[0].Length];
@@ -102,6 +115,24 @@ public class ScorecardLoader : MonoBehaviour
 
         foreach (int i in winning)
             totalScores[i].color = WinnerColor;
+    }
+
+    public void ReadyCheck()
+    {
+        if (!ready)
+        {
+            ready = true;
+            nh_network.server.setReady();
+            readyText.text = "Waiting for other players...";
+            gameObject.GetComponent<UnityEngine.UI.Image>().enabled = true;
+        }
+    }
+
+    public void reset()
+    {
+        ready = false;
+        readycheck.SetActive(false);
+        gameObject.GetComponent<UnityEngine.UI.Image>().enabled = true;
     }
 }
 

@@ -166,12 +166,16 @@ public class GameManager : MonoBehaviour
 
     public void resetAll()
     {
-        myTurn = myDraw = myDiscard = lastTurn = false;
+        if (lastTurn)   // reset if needed
+        {
+            myTurn = myDraw = myDiscard = lastTurn = false;
 
-        outDeckHandler.resetOutPanel();
-        firstOutButton.SetActive(false);
+            outDeckHandler.resetOutPanel();
+            firstOutButton.SetActive(false);
 
-        openOutPanel(true);
-        outPanel.GetComponent<OutHandler>().resetOut();
+            openOutPanel(true);
+            outPanel.GetComponent<OutHandler>().resetOut();
+            ScorecardLoader.inst.reset();
+        }
     }
 }

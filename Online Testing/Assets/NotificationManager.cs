@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 [System.Serializable]
 public class Notification
@@ -24,7 +25,8 @@ public class Notification
 
 public class NotificationManager : MonoBehaviour
 {
-    public Text notificationsText;
+    //public Text notificationsText;
+    public TextMeshProUGUI notificationsText;
     public float duration;
     public Color color;
 

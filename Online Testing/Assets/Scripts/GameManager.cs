@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
         else instance = this;
 
         server = nh_network.server;
+        endRoundScreen.SetActive(true);
     }
 
     void Start()

@@ -170,6 +170,12 @@ public class GameManager : MonoBehaviour
         {
             myTurn = myDraw = myDiscard = lastTurn = false;
 
+            foreach(CardButton c in myHand)
+            {
+                CardPooler.instance.PushCard(c.gameObject);
+            }
+            myHand.Clear();
+
             outDeckHandler.resetOutPanel();
             firstOutButton.SetActive(false);
 

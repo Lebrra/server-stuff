@@ -12,6 +12,7 @@ public class LobbyFunctions : MonoBehaviour
 
     public TMP_InputField roomInput;
     public GameObject joinBox;
+    public Animator errorAnim;
     public GameObject lobbyButtons;
     public GameObject usernameInput;
 
@@ -96,5 +97,10 @@ public class LobbyFunctions : MonoBehaviour
     public void openUsernamePanel(bool open)
     {
         usernameInput.SetActive(open);
+    }
+
+    public void showRoomError()
+    {
+        errorAnim.SetTrigger("flash");
     }
 }

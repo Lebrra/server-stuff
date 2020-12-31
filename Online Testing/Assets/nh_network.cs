@@ -41,7 +41,9 @@ public class nh_network : MonoBehaviour
         socket.On("roomUsers", loadRoomUsers);
         socket.On("removeUser", removeUser);
         socket.On("createdRoom", createdRoom);
+        socket.On("roomNotFound", roomError);
         socket.On("loadGame", loadGame);
+
         socket.On("currentRound", roundInfo);
         socket.On("currentTurn", turnInfo);
         socket.On("playerHand", handInfo);
@@ -50,10 +52,12 @@ public class nh_network : MonoBehaviour
         socket.On("yourTurn", myTurn);
         socket.On("drewFromDeck", drewFromDeck);
         socket.On("drewFromDiscard", drewFromDiscard);
+
         socket.On("updateOutDeck", updateOutDeck);
         socket.On("firstOutPlayer", firstOutPlayer);
         socket.On("playernamesInRoom", scorecardNames);
         socket.On("updateScoreCard", scorecardValues);
+        socket.On("gameover", gameOver);
         
         socket.On("ping", ping);
 
@@ -88,6 +92,11 @@ public class nh_network : MonoBehaviour
     {
         Debug.Log("Created new room: " + evt.data.GetField("name"));
         LobbyFunctions.inst.enterRoom(evt.data.GetField("name").ToString().Trim('"'));
+    }
+
+    void roomError(SocketIOEvent evt)
+    {
+        LobbyFunctions.inst.showRoomError();
     }
     #endregion
     #region Username Functions
@@ -313,7 +322,7 @@ public class nh_network : MonoBehaviour
     }
 
     #endregion
-
+    #region Scoring
     public void sendMyScore(int score)
     {
         //send score to server
@@ -356,6 +365,18 @@ public class nh_network : MonoBehaviour
         }
 
         ScorecardLoader.inst.LoadScores(allValues);
+    }
+    #endregion
+
+    void gameOver(SocketIOEvent evt)
+    {
+        Debug.Log("The game has ended.");
+        ScorecardLoader.inst.gameover = true;
+    }
+
+    public void destroyGameData()
+    {
+        socket.Emit("deleteGame");
     }
 
     #endregion

@@ -74,6 +74,7 @@ io.sockets.on('connection', (socket) => {
         else {
             // room does not exist
             console.log("Cannot join; room does not exist.");
+            socket.emit('roomNotFound');
         }
     });
 
@@ -86,6 +87,9 @@ io.sockets.on('connection', (socket) => {
         changeUserProperty("room", "");
         changeUserProperty("state", states.LOBBY);
         //console.log(socket.adapter.rooms[Users.get(socket.id).room].sockets);
+
+        console.log("room:");
+        console.log(Users.get(socket.id).room);
 
         updateFormerRoomList(formerRoom);
     });
@@ -149,6 +153,20 @@ io.sockets.on('connection', (socket) => {
         Games[Users.get(socket.id)['room']].updatePlayerScore(socket.id, score);
     });
 
+    socket.on("deleteGame", () => {
+
+        socket.leave(Users.get(socket.id).room);
+        changeUserProperty("room", "");
+        changeUserProperty("state", states.LOBBY);
+
+        if (Games.includes(Users.get(socket.id)['room'])) {
+            console.log(`destroying game in room ${Users.get(socket.id)['room']}`);
+
+            var gameIndex = Games.indexOf(Users.get(socket.id)['room']);
+            Games.splice(gameIndex, 1);
+        }
+    });
+
 
 
 
@@ -182,11 +200,13 @@ io.sockets.on('connection', (socket) => {
             let _sockets = socket.adapter.rooms[formerRoom].sockets;
             let tempUsers = [];
             for (_socket in _sockets) {
-                tempUsers.push(
-                    {
-                        username: getUsernameFromSocketID(_socket),
-                        id: _socket
-                    });
+                if (Users[_socket].state == states.ROOM) {
+                    tempUsers.push(
+                        {
+                            username: getUsernameFromSocketID(_socket),
+                            id: _socket
+                        });
+                }
             }
 
             var roomDetails = {
@@ -194,9 +214,14 @@ io.sockets.on('connection', (socket) => {
             }
 
             console.log('--- Room Details ---');
-            console.table(roomDetails);
+            //console.table(roomDetails);
             socket.to(formerRoom).emit('roomUsers', roomDetails);
             //io.emit('roomUsers', roomDetails);
+        }
+        else {
+            console.log("room is empty, removing it");
+            var roomIndex = Rooms.indexOf(formerRoom);
+            Rooms.splice(roomIndex, 1);
         }
     }
 
@@ -217,6 +242,13 @@ io.sockets.on('connection', (socket) => {
         var animal = Math.floor(Math.random() * (Animals.length));
         var num = Math.floor(Math.random() * 100);
         var roomName = Animals[animal] + num.toString().padStart(2, "0");
+
+        while (Rooms.includes(roomName)) {
+            console.log("changing room name, chosen was taken");
+            num = Math.floor(Math.random() * 100);
+            roomName = Animals[animal] + num.toString().padStart(2, "0");
+        }
+
         Rooms.push(roomName);
         console.table(Rooms);
         return roomName;
@@ -230,7 +262,7 @@ io.sockets.on('connection', (socket) => {
             tempObj[property] = value;
             Users.set(socket.id, tempObj);
         }
-        checkUsers();
+        if (property == 'username') checkUsers();
     }
 
     function changeUserPropertyWithID(socketID, property, value) {
@@ -241,7 +273,7 @@ io.sockets.on('connection', (socket) => {
             tempObj[property] = value;
             Users.set(socketID, tempObj);
         }
-        checkUsers();
+        if (property == 'username') checkUsers();
     }
 
     function addUsername(newUsername) {
@@ -543,6 +575,7 @@ class Game {
             this.resetRound();
         } else {
             console.log("GAME OVER, just finished round 13.");
+            io.in(this.Roomname).emit('gameover');
         }
     }
 

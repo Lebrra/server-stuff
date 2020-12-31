@@ -29,6 +29,10 @@ public class ScorecardLoader : MonoBehaviour
     public TextMeshProUGUI readyText;
     public bool ready;
 
+    [Header("Game Over")]
+    public bool gameover = false;
+    public GameObject gameoverScreen;
+
     int[][] loadedScores;
 
     private void Awake()
@@ -122,9 +126,18 @@ public class ScorecardLoader : MonoBehaviour
         if (!ready)
         {
             ready = true;
-            nh_network.server.setReady();
-            readyText.text = "Waiting for other players...";
-            gameObject.GetComponent<UnityEngine.UI.Image>().enabled = true;
+            if (!gameover)
+            {
+                nh_network.server.setReady();
+                readyText.text = "Waiting for other players...";
+                gameObject.GetComponent<UnityEngine.UI.Image>().enabled = true;
+            }
+            else
+            {
+                //end game things
+                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+                nh_network.server.destroyGameData();
+            }
         }
     }
 
@@ -143,7 +156,8 @@ public class ScorecardLoader : MonoBehaviour
         yield return new WaitForSeconds(5F);
 
         readycheck.SetActive(true);
-        readyText.text = "Tap anywhere to start next round!";
+        if (!gameover) readyText.text = "Tap anywhere to start next round!";
+        else readyText.text = "The game has ended, tap anywhere to continue...";
     }
 
     public void OpenScoreCard()

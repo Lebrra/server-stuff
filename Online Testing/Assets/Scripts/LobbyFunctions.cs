@@ -46,7 +46,12 @@ public class LobbyFunctions : MonoBehaviour
     {
         if (roomInput.text != "")
         {
-            nh_network.server.joinRoom(roomInput.text);
+            string firstLetter = roomInput.text[0].ToString();
+            string code = roomInput.text.ToLower();
+            code = firstLetter.ToUpper() + code.Substring(1);
+            Debug.Log("Room code received: " + code);
+
+            nh_network.server.joinRoom(code);
         }
     }
 

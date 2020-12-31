@@ -742,6 +742,8 @@ MonoBehaviour:
   readycheck: {fileID: 1100586611}
   readyText: {fileID: 1812567945}
   ready: 0
+  gameover: 0
+  gameoverScreen: {fileID: 0}
 --- !u!114 &35243160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21180,7 +21182,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -4073570385740111339, guid: 0d7ded9c73d68430a9214864549af33d,
+  m_Sprite: {fileID: -4073570385740111339, guid: b21b108cc106447879a9a21ece8f60b4,
     type: 3}
   m_Type: 1
   m_PreserveAspect: 0

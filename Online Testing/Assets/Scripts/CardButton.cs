@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Rendering;
 
 public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -12,6 +13,8 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
     Transform parentObject;
     Transform handObject;
+
+    private int sortingOrder;
 
     bool waitForClick = false;
 
@@ -66,6 +69,8 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
     {
         if (!interactable) return;
 
+        gameObject.AddComponent<Canvas>().overrideSorting = true;
+        
         GetComponent<Image>().raycastTarget = false;
         
         // ~- Leah I've noticed that if i disable the line below, we don't get the card bloat -- can you look at this?
@@ -93,10 +98,20 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
     {
         if (!interactable) return;
 
-        GameObject dropObject = eventData.pointerCurrentRaycast.gameObject;
+        if (GetComponent<Canvas>())
+        {
+            Destroy(GetComponent<Canvas>());
+        }
 
-        var rayResults = new List<RaycastResult>();
+        
         bool hitHand = false;
+        bool drop = false;
+        
+        // first hit ray
+        GameObject dropObject = eventData.pointerCurrentRaycast.gameObject;
+        
+        // all hit ray
+        var rayResults = new List<RaycastResult>();
         EventSystem.current.RaycastAll(eventData, rayResults);
         foreach (var hit in rayResults)
         {
@@ -104,13 +119,17 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
             {
                 hitHand = true;
             }
+
+            if (hit.gameObject.GetComponent<DropHandler>())
+            {
+                print("found outhandler? " + hit.gameObject.name);
+                drop = true;
+                dropObject = hit.gameObject;
+            }
         }
 
-        print("ray results: " + rayResults);
-            
-        print("dropObkect: " + dropObject.name);
-
-        if (dropObject?.GetComponent<DropHandler>())
+        // if (dropObject?.GetComponent<DropHandler>())
+        if(drop)
         {
             if (dropObject.GetComponent<DropHandler>().checkValidDrop(this))
             {
@@ -142,32 +161,36 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
             for (int i = 0; i < cards.Length-1; i++)
             {
                 print("card pos: " + cards[i].transform.position.x);
-                if (dropPos.x > cards[i].transform.position.x && dropPos.x < cards[i + 1].transform.position.x)
-                { 
-                    // print();
-                    int sibInd = cards[i].transform.GetSiblingIndex();
-                    print("Inserting card at: " + sibInd + 1);
-                    ReturnToHand();
-                    transform.SetSiblingIndex(sibInd+1);
-                }
-                else if (dropPos.x < cards[0].transform.position.x)
+                
+                if (dropPos.x < cards[0].transform.position.x)
                 {
                     print("Moving card to left-most position");
                     ReturnToHand();
                     transform.SetAsFirstSibling();
+                    break;
                 }
-                else
+                if (dropPos.x > cards[i].transform.position.x && dropPos.x < cards[i + 1].transform.position.x)
+                {
+                    // print();
+                    int sibInd = cards[i].transform.GetSiblingIndex();
+                    print("Inserting card at: " + sibInd);
+                    ReturnToHand();
+                    transform.SetSiblingIndex(sibInd + 1);
+                    break;
+                }
+                if (dropPos.x > cards[cards.Length-1].transform.position.x)
                 {
                     print("Moving card to right-most position");
                     ReturnToHand();
                     transform.SetAsLastSibling();
+                    break;
                 }
             }
-            // handObject.chi
+            ReturnToHand();
         }
         else
         {
-            print("did not drag card to a droppable object");
+            print("Did not drag card to a droppable object");
             ReturnToHand();
         }
 
@@ -176,9 +199,10 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
     public void ReturnToHand()
     {
-        print("return to hand");
+        print("Returned to hand");
         parentObject = handObject;
         transform.SetParent(parentObject);
+        
         if (transform.parent.GetComponent<HorizontalOrVerticalLayoutGroup>())
         {
             transform.parent.GetComponent<HorizontalOrVerticalLayoutGroup>().enabled = false;

@@ -52,13 +52,7 @@ public class UsernameActions : MonoBehaviour
         {
             if (PlayerPrefs.HasKey("username") && name == "New Player")
             {
-                // don't take this name, set it to my username
-                if (PlayerPrefs.GetString("username") == "New Player")
-                {
-                    PlayerPrefs.DeleteKey("username");
-                    addUsername(id, name);
-                }
-                else nh_network.server.newUsername(PlayerPrefs.GetString("username"));
+                StartCoroutine(DelayUsernameUpdate(id, name));
             }
             else
             {
@@ -88,5 +82,18 @@ public class UsernameActions : MonoBehaviour
     {
         foreach(GameObject a in usernameTexts.Values) Destroy(a);
         usernameTexts = new Dictionary<string, GameObject>();
+    }
+
+    IEnumerator DelayUsernameUpdate(string id, string name)
+    {
+        yield return new WaitForSeconds(0.3F);
+
+        // don't take this name, set it to my username
+        if (PlayerPrefs.GetString("username") == "New Player")
+        {
+            PlayerPrefs.DeleteKey("username");
+            addUsername(id, name);
+        }
+        else nh_network.server.newUsername(PlayerPrefs.GetString("username"));
     }
 }

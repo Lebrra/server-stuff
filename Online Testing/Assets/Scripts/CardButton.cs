@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -73,7 +74,7 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
         
         print("DRAG BEGIN: " + transform.parent);
 
-        // if in drop handler, remove it from its list
+        // if in drop handler, remove it from its list   <--- USING IT FOR TWO DIFFERENT OBJECTS == CONFUSING
         if (parentObject.GetComponent<DropHandler>()) parentObject.GetComponent<DropHandler>().removeCard(this);
     }
 
@@ -84,7 +85,7 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
             // move card image with mouse/finger
             transform.position = Input.mousePosition;
 
-            print("DRAGGING: " + transform.parent);
+            // print("DRAGGING: " + transform.parent);
         }
     }
 
@@ -93,6 +94,21 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
         if (!interactable) return;
 
         GameObject dropObject = eventData.pointerCurrentRaycast.gameObject;
+
+        var rayResults = new List<RaycastResult>();
+        bool hitHand = false;
+        EventSystem.current.RaycastAll(eventData, rayResults);
+        foreach (var hit in rayResults)
+        {
+            if (hit.gameObject.transform == handObject)
+            {
+                hitHand = true;
+            }
+        }
+
+        print("ray results: " + rayResults);
+            
+        print("dropObkect: " + dropObject.name);
 
         if (dropObject?.GetComponent<DropHandler>())
         {
@@ -111,6 +127,43 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
         {
             if (!dropObject.GetComponent<DiscardHandler>().DiscardCard(this))
                 ReturnToHand();
+        } else if (hitHand)
+        {
+            print("Manualling resort cards");
+            transform.SetParent(null);
+ 
+            Vector3 dropPos = eventData.position;
+            print("dropPos: " + dropPos);
+            CardButton [] cards = handObject.GetComponentsInChildren<CardButton>();
+            // i and i+1 x position
+            
+            print("mouse released at: " + dropPos.x);
+            
+            for (int i = 0; i < cards.Length-1; i++)
+            {
+                print("card pos: " + cards[i].transform.position.x);
+                if (dropPos.x > cards[i].transform.position.x && dropPos.x < cards[i + 1].transform.position.x)
+                { 
+                    // print();
+                    int sibInd = cards[i].transform.GetSiblingIndex();
+                    print("Inserting card at: " + sibInd + 1);
+                    ReturnToHand();
+                    transform.SetSiblingIndex(sibInd+1);
+                }
+                else if (dropPos.x < cards[0].transform.position.x)
+                {
+                    print("Moving card to left-most position");
+                    ReturnToHand();
+                    transform.SetAsFirstSibling();
+                }
+                else
+                {
+                    print("Moving card to right-most position");
+                    ReturnToHand();
+                    transform.SetAsLastSibling();
+                }
+            }
+            // handObject.chi
         }
         else
         {

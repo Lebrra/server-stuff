@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        server.setReady();
+        server?.setReady();
     }
 
     public void drawCard(bool fromDeck)

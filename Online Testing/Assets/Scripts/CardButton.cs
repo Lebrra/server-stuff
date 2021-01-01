@@ -98,6 +98,7 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
     {
         if (!interactable) return;
 
+        
         if (GetComponent<Canvas>())
         {
             Destroy(GetComponent<Canvas>());

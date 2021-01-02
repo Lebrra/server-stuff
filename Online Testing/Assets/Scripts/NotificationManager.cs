@@ -99,7 +99,7 @@ public class NotificationManager : MonoBehaviour
         isNotifying = true;
         while(Notifications.Count > 0)
         {
-            print(Notifications.Count);
+            // print(Notifications.Count);
             var currentNotification = Notifications[0];
 
             notificationsText.text = currentNotification.Message;
@@ -108,15 +108,7 @@ public class NotificationManager : MonoBehaviour
             // wait for completion of message to remove it
             Notifications.RemoveAt(0);
             yield return false;
-            // sometimes depending on loop structure, it's catastrophic remove to items in containers at certain points in looped execution...
-            // if (Notifications.Count <= 0)
-            // {
-            //     notificationsText.text = "";
-            //     print("no more nots");
-            //     break;
-            // }
 
-            // add a second of pause if there are more notifications
             if (Notifications.Count > 0)
             {
                 notificationsText.text = "";
@@ -126,7 +118,7 @@ public class NotificationManager : MonoBehaviour
             yield return false;
         } 
 
-        print("Notifications finished");
+        // print("Notifications finished");
         isNotifying = false;
         yield return true;
     }

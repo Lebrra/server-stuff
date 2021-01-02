@@ -266,6 +266,11 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
                 card.myCard.usedAsWild = false;
             }
             
+            if (cards.Count <= 1)
+            {
+                outState = Out.None;
+            }
+            
             if (outState == Out.Set)
             {
                 // if set
@@ -306,13 +311,20 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
                 if(cards.Contains(card))
                     cards.Remove(card);
             }
-
-            else if (cards.Count == 1)
+            
+            else if (outState == Out.None)
             {
-                outState = Out.None;
                 cards.Remove(card);
                 outHandler.ReturnToHand(card);
             }
+
+            // old stuff.
+            // else if (cards.Count == 1)
+            // {
+            //     outState = Out.None;
+            //     cards.Remove(card);
+            //     outHandler.ReturnToHand(card);
+            // }
 
             if (cards.Count == 0)
             {

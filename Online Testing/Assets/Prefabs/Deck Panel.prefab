@@ -189,15 +189,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d6d8a1e16ed16d448fa98f81d55c62f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canDrop: 1
   cards: []
-  outState: 0
-  reorderTime: 0.05
-  outHandler: {fileID: 0}
   wildCards: []
+  outState: 0
+  outSuit: 0
+  outHandler: {fileID: 0}
   DropGuideLeft: {fileID: 6988594969286715356}
   DropGuideRight: {fileID: 6988594967765773603}
-  canDrop: 1
-  lastCard: {fileID: 0}
+  reorderTime: 0.05
 --- !u!114 &5174608921731796745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,8 +237,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outSpacing: -100
   inSpacing: -300
+  handWorkingSpacePercent: 80
   LayoutElements: []
+  layoutGroup: {fileID: 0}
   spacingOffset: 0
+  defaultSpacing: -10
 --- !u!223 &5174608921963193175
 Canvas:
   m_ObjectHideFlags: 0

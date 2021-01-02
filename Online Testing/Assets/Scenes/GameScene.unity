@@ -5693,12 +5693,12 @@ PrefabInstance:
     - target: {fileID: 5219179772462276789, guid: 7b1821b9fdc97469793241822a632c95,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -874.7
+      value: 880
       objectReference: {fileID: 0}
     - target: {fileID: 5219179772462276789, guid: 7b1821b9fdc97469793241822a632c95,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 461
+      value: -181
       objectReference: {fileID: 0}
     - target: {fileID: 5219179772462276789, guid: 7b1821b9fdc97469793241822a632c95,
         type: 3}
@@ -21289,6 +21289,7 @@ GameObject:
   - component: {fileID: 1986125030}
   - component: {fileID: 1986125029}
   - component: {fileID: 1986125031}
+  - component: {fileID: 1986125032}
   m_Layer: 5
   m_Name: Hand
   m_TagString: Untagged
@@ -21377,6 +21378,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1986125032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1986125027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3506ab6ea834e415fb1e0de7134885cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outSpacing: 0
+  inSpacing: 0
+  handWorkingSpacePercent: 80
+  LayoutElements: []
+  layoutGroup: {fileID: 0}
+  spacingOffset: 0
+  defaultSpacing: 0
 --- !u!1 &2018814029
 GameObject:
   m_ObjectHideFlags: 0
@@ -23119,8 +23139,7 @@ PrefabInstance:
       propertyPath: outHandler
       value: 
       objectReference: {fileID: 362191952}
-    m_RemovedComponents:
-    - {fileID: 803599691846210141, guid: 3632175f242f34847a09974c0745f4b4, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3632175f242f34847a09974c0745f4b4, type: 3}
 --- !u!224 &6008093851827862517
 RectTransform:

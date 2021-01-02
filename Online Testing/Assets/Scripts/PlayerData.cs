@@ -18,6 +18,7 @@ public class PlayerData
         cardback = 0;
     }
 
+    // these are necessary as Color and Vector are not structures that can be serialized, so we are unpacking and packing upon request
     public Color getColor()
     {
         return new Color(R, G, B, 255);

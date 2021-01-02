@@ -225,49 +225,6 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
         canDrop = false;
     }
     
-    // public void ContextEnableOutOptions()
-    // {
-    //     // squeeze cards to center
-    //     GetComponent<LayoutController>().squeezeIn();
-    //     // display context options for run or sets
-    //     DropGuideLeft.SetActive(true);
-    //     DropGuideRight.SetActive(true);
-    //     // set context values
-    //     DropGuideLeft.GetComponent<DropContextController>().setHeader("Run");
-    //     DropGuideLeft.GetComponent<Button>().onClick.AddListener(ContextSetRun);
-    //     DropGuideRight.GetComponent<DropContextController>().setHeader("Set");
-    //     DropGuideRight.GetComponent<Button>().onClick.AddListener(ContextSetSet);
-    //     canDrop = false;
-    // }
-
-    // public void ContextDisable()
-    // {
-    //     // remove event listeners
-    //     DropGuideLeft.GetComponent<Button>().onClick.RemoveAllListeners();
-    //     DropGuideRight.GetComponent<Button>().onClick.RemoveAllListeners();
-    //     // disable context options
-    //     DropGuideLeft.SetActive(false);
-    //     DropGuideRight.SetActive(false);
-    // }
-
-    // public void ContextSetRun()
-    // {
-    //     outState = Out.Run;
-    //     canDrop = true;
-    //     ContextDisable();
-    //     // may add a flash?
-    //     ContextEnableRunOptions();
-    // }
-    //
-    // public void ContextSetSet()
-    // {
-    //     outState = Out.Set;
-    //     canDrop = true;
-    //     cards.Add(wildCards.Last());
-    //     outHandler.RemoveFromHand(wildCards.Last());
-    //     ContextDisable();
-    // }
-
     public override void ContextSetRunFirstCard()
     {
         // set position
@@ -296,82 +253,6 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
         outDeckHandler.RemoveFromHand(cards.Last());
     }
 
-
-    // public bool removeCard(CardButton card)
-    // {
-    //     print("removing card");
-    //     if (cards.Contains(card))
-    //     {
-    //         // ~ wild
-    //         if (card.myCard.usedAsWild)
-    //         {
-    //             wildCards.Remove(card);
-    //             card.myCard.usedAsWild = false;
-    //         }
-    //         
-    //         if (outState == Out.Set)
-    //         {
-    //             // if set
-    //             cards.Remove(card);
-    //             outHandler.ReturnToHand(card);
-    //             print($"Removed {card} from CheckPile on {gameObject.name}");
-    //             cards.Sort(Compare);
-    //             return true;
-    //         }
-    //
-    //         else if (outState == Out.Run)
-    //         {
-    //             // if run, remove that card and the shorter side of the existing run
-    //             var cardIndex = cards.IndexOf(card);
-    //             print($"Removing from a run at index {cardIndex}. Total number of cards is {cards.Count}.");
-    //             // determine shorter side
-    //             if ((cardIndex+1) * 2 <= cards.Count)
-    //             {
-    //                 print("Removing from left side");
-    //                 for (int i = 0; i < cardIndex; i++)
-    //                 {
-    //                     // removing from the left side end everytime
-    //                     outHandler.ReturnToHand(cards[0]);
-    //                     cards[0].ReturnToHand();
-    //                     cards.RemoveAt(0);
-    //                 }
-    //             }
-    //             else
-    //             {
-    //                 print("Removing from right side");
-    //                 for (int i = 0; i < (cards.Count-cardIndex); i++)
-    //                 {
-    //                     outHandler.ReturnToHand(cards[cards.Count-1]);
-    //                     cards.Last().ReturnToHand();
-    //                     cards.RemoveAt(cards.Count-1);
-    //                 }
-    //             }
-    //             if(cards.Contains(card))
-    //                 cards.Remove(card);
-    //         }
-    //
-    //         else if (cards.Count == 1)
-    //         {
-    //             outState = Out.None;
-    //             cards.Remove(card);
-    //             outHandler.ReturnToHand(card);
-    //         }
-    //
-    //         if (cards.Count == 0)
-    //         {
-    //             outHandler.RemoveEmptyDrop();
-    //         }
-    //
-    //         return true;
-    //     }
-    //     else
-    //     {
-    //         print($"Trying to remove card that doesn't exist in DropHandler on {gameObject.name}");
-    //         return false;
-    //     }
-    // }
-
-    
     public override bool checkValid()
     {
         // return cards.Count > 0;
@@ -388,16 +269,6 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
         return cardNum - firstcardVal == -1 |
                cardNum - lastcardVal == 1;
     }
-    
-    // public int Compare(CardButton x, CardButton y)
-    // {
-    //     print("Sorting Cards...");
-    //     int xVal = (x.myCard.usedAsWild) ? x.myCard.wildNumber : x.myCard.number;
-    //     int yVal = (y.myCard.usedAsWild) ? y.myCard.wildNumber : y.myCard.number;
-    //     if (xVal < yVal) return -1;
-    //     else if (xVal > yVal) return 1;
-    //     else return 0;
-    // }
 
     public override void clearDropZone()
     {
@@ -411,5 +282,4 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
         outState = Out.None;
         canDrop = true;
     }
-    
 }

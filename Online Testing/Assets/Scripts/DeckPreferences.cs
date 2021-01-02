@@ -21,15 +21,15 @@ public class DeckPreferences : MonoBehaviour
 
     public GameObject inGameCard;
 
+    // [HideInInspector]
     public PlayerData data;
-
-    // public ColorOption[] colors;
-
+    
     // Start is called before the first frame update
     void Start()
     {
         data = SaveLoad.Load();
 
+        // display the color and backing options, add buttons, and link button presses to update the card data
         foreach (var color in colors)
         {
             var newColorOption = Instantiate(colorPrefab, colorContainer);
@@ -81,16 +81,13 @@ public class DeckPreferences : MonoBehaviour
         // demoCard.GetComponent()
         demoCard.transform.GetChild(0).GetComponent<Image>().color = color;
         data.setColor(color);
-        print("color: " + data.R + " - " + data.G  + " - "+ data.B  + " - ");
-        // save
+        // print("color: " + data.R + " - " + data.G  + " - "+ data.B  + " - ");
     }
     
     public void setCardback(Sprite back)
     {
-        // demoCard.GetComponent()
         demoCard.transform.GetChild(1).GetComponent<Image>().sprite = back;
         data.cardback = Array.IndexOf(backs, back);
         print("back: " + data.cardback);
-        //save
     }
 }

@@ -9,6 +9,8 @@ public class PlayerData
     public float R, G, B;
     public int cardback;
 
+    public bool newUser;
+
     public PlayerData()
     {
         username = "";
@@ -16,6 +18,7 @@ public class PlayerData
         G = 0;
         B = 255;
         cardback = 0;
+        newUser = true;
     }
 
     // these are necessary as Color and Vector are not structures that can be serialized, so we are unpacking and packing upon request
@@ -29,5 +32,10 @@ public class PlayerData
         R = newColor.r;
         G = newColor.g; 
         B = newColor.b;
+    }
+
+    public void setNewUser(bool state)
+    {
+        newUser = state;
     }
 }

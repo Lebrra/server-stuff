@@ -180,10 +180,35 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         DropGuideRight.GetComponent<Button>().onClick.AddListener(ContextSetRunLastCard);
         canDrop = false;
     }
-    
+
+    IEnumerator disableDropCards()
+    {
+        yield return new WaitForSeconds(1.5f);
+        var _cards = GetComponentsInChildren<CardButton>();
+        print("cards? " + _cards.Length);
+        foreach (var _card in _cards)
+        {
+            print("_cards? " + _card.gameObject.name);
+            _card.interactable = false;
+        }
+    }
+
+    IEnumerator enableDropCards()
+    {
+        yield return new WaitForSeconds(1.5f);
+        var _cards = GetComponentsInChildren<CardButton>();
+        print("cards? " + _cards.Length);
+        foreach (var _card in _cards)
+        {
+            print("_cards? " + _card.gameObject.name);
+            _card.interactable = true;
+        }
+    }
     
     public virtual void ContextEnableOutOptions()
     {
+        // disable cards from being interactable
+        StartCoroutine(disableDropCards());
         // squeeze cards to center
         GetComponent<LayoutController>().squeezeIn();
         // display context options for run or sets
@@ -205,6 +230,8 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         // disable context options
         DropGuideLeft.SetActive(false);
         DropGuideRight.SetActive(false);
+        // enable interactability for cards
+        StartCoroutine(enableDropCards());
     }
 
     public void ContextSetRun()

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 [System.Serializable]
 public struct menuPairs 
 {
-    public KeyValuePair<GameObject, GameObject> pairs;
+    // public KeyValuePair<GameObject, GameObject> pairs;
     public GameObject button;
     public GameObject menuObject;
 }

@@ -241,6 +241,8 @@ public class nh_network : MonoBehaviour
         // update visuals of discard pile here
         var notification = new Notification(playername + " has drawn from the discard pile!", 3, true, Color.black );
         NotificationManager.instance.addNotification(notification);
+
+        GameManager.instance.updateDiscardPile();
     }
 
     public void discardCard(string cardname)

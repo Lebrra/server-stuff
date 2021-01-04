@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     [Header("Discard Objects")]
     public Transform discardTransform;
     public GameObject cardInDiscard;
+    string previousCard;
 
     [Header("Panels")]
     public GameObject outPanel;
@@ -102,16 +103,34 @@ public class GameManager : MonoBehaviour
 
         if (cardInDiscard)
         {
+            previousCard = CardParser.deparseCard(cardInDiscard.GetComponent<CardButton>().myCard);
             cardInDiscard.GetComponent<CardButton>().enabled = true;
             CardPooler.instance.PushCard(cardInDiscard);
             cardInDiscard = null;
         }
+        else previousCard = "";
 
         // notification
         var notification = new Notification($"Discarded {newCard.GetComponent<CardButton>().myCard.ToString()}", 3, true, Color.black);
         NotificationManager.instance.addNotification(notification);
 
         cardInDiscard = newCard;
+    }
+
+    public void updateDiscardPile()
+    {
+        // change discard card to previous card
+        cardInDiscard.GetComponent<CardButton>().enabled = true;
+        CardPooler.instance.PushCard(cardInDiscard);
+
+        if (previousCard != "")
+        {
+            GameObject newCard = CardPooler.instance.PopCard(previousCard, discardTransform);
+            newCard.GetComponent<CardButton>().enabled = false;
+
+            cardInDiscard = newCard;
+        }
+        else cardInDiscard = null;
     }
 
     public void openOutPanel(bool open)

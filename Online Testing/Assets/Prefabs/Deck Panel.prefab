@@ -238,6 +238,8 @@ MonoBehaviour:
   outSpacing: -100
   inSpacing: -300
   handWorkingSpacePercent: 80
+  squeezeSpacePercent: 20
+  percent: 0
   LayoutElements: []
   layoutGroup: {fileID: 0}
   spacingOffset: 0

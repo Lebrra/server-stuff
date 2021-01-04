@@ -10,6 +10,10 @@ public class LayoutController : MonoBehaviour
     public float outSpacing, inSpacing;
 
     public float handWorkingSpacePercent = 80;
+    public float squeezeSpacePercent = 40;
+    
+    // make this private soon
+    public float percent;
     
     public List<LayoutElement> LayoutElements;
 
@@ -31,6 +35,7 @@ public class LayoutController : MonoBehaviour
     void Start()
     {
         print("spacing? "+ layoutGroup.spacing);
+        percent = handWorkingSpacePercent;
     }
 
     private void Update()
@@ -39,40 +44,48 @@ public class LayoutController : MonoBehaviour
         
         if (LayoutElements.Count > 0 && lastCardCount != LayoutElements.Count)
         {
-         
-            var cardCount = LayoutElements.Count;
-            var handAreaWidth = GetComponent<RectTransform>().rect.width;
-            var workingArea = handAreaWidth * (handWorkingSpacePercent/100f);
-            var cardWidth = LayoutElements[0].GetComponent<RectTransform>().rect.width;
-            var totalCardWidth = cardCount * cardWidth;
-            
-            print("Card width: " + cardWidth);
-            print("working area: " + workingArea);
-            if (totalCardWidth > workingArea)
-            {
-                print("setting layoutspacing to: " + (totalCardWidth - workingArea) / (cardCount + 1) * -1);
-                layoutGroup.spacing = (totalCardWidth - workingArea) / cardCount * -1;
-            }
-            else
-            {
-                layoutGroup.spacing = defaultSpacing;
-            }
+            adjustSpacing();
         }
-
+        
         lastCardCount = LayoutElements.Count;
+    }
+
+    private void adjustSpacing()
+    {
+        var cardCount = LayoutElements.Count;
+        var handAreaWidth = GetComponent<RectTransform>().rect.width;
+        var workingArea = handAreaWidth * (percent/100f);
+        var cardWidth = LayoutElements[0].GetComponent<RectTransform>().rect.width;
+        var totalCardWidth = (cardCount * cardWidth) + (.5f * cardWidth);
+            
+        print("Card width: " + cardWidth);
+        print("working area: " + workingArea);
+        if (totalCardWidth > workingArea)
+        {
+            print("setting layoutspacing to: " + (totalCardWidth - workingArea) / (cardCount - 1) * -1);
+            layoutGroup.spacing = (totalCardWidth - workingArea) / cardCount * -1;
+        }
+        else
+        {
+            layoutGroup.spacing = defaultSpacing;
+        }
     }
 
     public void fanOut()
     {
-        print("fanning in dropzone cards");
-        layoutGroup.spacing = outSpacing;
+        print("fanning out dropzone cards");
+        // layoutGroup.spacing = outSpacing;
+        percent = handWorkingSpacePercent;
+        adjustSpacing();
     }
 
     public void squeezeIn()
     {
         // LayoutElements
         print("squeezing in dropzone cards");
-        layoutGroup.spacing = inSpacing;
+        // layoutGroup.spacing = inSpacing;
+        percent = squeezeSpacePercent;
+        adjustSpacing();
     }
 
     int getNumberOfLayoutElements()

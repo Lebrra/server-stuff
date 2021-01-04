@@ -184,11 +184,11 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
     IEnumerator disableDropCards()
     {
         yield return new WaitForSeconds(1.5f);
-        var _cards = GetComponentsInChildren<CardButton>();
-        print("cards? " + _cards.Length);
+        var _cards = GetComponentsInChildren<CardButton>(false);
+        // print("cards? " + _cards.Length);
         foreach (var _card in _cards)
         {
-            print("_cards? " + _card.gameObject.name);
+            // print("_cards? " + _card.gameObject.name);
             _card.interactable = false;
         }
     }
@@ -232,6 +232,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         DropGuideRight.SetActive(false);
         // enable interactability for cards
         StartCoroutine(enableDropCards());
+        GetComponent<LayoutController>().fanOut();
     }
 
     public void ContextSetRun()

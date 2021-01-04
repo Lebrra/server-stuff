@@ -11,8 +11,8 @@ public class OutDeckHandler : MonoBehaviour
     public List<CardButton> myCurrentHand;
 
     public OutDropHandler[] firstOutDrops;
-    //public TextMeshProUGUI[] titleTexts;
-    public UnityEngine.UI.Text[] firstTitleTexts;
+    public TextMeshProUGUI[] firstTitleTexts;
+    //public UnityEngine.UI.Text[] firstTitleTexts;
 
     public void setOutDeck(List<string>[] cards, Out[] outTypes)
     {

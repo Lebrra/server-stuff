@@ -13,6 +13,8 @@ public class CardPooler : MonoBehaviour
     List<GameObject> cardPool;
     public GameObject cardPrefab;
 
+    public Sprite[] suitIcons;
+
     private void Awake()
     {
         if (instance) Destroy(gameObject);
@@ -59,5 +61,28 @@ public class CardPooler : MonoBehaviour
         card.GetComponent<CardButton>().interactable = true;
         card.SetActive(false);
         cardPool.Add(card);
+    }
+
+
+    /// <summary>
+    /// Returns Sprite for corresponding suit
+    /// </summary>
+    public Sprite GetSuitImage(Suit suit)
+    {
+        switch (suit)
+        {
+            default:
+                return null;
+            case Suit.Club:
+                return suitIcons[0];
+            case Suit.Diamond:
+                return suitIcons[1];
+            case Suit.Heart:
+                return suitIcons[2];
+            case Suit.Spade:
+                return suitIcons[3];
+            case Suit.Joker:
+                return suitIcons[4];
+        }
     }
 }

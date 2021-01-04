@@ -35,7 +35,7 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
         //set texts
         char cardText = CardParser.valueToChar(myCard.number);
-        if (cardText == '0') transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = "10";
+        /*if (cardText == '0') transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = "10";
         else transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = cardText.ToString();
         transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().text = myCard.suit.ToString();
 
@@ -50,6 +50,37 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
             // make texts black
             transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().color = Color.black;
             transform.GetChild(0).GetComponent<TMPro.TextMeshProUGUI>().color = Color.black;
+        }*/
+
+        if (cardText == '0')
+        {
+            transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = "10";
+            transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().text = "10";
+        }
+        else
+        {
+            transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = cardText.ToString();
+            transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().text = cardText.ToString();
+        }
+        transform.GetChild(3).GetComponent<Image>().sprite = CardPooler.instance.GetSuitImage(myCard.suit);
+
+        if (myCard.suit == Suit.Diamond || myCard.suit == Suit.Heart)
+        {
+            // make texts red
+            transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().color = Color.red;
+            transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().color = Color.red;
+            transform.GetChild(3).GetComponent<Image>().color = Color.red;
+        }
+        else
+        {
+            // make texts black
+            transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().color = Color.black;
+            transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().color = Color.black;
+
+            if (myCard.suit == Suit.Joker)
+                transform.GetChild(3).GetComponent<Image>().color = Color.white;
+            else
+                transform.GetChild(3).GetComponent<Image>().color = Color.black;
         }
     }
 

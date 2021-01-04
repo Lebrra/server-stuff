@@ -70,6 +70,7 @@ public class OutHandler : MonoBehaviour
             foreach (DropHandler d in dropSpots) d.clearDropZone();
             handCopy.Clear();
             foreach (CardButton c in GameManager.instance.myHand) c.ReturnToHand();
+            goOutBtn.interactable = false;
         }
         else
         {

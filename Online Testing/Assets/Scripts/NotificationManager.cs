@@ -28,6 +28,9 @@ public class NotificationManager : MonoBehaviour
     //public Text notificationsText;
     public TextMeshProUGUI notificationsText;
     public float duration;
+
+    public float interMessageDelay = .5f;
+    
     public Color color;
 
     public bool isNotifying = false;
@@ -49,13 +52,7 @@ public class NotificationManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
+    
     // Update is called once per frame
     void Update()
     {
@@ -69,7 +66,6 @@ public class NotificationManager : MonoBehaviour
             var newNotification = new Notification("Interrupting Message", 2, true, Color.red);
             addNotification(newNotification);
         }
-        
     }
 
     public bool addNotification(Notification newNotification)
@@ -112,7 +108,7 @@ public class NotificationManager : MonoBehaviour
             if (Notifications.Count > 0)
             {
                 notificationsText.text = "";
-                yield return new WaitForSeconds(1);
+                yield return new WaitForSeconds(interMessageDelay);
             }
 
             yield return false;

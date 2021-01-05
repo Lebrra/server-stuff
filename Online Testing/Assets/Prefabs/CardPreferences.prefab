@@ -920,6 +920,7 @@ MonoBehaviour:
     G: 0
     B: 255
     cardback: 0
+    newUser: 1
 --- !u!1 &5219179772462276788
 GameObject:
   m_ObjectHideFlags: 0

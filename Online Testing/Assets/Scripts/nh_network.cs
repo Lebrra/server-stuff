@@ -180,7 +180,8 @@ public class nh_network : MonoBehaviour
     void myTurn(SocketIOEvent evt)
     {
         Debug.Log("Its my turn!");
-        GameManager.instance.myDraw = GameManager.instance.myTurn = true;
+        GameManager.instance.setMyTurn(true);
+        GameManager.instance.myDraw = true;
         var notification = new Notification("It is your turn", 3, true, Color.black );
         NotificationManager.instance.addNotification(notification);
     }

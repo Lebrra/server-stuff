@@ -11,7 +11,7 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
 
     public OutDeckHandler outDeckHandler;
 
-    private GameManager gameManager;
+    // private GameManager gameManager;
 
     public override bool  checkValidDrop(CardButton newCard)
     {
@@ -211,19 +211,19 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
         }
     }
     
-    public override void ContextEnableRunOptions()
-    {
-        GetComponent<LayoutController>().squeezeIn();
-        // display context options for run or sets
-        DropGuideLeft.SetActive(true);
-        DropGuideRight.SetActive(true);
-        // set context values
-        DropGuideLeft.GetComponent<DropContextController>().setHeader("<");
-        DropGuideLeft.GetComponent<Button>().onClick.AddListener(ContextSetRunFirstCard);
-        DropGuideRight.GetComponent<DropContextController>().setHeader(">");
-        DropGuideRight.GetComponent<Button>().onClick.AddListener(ContextSetRunLastCard);
-        canDrop = false;
-    }
+    // public override void ContextEnableRunOptions()
+    // {
+    //     GetComponent<LayoutController>().squeezeIn();
+    //     // display context options for run or sets
+    //     DropGuideLeft.SetActive(true);
+    //     DropGuideRight.SetActive(true);
+    //     // set context values
+    //     DropGuideLeft.GetComponent<DropContextController>().setHeader("<");
+    //     DropGuideLeft.GetComponent<Button>().onClick.AddListener(ContextSetRunFirstCard);
+    //     DropGuideRight.GetComponent<DropContextController>().setHeader(">");
+    //     DropGuideRight.GetComponent<Button>().onClick.AddListener(ContextSetRunLastCard);
+    //     canDrop = false;
+    // }
     
     public override void ContextSetRunFirstCard()
     {

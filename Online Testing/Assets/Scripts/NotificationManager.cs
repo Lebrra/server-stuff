@@ -33,6 +33,8 @@ public class NotificationManager : MonoBehaviour
     
     public Color color;
 
+    public Color myTurnColor;
+
     public bool isNotifying = false;
 
     public bool interruptMessages;
@@ -40,6 +42,8 @@ public class NotificationManager : MonoBehaviour
     public static NotificationManager instance;
 
     public List<Notification> Notifications;
+
+    public GameObject turnHighlighter;
 
     private void Awake()
     {
@@ -67,6 +71,27 @@ public class NotificationManager : MonoBehaviour
             addNotification(newNotification);
         }
     }
+
+    public void myTurn(bool state)
+    {
+        if(state)
+            StartCoroutine(myTurnFlash());
+    }
+
+    IEnumerator myTurnFlash()
+    {
+        var image = GetComponent<Image>();
+        Color tempColor = image.color;
+        image.color = myTurnColor;
+        yield return new WaitForSeconds(.2f);
+        image.color = tempColor;
+        yield return new WaitForSeconds(.2f);
+        image.color = myTurnColor;
+        yield return new WaitForSeconds(.2f);
+        image.color = tempColor;
+        // yield return tr;
+    }
+    
 
     public bool addNotification(Notification newNotification)
     {

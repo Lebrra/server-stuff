@@ -1731,7 +1731,7 @@ MonoBehaviour:
   duration: 0
   interMessageDelay: 0.5
   color: {r: 0, g: 0, b: 0, a: 0}
-  myTurnColor: {r: 1, g: 1, b: 1, a: 0.8784314}
+  myTurnColor: {r: 1, g: 0.25943398, b: 0.25943398, a: 0.8784314}
   isNotifying: 0
   interruptMessages: 0
   Notifications: []

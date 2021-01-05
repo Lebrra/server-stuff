@@ -70,26 +70,35 @@ public class NotificationManager : MonoBehaviour
             var newNotification = new Notification("Interrupting Message", 2, true, Color.red);
             addNotification(newNotification);
         }
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            myTurn(true);
+        }
     }
 
     public void myTurn(bool state)
     {
-        if(state)
+        if (state)
+        {
+            StopCoroutine(myTurnFlash());
             StartCoroutine(myTurnFlash());
+        }
     }
 
     IEnumerator myTurnFlash()
     {
         var image = GetComponent<Image>();
-        Color tempColor = image.color;
+        Color originalColor = image.color;
+        yield return false;
         image.color = myTurnColor;
         yield return new WaitForSeconds(.2f);
-        image.color = tempColor;
+        image.color = originalColor;
         yield return new WaitForSeconds(.2f);
         image.color = myTurnColor;
         yield return new WaitForSeconds(.2f);
-        image.color = tempColor;
-        // yield return tr;
+        image.color = originalColor;
+        yield return true;
     }
     
 

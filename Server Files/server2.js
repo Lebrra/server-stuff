@@ -571,7 +571,7 @@ class Game {
         console.table(this.ScoreCard);
 
         //reset round method
-        if(this.Round < 13) {
+        if (this.Round < 13) {
             this.resetRound();
         } else {
             console.log("GAME OVER, just finished round 13.");

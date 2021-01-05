@@ -886,7 +886,13 @@ MonoBehaviour:
     - {fileID: 415798968}
     - {fileID: 1374007137}
     - {fileID: 1821004667}
-  - roundRow: []
+  - roundRow:
+    - {fileID: 71265073}
+    - {fileID: 1499599105}
+    - {fileID: 1444310517}
+    - {fileID: 1334002937}
+    - {fileID: 1541820927}
+    - {fileID: 749125203}
   totalScores:
   - {fileID: 256534961}
   - {fileID: 105479011}
@@ -1725,9 +1731,11 @@ MonoBehaviour:
   duration: 0
   interMessageDelay: 0.5
   color: {r: 0, g: 0, b: 0, a: 0}
+  myTurnColor: {r: 1, g: 1, b: 1, a: 0.8784314}
   isNotifying: 0
   interruptMessages: 0
   Notifications: []
+  turnHighlighter: {fileID: 0}
 --- !u!1 &96803550
 GameObject:
   m_ObjectHideFlags: 0

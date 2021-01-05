@@ -23,6 +23,8 @@ public class DeckPreferences : MonoBehaviour
 
     // [HideInInspector]
     public PlayerData data;
+
+    public Animator saveMessage;
     
     // Start is called before the first frame update
     void Start()
@@ -70,7 +72,8 @@ public class DeckPreferences : MonoBehaviour
     public void closeDeckPrefPanel()
     {
         SaveLoad.Save(data);
-        deckPanel.SetActive(false);
+        //deckPanel.SetActive(false);
+        saveMessage.SetTrigger("flash");
 
         updateInGameDeck();
     }

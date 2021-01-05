@@ -13,6 +13,8 @@ public class UsernameActions : MonoBehaviour
     public GameObject textPrefab;
     Dictionary<string, GameObject> usernameTexts;
 
+    public Animator message;
+
     private void Start()
     {
         usernameTexts = new Dictionary<string, GameObject>();
@@ -36,9 +38,11 @@ public class UsernameActions : MonoBehaviour
             //nameField.placeholder.GetComponent<Text>().text = nameField.text;
             nameField.placeholder.GetComponent<TextMeshProUGUI>().text = nameField.text;
             nameField.text = "";
+
+            message.SetTrigger("flash");
         }
 
-        LobbyFunctions.inst.openUsernamePanel(false);
+        //LobbyFunctions.inst.openUsernamePanel(false);
     }
 
     public void addUsername(string id, string name)

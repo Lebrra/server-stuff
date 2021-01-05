@@ -48,6 +48,9 @@ public class DeckPreferences : MonoBehaviour
             newCardback.GetComponent<Button>().onClick.AddListener(
                 ()=> setCardback(back));
         }
+        
+        demoCard.transform.GetChild(0).GetComponent<Image>().color = data.getColor();
+        demoCard.transform.GetChild(1).GetComponent<Image>().sprite = backs[data.cardback];
 
         updateInGameDeck();
     }

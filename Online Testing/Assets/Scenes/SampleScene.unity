@@ -2861,7 +2861,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 961346d7e16a445ff93777573e78efd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: ws://localhost:3000/socket.io/?EIO=4&transport=websocket
+  url: ws://michigan-server.herokuapp.com/socket.io/?EIO=4&transport=websocket
   autoConnect: 1
   reconnectDelay: 5000
   ackExpirationTime: 1800
@@ -2892,7 +2892,7 @@ MonoBehaviour:
     New
     Server:
 
-    ws://michgan-server.herokuapp.com/socket.io/?EIO=4&transport=websocket'
+    ws://michigan-server.herokuapp.com/socket.io/?EIO=4&transport=websocket'
 --- !u!4 &1159937821
 Transform:
   m_ObjectHideFlags: 0

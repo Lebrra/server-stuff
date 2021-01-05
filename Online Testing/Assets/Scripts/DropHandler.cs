@@ -93,6 +93,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             {
                 print("Setting Drop Zone to Out to 'Run'");
                 outState = Out.Run;
+                outSuit = cards[0].myCard.suit;
             } else
             {
                 // if the second card is not wild, set-making nor contiguous, reject 
@@ -149,6 +150,12 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             if (cardNums.Contains(incomingNum)) // this might be necessary if i adjust the contiguous
             {
                 print($"{newCard.myCard.suit}: {newCard.myCard.number} - Card already exists in run.");
+                return false;
+            }
+
+            if (newCard.myCard.suit != cards[0].myCard.suit)
+            {
+                print($"{newCard.myCard.suit}: - Card does not match run's suit: {outSuit}");
                 return false;
             }
 

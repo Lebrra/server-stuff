@@ -289,7 +289,9 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         // set position
         cards.Insert(0, wildCards.Last());
         // set wild value
-        cards[0].myCard.wildNumber = cards[1].myCard.number - 1;
+        cards[0].myCard.wildNumber =
+            cards[1].myCard.usedAsWild ? cards[1].myCard.wildNumber - 1 : cards[1].myCard.number - 1;
+
         print($"Setting wild card to number to {cards[0].myCard.wildNumber}");
         ContextDisable();
         Invoke(nameof(ReorderCardObjects), reorderTime);
@@ -303,7 +305,8 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
         // set position
         cards.Add(wildCards.Last());
         // set wild value
-        cards.Last().myCard.wildNumber = cards[cards.Count-2].myCard.number + 1;
+        cards.Last().myCard.wildNumber = cards[cards.Count-2].myCard.usedAsWild ? cards[cards.Count-2].myCard.wildNumber + 1 : cards[cards.Count-2].myCard.number + 1;
+        
         print($"Setting wild card to number to {cards.Last().myCard.wildNumber}");
         ContextDisable();
         Invoke(nameof(ReorderCardObjects), reorderTime);

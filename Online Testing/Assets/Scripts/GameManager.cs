@@ -213,6 +213,7 @@ public class GameManager : MonoBehaviour
             openOutPanel(true);
             outPanel.GetComponent<OutHandler>().resetOut();
             ScorecardLoader.inst.reset();
+            NotificationManager.instance.clearNotifications();
         }
     }
 }

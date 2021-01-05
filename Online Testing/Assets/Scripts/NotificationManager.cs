@@ -152,4 +152,10 @@ public class NotificationManager : MonoBehaviour
         isNotifying = false;
         yield return true;
     }
+
+    public void clearNotifications()
+    {
+        StopAllCoroutines();
+        Notifications = new List<Notification>();
+    }
 }

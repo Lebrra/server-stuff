@@ -247,7 +247,12 @@ public class OutHandler : MonoBehaviour
     {
         hasGoneOut = false;
         goOutBtn.gameObject.SetActive(true);
-        CloseOutMenu();
+
+        for(int i = 0; i < 4; i++)
+        {
+            openDrop[i] = false;
+            dropSpots[i].gameObject.SetActive(false);
+        }
         gameObject.SetActive(false);
     }
 }

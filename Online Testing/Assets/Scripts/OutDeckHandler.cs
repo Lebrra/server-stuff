@@ -135,6 +135,7 @@ public class OutDeckHandler : MonoBehaviour
         foreach(CardButton c in myCurrentHand)
         {
             if (c.myCard.suit == Suit.Joker) score += 15;
+            else if (c.myCard.number > 9) score += 10;
             else score += c.myCard.number;
         }
 

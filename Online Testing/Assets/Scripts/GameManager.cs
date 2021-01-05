@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     [Header("Discard Objects")]
     public Transform discardTransform;
     public GameObject cardInDiscard;
-    string previousCard;
+    public string previousCard;
 
     [Header("Panels")]
     public GameObject outPanel;
@@ -188,6 +188,11 @@ public class GameManager : MonoBehaviour
         if (lastTurn)   // reset if needed
         {
             myTurn = myDraw = myDiscard = lastTurn = false;
+
+            cardInDiscard.GetComponent<CardButton>().enabled = true;
+            CardPooler.instance.PushCard(cardInDiscard);
+            previousCard = "";
+            cardInDiscard = null;
 
             foreach(CardButton c in myHand)
             {

@@ -20,6 +20,7 @@ public class ScorecardLoader : MonoBehaviour
     public TextMeshProUGUI[] nameTexts;
     public ScorecardTexts[] scorecardTexts;
     public TextMeshProUGUI[] totalScores;
+    int currentColumn;
 
     public GameObject showScoreBtn;
     public GameObject closeScoreBtn;
@@ -39,6 +40,8 @@ public class ScorecardLoader : MonoBehaviour
     {
         inst = this;
         gameObject.SetActive(false);
+
+        currentColumn = -1;
     }
 
     public void EnableWait(int score)
@@ -55,15 +58,20 @@ public class ScorecardLoader : MonoBehaviour
 
     public void LoadNames(string[] playerNames)
     {
-        for(int i = 0; i < playerNames.Length; i++)
+        if (currentColumn == -1)
         {
-            nameTexts[i].text = playerNames[i];
+            for (int i = 0; i < playerNames.Length; i++)
+            {
+                nameTexts[i].text = playerNames[i];
+            }
+
+            currentColumn++;
         }
     }
 
     public void LoadScores(int[][] scores)
     {
-        for(int i = 0; i < scores.Length; i++)
+        /*for(int i = 0; i < scores.Length; i++)
         {
             if (scores[i] == null) break;
 
@@ -77,7 +85,22 @@ public class ScorecardLoader : MonoBehaviour
                 }
                 else scorecardTexts[i].roundRow[j].text = scores[i][j].ToString();
             }
+        }*/
+
+        if (scores[currentColumn] == null) Debug.LogError("no scores found in column " + currentColumn);
+
+        for (int j = 0; j < scores[currentColumn].Length; j++)
+        {
+            if (scores[currentColumn][j] == 0)
+            {
+                Debug.Log("who was first out? " + firstoutplayer);
+                if (firstoutplayer == j) scorecardTexts[currentColumn].roundRow[j].text = "X";
+                else scorecardTexts[currentColumn].roundRow[j].text = "-";
+            }
+            else scorecardTexts[currentColumn].roundRow[j].text = scores[currentColumn][j].ToString();
         }
+
+        currentColumn++;
 
         CalculateTotals(scores);
         gameObject.GetComponent<UnityEngine.UI.Image>().enabled = false;

@@ -24462,6 +24462,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2474699669634089404, guid: 71c8327112a63a540bf4b7a7ea605f4d,
+        type: 3}
+      propertyPath: inGameCard
+      value: 
+      objectReference: {fileID: 2824774551968643578}
     - target: {fileID: 2678297282951428228, guid: 71c8327112a63a540bf4b7a7ea605f4d,
         type: 3}
       propertyPath: inGameCard

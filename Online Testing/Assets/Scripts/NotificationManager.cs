@@ -13,6 +13,7 @@ public class Notification
     public float Duration;
     public bool Interrupt;
     public Color Color;
+    public bool Turn;
 
     public Notification(string message, float duration, bool interrupt, Color color)
     {
@@ -20,6 +21,15 @@ public class Notification
         this.Duration = duration;
         this.Interrupt = interrupt;
         this.Color = color;
+    }
+
+    public Notification(string message, float duration, bool interrupt, Color color, bool turn)
+    {
+        this.Message = message;
+        this.Duration = duration;
+        this.Interrupt = interrupt;
+        this.Color = color;
+        this.Turn = turn;
     }
 }
 
@@ -34,6 +44,8 @@ public class NotificationManager : MonoBehaviour
     public Color color;
 
     public Color myTurnColor;
+
+    public Image image;
 
     public bool isNotifying = false;
 
@@ -55,6 +67,9 @@ public class NotificationManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        
+        image = GetComponent<Image>();
+        color = image.color;
     }
     
     // Update is called once per frame
@@ -71,39 +86,44 @@ public class NotificationManager : MonoBehaviour
             addNotification(newNotification);
         }
 
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            myTurn(true);
-        }
+        // if (Input.GetKeyDown(KeyCode.Tab))
+        // {
+        //     myTurn();
+        // }
     }
 
-    public void myTurn(bool state)
+    public void myTurn()
     {
-        if (state)
-        {
-            StopCoroutine(myTurnFlash());
-            StartCoroutine(myTurnFlash());
-        }
+        image.color = myTurnColor;
+        // StopCoroutine(myTurnFlash());
+        // StartCoroutine(myTurnFlash());
     }
 
     IEnumerator myTurnFlash()
     {
-        var image = GetComponent<Image>();
         Color originalColor = image.color;
-        yield return false;
         image.color = myTurnColor;
-        yield return new WaitForSeconds(.2f);
+        yield return new WaitForSecondsRealtime(.1f);
         image.color = originalColor;
-        yield return new WaitForSeconds(.2f);
+        yield return new WaitForSeconds(.1f);
         image.color = myTurnColor;
-        yield return new WaitForSeconds(.2f);
+        yield return new WaitForSeconds(.1f);
         image.color = originalColor;
-        yield return true;
+        // yield return ;
     }
     
 
     public bool addNotification(Notification newNotification)
     {
+        if (newNotification.Turn)
+        {
+            StopAllCoroutines();
+            clearNotifications();
+            Notifications.Add(newNotification);
+            StartCoroutine(notify());
+            return true;
+        }
+        
         // if nofication is meant to interrupt, add it the top of the list and start notifying
         if (newNotification.Interrupt)
         {
@@ -131,10 +151,17 @@ public class NotificationManager : MonoBehaviour
         {
             // print(Notifications.Count);
             var currentNotification = Notifications[0];
-
+            print("notifiction: " + currentNotification.Turn);
+            if (currentNotification.Turn == true)
+                myTurn();
+            
+            yield return false;
             notificationsText.text = currentNotification.Message;
             notificationsText.color = currentNotification.Color;
             yield return new WaitForSeconds(currentNotification.Duration);
+
+            image.color = color;
+            
             // wait for completion of message to remove it
             Notifications.RemoveAt(0);
             yield return false;

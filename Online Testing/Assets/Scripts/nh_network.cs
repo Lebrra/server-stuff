@@ -182,7 +182,7 @@ public class nh_network : MonoBehaviour
         Debug.Log("Its my turn!");
         GameManager.instance.setMyTurn(true);
         GameManager.instance.myDraw = true;
-        var notification = new Notification("It is your turn", 3, true, Color.black );
+        var notification = new Notification("It is your turn", 3, true, Color.black, true);
         NotificationManager.instance.addNotification(notification);
     }
 

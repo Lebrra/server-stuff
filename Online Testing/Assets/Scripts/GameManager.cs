@@ -63,7 +63,8 @@ public class GameManager : MonoBehaviour
     public void setMyTurn(bool state)
     {
         myTurn = state;
-        NotificationManager.instance.myTurn(true);
+        print("your turn");
+        // NotificationManager.instance.myTurn();
     }
     
     public bool discardCard(string cardName)

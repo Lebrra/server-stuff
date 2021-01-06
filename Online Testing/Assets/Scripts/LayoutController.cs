@@ -34,7 +34,7 @@ public class LayoutController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        print("spacing? "+ layoutGroup.spacing);
+        // print("spacing? "+ layoutGroup.spacing);
         percent = handWorkingSpacePercent;
     }
 
@@ -58,11 +58,11 @@ public class LayoutController : MonoBehaviour
         var cardWidth = LayoutElements[0].GetComponent<RectTransform>().rect.width;
         var totalCardWidth = (cardCount * cardWidth) + (.5f * cardWidth);
             
-        print("Card width: " + cardWidth);
-        print("working area: " + workingArea);
+        // print("Card width: " + cardWidth);
+        // print("working area: " + workingArea);
         if (totalCardWidth > workingArea)
         {
-            print("setting layoutspacing to: " + (totalCardWidth - workingArea) / (cardCount - 1) * -1);
+            // print("setting layoutspacing to: " + (totalCardWidth - workingArea) / (cardCount - 1) * -1);
             layoutGroup.spacing = (totalCardWidth - workingArea) / cardCount * -1;
         }
         else
@@ -73,7 +73,7 @@ public class LayoutController : MonoBehaviour
 
     public void fanOut()
     {
-        print("fanning out dropzone cards");
+        // print("fanning out dropzone cards");
         // layoutGroup.spacing = outSpacing;
         percent = handWorkingSpacePercent;
         adjustSpacing();
@@ -82,7 +82,7 @@ public class LayoutController : MonoBehaviour
     public void squeezeIn()
     {
         // LayoutElements
-        print("squeezing in dropzone cards");
+        // print("squeezing in dropzone cards");
         // layoutGroup.spacing = inSpacing;
         percent = squeezeSpacePercent;
         adjustSpacing();

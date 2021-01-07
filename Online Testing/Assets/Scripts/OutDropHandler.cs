@@ -175,6 +175,8 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
             return;
         }
 
+        outSuit = refCard.myCard.suit;
+
         if (outState == Out.Run)
         {
             // sweep right

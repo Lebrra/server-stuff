@@ -79,7 +79,7 @@ io.sockets.on('connection', (socket) => {
                     console.log(socket.adapter.rooms[Users.get(socket.id).room].sockets);
                     //console.table(Users.get(socket.id).room);
                     socket.emit('createdRoom', { name: roomName });
-                    socket.emit('roomCount', { roomCount: playerCount });
+                    socket.to(roomName).emit('roomCount', { roomCount: playerCount });
                     console.log(Users.get(socket.id).username + ' joined room ' + roomName);
                     listRoomUsers();
                 }

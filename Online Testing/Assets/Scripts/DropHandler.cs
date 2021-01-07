@@ -58,6 +58,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
             }
             
             cards.Add(newCard);
+            outSuit = newCard.myCard.suit;
             outHandler.RemoveFromHand(newCard);
             activateNewDropHandler();
             Debug.Log($"Added a new card {newCard.myCard.suit} - {newCard.myCard.number} to drop zone");
@@ -153,7 +154,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
                 return false;
             }
 
-            if (newCard.myCard.suit != cards[0].myCard.suit)
+            if (newCard.myCard.suit != outSuit)
             {
                 print($"{newCard.myCard.suit}: - Card does not match run's suit: {outSuit}");
                 return false;
@@ -188,6 +189,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
     
     public virtual void ContextEnableRunOptions()
     {
+        StartCoroutine(disableDropCards());
         GetComponent<LayoutController>().squeezeIn();
         // display context options for run or sets
         DropGuideLeft.SetActive(true);

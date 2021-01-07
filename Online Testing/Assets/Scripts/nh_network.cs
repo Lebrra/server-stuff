@@ -41,7 +41,8 @@ public class nh_network : MonoBehaviour
         socket.On("roomUsers", loadRoomUsers);
         socket.On("removeUser", removeUser);
         socket.On("createdRoom", createdRoom);
-        socket.On("roomNotFound", roomError);
+        socket.On("roomError", roomError);
+        socket.On("roomCount", updatePlayButton);
         socket.On("loadGame", loadGame);
 
         socket.On("currentRound", roundInfo);
@@ -96,7 +97,17 @@ public class nh_network : MonoBehaviour
 
     void roomError(SocketIOEvent evt)
     {
-        LobbyFunctions.inst.showRoomError();
+        string errormessage = evt.data.GetField("message").ToString().Trim('"');
+        Debug.LogWarning(errormessage);
+        LobbyFunctions.inst.showRoomError(errormessage);
+    }
+
+    void updatePlayButton(SocketIOEvent evt)
+    {
+        int roomCount;
+        int.TryParse(evt.data.GetField("roomCount").ToString(), out roomCount);
+        Debug.Log("Current room player count: " + roomCount);
+        LobbyFunctions.inst.playBtnInteraction(roomCount > 1 && roomCount < 7);
     }
     #endregion
     #region Username Functions

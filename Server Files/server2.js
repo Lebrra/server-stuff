@@ -52,6 +52,7 @@ io.sockets.on('connection', (socket) => {
         changeUserProperty("room", newRoomName);
         changeUserProperty("state", states.ROOM);
         socket.emit('createdRoom', { name: newRoomName });
+        socket.emit('roomCount', { roomCount: 1});
         //send room name to unity of the creator only
         listRoomUsers();
     });
@@ -60,19 +61,39 @@ io.sockets.on('connection', (socket) => {
         console.log('Room name given: ' + roomName);
 
         if (Rooms.includes(roomName)) {
-            socket.join(roomName);
-            changeUserProperty("room", roomName);
-            changeUserProperty("state", states.ROOM);
-            console.log(socket.adapter.rooms[Users.get(socket.id).room].sockets);
-            //console.table(Users.get(socket.id).room);
-            socket.emit('createdRoom', { name: roomName });
-            console.log(Users.get(socket.id).username + ' joined room ' + roomName);
-            listRoomUsers();
+            //check for roomstate
+            if (typeof Games[roomName] === 'undefined') {
+                //game has not started, players may join
+
+                var playerCount = Object.keys(socket.adapter.rooms[roomName].sockets).length;
+
+                if (playerCount >= 6) {
+                    // max player count met; cannot join
+                    console.log("Cannot join; room is full.");
+                    socket.emit('roomError', { message: 'Room is full, cannot join' });
+                }
+                else {
+                    socket.join(roomName);
+                    changeUserProperty("room", roomName);
+                    changeUserProperty("state", states.ROOM);
+                    console.log(socket.adapter.rooms[Users.get(socket.id).room].sockets);
+                    //console.table(Users.get(socket.id).room);
+                    socket.emit('createdRoom', { name: roomName });
+                    socket.emit('roomCount', { roomCount: playerCount });
+                    console.log(Users.get(socket.id).username + ' joined room ' + roomName);
+                    listRoomUsers();
+                }
+            }
+            else {
+                //game has started, players CANNOT join
+                console.log("Cannot join; game has already started.");
+                socket.emit('roomError', { message: 'Game has started, cannot join' });
+            }
         }
         else {
             // room does not exist
             console.log("Cannot join; room does not exist.");
-            socket.emit('roomNotFound');
+            socket.emit('roomError', { message: 'Room not found, try again' });
         }
     });
 
@@ -93,19 +114,27 @@ io.sockets.on('connection', (socket) => {
     });
 
     socket.on('startGame', () => {
-        console.log(Users.get(socket.id)['username'] + ' has started the game!');
-        let roomStarted = Users.get(socket.id)['room'];
-
-        for (user in socket.adapter.rooms[Users.get(socket.id).room].sockets) {
-            changeUserPropertyWithID(user.id, 'state', states.GAME);
+        //check player count one more time:
+        var playerCount = Object.keys(socket.adapter.rooms[Users.get(socket.id).room].sockets).length;
+        if (playerCount < 2 || playerCount > 6) {
+            console.log("invaild player count, attempting to update play button...");
+            socket.emit('roomCount', { roomCount: 1 });
         }
-        console.table(Users);
+        else {
+            console.log(Users.get(socket.id)['username'] + ' has started the game!');
+            let roomStarted = Users.get(socket.id)['room'];
 
-        io.in(roomStarted).emit('loadGame');
+            for (user in socket.adapter.rooms[Users.get(socket.id).room].sockets) {
+                changeUserPropertyWithID(user.id, 'state', states.GAME);
+            }
+            console.table(Users);
 
-        // make new game instance here
-        // var game = new Game(listRoomUsers());
-        Games[roomStarted] = new Game(listRoomUsers(), roomStarted); // assigned new game to Games array based on roomname
+            io.in(roomStarted).emit('loadGame');
+
+            // make new game instance here
+            // var game = new Game(listRoomUsers());
+            Games[roomStarted] = new Game(listRoomUsers(), roomStarted); // assigned new game to Games array based on roomname
+        }
     });
 
     socket.on('setReady', () => {
@@ -185,7 +214,7 @@ io.sockets.on('connection', (socket) => {
             ...tempUsers
         }
 
-        console.log('--- Room Details ---');
+        console.log('--- Room ' + socket.adapter.rooms[Users.get(socket.id).room] + ' Details ---');
         console.table(roomDetails);
         io.in(Users.get(socket.id).room).emit('roomUsers', roomDetails);        // sending to all users within a room
         return tempUsers;
@@ -211,9 +240,10 @@ io.sockets.on('connection', (socket) => {
                 ...tempUsers
             }
 
-            console.log('--- Room Details ---');
+            console.log('--- Room ' + formerRoom + ' Details ---');
             //console.table(roomDetails);
             socket.to(formerRoom).emit('roomUsers', roomDetails);
+            socket.to(formerRoom).emit('roomCount', { roomCount: tempUsers.length });
             //io.emit('roomUsers', roomDetails);
         }
         else {

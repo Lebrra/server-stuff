@@ -38,8 +38,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance) Destroy(gameObject);
-        else instance = this;
+        instance = this;
 
         server = nh_network.server;
         endRoundScreen.SetActive(true);

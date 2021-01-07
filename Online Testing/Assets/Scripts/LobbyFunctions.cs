@@ -23,8 +23,7 @@ public class LobbyFunctions : MonoBehaviour
 
     private void Awake()
     {
-        if (inst) Destroy(gameObject);
-        else inst = this;
+        inst = this;
     }
 
     public void createGameBtn()
@@ -88,6 +87,11 @@ public class LobbyFunctions : MonoBehaviour
         inRoom = true;
     }
 
+    public void playBtnInteraction(bool enable)
+    {
+        playButton.GetComponent<UnityEngine.UI.Button>().interactable = enable;
+    }
+
     public void playGame()
     {
 
@@ -99,8 +103,9 @@ public class LobbyFunctions : MonoBehaviour
         usernameInput.SetActive(open);
     }
 
-    public void showRoomError()
+    public void showRoomError(string error)
     {
+        errorAnim.GetComponent<TextMeshProUGUI>().text = error;
         errorAnim.SetTrigger("flash");
     }
 }

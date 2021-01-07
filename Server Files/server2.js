@@ -66,6 +66,7 @@ io.sockets.on('connection', (socket) => {
                 //game has not started, players may join
 
                 var playerCount = Object.keys(socket.adapter.rooms[roomName].sockets).length;
+                console.log("player count: " + playerCount);
 
                 if (playerCount >= 6) {
                     // max player count met; cannot join

@@ -16,6 +16,8 @@ public class DiscardHandler : MonoBehaviour
 
             GameManager.instance.myHand.Remove(card);
             CardPooler.instance.PushCard(card.gameObject);
+            
+            NotificationManager.instance.myTurn(false);
             return true;
         }
         else return false;

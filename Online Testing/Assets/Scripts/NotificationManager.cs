@@ -37,6 +37,8 @@ public class NotificationManager : MonoBehaviour
 {
     //public Text notificationsText;
     public TextMeshProUGUI notificationsText;
+    public TextMeshProUGUI myTurnText;
+    
     public float duration;
 
     public float interMessageDelay = .5f;
@@ -54,8 +56,6 @@ public class NotificationManager : MonoBehaviour
     public static NotificationManager instance;
 
     public List<Notification> Notifications;
-
-    public GameObject turnHighlighter;
 
     private void Awake()
     {
@@ -92,35 +92,17 @@ public class NotificationManager : MonoBehaviour
         // }
     }
 
-    public void myTurn()
+    public void myTurn(bool state)
     {
-        image.color = myTurnColor;
-        // StopCoroutine(myTurnFlash());
-        // StartCoroutine(myTurnFlash());
-    }
-
-    IEnumerator myTurnFlash()
-    {
-        Color originalColor = image.color;
-        image.color = myTurnColor;
-        yield return new WaitForSecondsRealtime(.1f);
-        image.color = originalColor;
-        yield return new WaitForSeconds(.1f);
-        image.color = myTurnColor;
-        yield return new WaitForSeconds(.1f);
-        image.color = originalColor;
-        // yield return ;
+        myTurnText.enabled = state;
     }
     
-
+    
     public bool addNotification(Notification newNotification)
     {
         if (newNotification.Turn)
         {
-            StopAllCoroutines();
-            clearNotifications();
-            Notifications.Add(newNotification);
-            StartCoroutine(notify());
+            myTurn(true);
             return true;
         }
         
@@ -151,9 +133,6 @@ public class NotificationManager : MonoBehaviour
         {
             // print(Notifications.Count);
             var currentNotification = Notifications[0];
-            print("notifiction: " + currentNotification.Turn);
-            if (currentNotification.Turn == true)
-                myTurn();
             
             yield return false;
             notificationsText.text = currentNotification.Message;

@@ -1,10 +1,8 @@
-const { emit } = require('cluster');
-const { debug } = require('console');
 
 // JavaScript source code
-var app = require('express')();
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
+const app = require('express')();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
 
 const PORT = process.env.PORT || 3000;
 
@@ -12,13 +10,13 @@ app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');
 });
 
-var Users = new Map();  // declaring Users structure
-var Rooms = [];
-var Games = [];
+let Users = new Map();  // declaring Users structure
+let Rooms = [];
+let Games = [];
 
-var Animals = ['Possum', 'Frog', 'Zebra', 'Lizard', 'Beaver', 'Panda', 'Giraffe', 'Toucan', 'Pelican', 'Sloth', 'Alligator', 'Scorpion', 'Viper', 'Armadillo'];
-var Deck;
-var DiscardPile;
+let Animals = ['Possum', 'Frog', 'Zebra', 'Lizard', 'Beaver', 'Panda', 'Giraffe', 'Toucan', 'Pelican', 'Sloth', 'Alligator', 'Scorpion', 'Viper', 'Armadillo'];
+let Deck;
+let DiscardPile;
 
 const
     states = {
@@ -49,7 +47,7 @@ io.sockets.on('connection', (socket) => {
 
     // socket event to intiate room creation
     socket.on('createRoom', () => {
-        var newRoomName = generateRoomName();
+        let newRoomName = generateRoomName();
         socket.join(newRoomName);
         changeUserProperty("room", newRoomName);
         changeUserProperty("state", states.ROOM);
@@ -81,7 +79,7 @@ io.sockets.on('connection', (socket) => {
     socket.on('leaveRoom', () => {
         console.log(Users.get(socket.id).username + ' left their room');
 
-        var formerRoom = Users.get(socket.id).room;
+        let formerRoom = Users.get(socket.id).room;
 
         socket.leave(Users.get(socket.id).room);
         changeUserProperty("room", "");
@@ -96,7 +94,7 @@ io.sockets.on('connection', (socket) => {
 
     socket.on('startGame', () => {
         console.log(Users.get(socket.id)['username'] + ' has started the game!');
-        var roomStarted = Users.get(socket.id)['room'];
+        let roomStarted = Users.get(socket.id)['room'];
 
         for (user in socket.adapter.rooms[Users.get(socket.id).room].sockets) {
             changeUserPropertyWithID(user.id, 'state', states.GAME);
@@ -116,7 +114,7 @@ io.sockets.on('connection', (socket) => {
     });
 
     socket.on('drawCard', (fromDeck) => {
-        var newCard;
+        let newCard;
         if (fromDeck === true) {
             newCard = Games[Users.get(socket.id)['room']].drawCard();
             io.in(Users.get(socket.id)['room']).emit('drewFromDeck', { player: Users.get(socket.id).username });
@@ -162,7 +160,7 @@ io.sockets.on('connection', (socket) => {
         if (Games.includes(Users.get(socket.id)['room'])) {
             console.log(`destroying game in room ${Users.get(socket.id)['room']}`);
 
-            var gameIndex = Games.indexOf(Users.get(socket.id)['room']);
+            let gameIndex = Games.indexOf(Users.get(socket.id)['room']);
             Games.splice(gameIndex, 1);
         }
     });
@@ -183,7 +181,7 @@ io.sockets.on('connection', (socket) => {
                 });
         }
 
-        var roomDetails = {
+        let roomDetails = {
             ...tempUsers
         }
 
@@ -195,12 +193,12 @@ io.sockets.on('connection', (socket) => {
 
     // update users in previous rooms
     function updateFormerRoomList(formerRoom) {
-        if (socket.adapter.rooms[formerRoom] != null || socket.adapter.rooms[formerRoom] != undefined) {
+        if (socket.adapter.rooms[formerRoom] != null || socket.adapter.rooms[formerRoom] !== undefined) {
             console.table(socket.adapter.rooms[formerRoom].sockets);
             let _sockets = socket.adapter.rooms[formerRoom].sockets;
             let tempUsers = [];
-            for (_socket in _sockets) {
-                if (Users[_socket].state == states.ROOM) {
+            for (let _socket in _sockets) {
+                if (Users[_socket].state === states.ROOM) {
                     tempUsers.push(
                         {
                             username: getUsernameFromSocketID(_socket),
@@ -209,7 +207,7 @@ io.sockets.on('connection', (socket) => {
                 }
             }
 
-            var roomDetails = {
+            let roomDetails = {
                 ...tempUsers
             }
 
@@ -220,7 +218,7 @@ io.sockets.on('connection', (socket) => {
         }
         else {
             console.log("room is empty, removing it");
-            var roomIndex = Rooms.indexOf(formerRoom);
+            let roomIndex = Rooms.indexOf(formerRoom);
             Rooms.splice(roomIndex, 1);
         }
     }
@@ -229,7 +227,7 @@ io.sockets.on('connection', (socket) => {
         if (socketid == null) {
             socketid = socket.id;
         }
-        if (Users.get(socketid) != undefined || Users.get(socketid) != null) {
+        if (Users.get(socketid) !== undefined || Users.get(socketid) != null) {
             console.log('id? ' + Users.get(socket.id).username);
             return Users.get(socketid).username;
         } else {
@@ -239,9 +237,9 @@ io.sockets.on('connection', (socket) => {
 
     // server generates room name
     function generateRoomName() {
-        var animal = Math.floor(Math.random() * (Animals.length));
-        var num = Math.floor(Math.random() * 100);
-        var roomName = Animals[animal] + num.toString().padStart(2, "0");
+        let animal = Math.floor(Math.random() * (Animals.length));
+        let num = Math.floor(Math.random() * 100);
+        let roomName = Animals[animal] + num.toString().padStart(2, "0");
 
         while (Rooms.includes(roomName)) {
             console.log("changing room name, chosen was taken");
@@ -257,23 +255,23 @@ io.sockets.on('connection', (socket) => {
     function changeUserProperty(property, value) {
         // users properties: id, username, observeallcontrol, observeallevents
         if (Users.has(socket.id)) {
-            tempObj = Users.get(socket.id);
+            let tempObj = Users.get(socket.id);
             // console.log('changed current user property: ' + property);
             tempObj[property] = value;
             Users.set(socket.id, tempObj);
         }
-        if (property == 'username') checkUsers();
+        if (property === 'username') checkUsers();
     }
 
     function changeUserPropertyWithID(socketID, property, value) {
         // users properties: id, username, observeallcontrol, observeallevents
         if (Users.has(socketID)) {
-            tempObj = Users.get(socketID);
+            let tempObj = Users.get(socketID);
             // console.log('changed current user property: ' + property);
             tempObj[property] = value;
             Users.set(socketID, tempObj);
         }
-        if (property == 'username') checkUsers();
+        if (property === 'username') checkUsers();
     }
 
     function addUsername(newUsername) {
@@ -321,10 +319,10 @@ io.sockets.on('connection', (socket) => {
         io.emit('users', usernameObject);
         */
 
-            // Giving id, name pairs
+        // Giving id, name pairs
         let tempUsers = Array.from(Users.values());
-        var usernameObject = {};
-        for (var i = 0; i < tempUsers.length; i++) {
+        let usernameObject = {};
+        for (let i = 0; i < tempUsers.length; i++) {
             usernameObject[i] = {
                 username: tempUsers[i]["username"],
                 id: tempUsers[i]["id"]
@@ -337,7 +335,7 @@ io.sockets.on('connection', (socket) => {
 server.listen(PORT);
 
 setInterval(function () {
-  io.emit('ping');
+    io.emit('ping');
 }, 1000);
 
 class Game {
@@ -364,15 +362,15 @@ class Game {
         this.OutPlayer = -1;
         this.roundOver = false;
 
-        this.ScoreCard = new Array();
+        this.ScoreCard = [];
     }
 
     roundSetUp() {
         this.declareRound();
 
         this.ScoreCard[this.Round - 3] = new Array(Array.from(this.Players.values()).length);
-        this.ScoreCard[this.Round - 3].forEach((value, index, array) => {
-            value = -1;
+        this.ScoreCard[this.Round - 3].forEach((value) => {
+            this.ScoreCard[this.Round - 3][value]= -1;
         });
 
         this.declareTurn(true);
@@ -386,8 +384,8 @@ class Game {
         this.changePlayerPropertyWithID(playerID, 'ready', true);
         console.table(Array.from(this.Players.values()));
 
-        var allReady = true;
-        this.Players.forEach((value, index, array) => {
+        let allReady = true;
+        this.Players.forEach((value) => {
             if (value.ready == false) allReady = false;
         });
 
@@ -396,19 +394,33 @@ class Game {
 
     buildPlayerMap(userInfo) {
         // userInfo: {[ {username: ____, id: socketid}, ... {}]}
-        for (user in userInfo) {
-            this.Players.set(
-                userInfo[user].id,
+        userInfo.forEach(user => {
+            this.Players.set(user.id,
                 {
-                    id: userInfo[user].id,
-                    username: userInfo[user].username,
+                    id: user.id,
+                    username: user.username,
                     hand: [],
                     out: 'false',
                     score: 0,
                     ready: false
                 }
             );
-        }
+        });
+
+
+        /*        foreach (user in userInfo) {
+                    this.Players.set(
+                        userInfo[user].id,
+                        {
+                            id: userInfo[user].id,
+                            username: userInfo[user].username,
+                            hand: [],
+                            out: 'false',
+                            score: 0,
+                            ready: false
+                        }
+                    );
+                };*/
         console.log("Player map built.");
         console.table(this.Players);
         console.log(this.Players.values());
@@ -417,7 +429,7 @@ class Game {
     changePlayerPropertyWithID(socketID, property, value) {
         // users properties: id, username, observeallcontrol, observeallevents
         if (this.Players.has(socketID)) {
-            tempObj = this.Players.get(socketID);
+            let tempObj = this.Players.get(socketID);
             // console.log('changed current user property: ' + property);
             tempObj[property] = value;
             this.Players.set(socketID, tempObj);
@@ -447,7 +459,7 @@ class Game {
     }
 
     declareTurn(firstTurn) {
-        var PlayersArray = Array.from(this.Players.values());
+        let PlayersArray = Array.from(this.Players.values());
 
         if (firstTurn) {
             this.Turn = (this.Round - 3) % PlayersArray.length;
@@ -469,12 +481,12 @@ class Game {
     }
 
     drawPlayerHands() {
-        this.Players.forEach((value, index, array) => {
-            for (var i = 0; i < this.Round; i++)
+        this.Players.forEach((value) => {
+            for (let i = 0; i < this.Round; i++)
                 value.hand.push(this.drawCard());
             console.log(value.username + "'s hand:");
             console.table(value.hand);
-            var hand = { ...value.hand };
+            let hand = { ...value.hand };
             io.to(value.id).emit('playerHand', hand);
         });
 
@@ -499,22 +511,20 @@ class Game {
             this.discardToDeck();
         }
 
-        var rand = Math.floor(Math.random() * Deck.length);
+        let rand = Math.floor(Math.random() * Deck.length);
 
-        var swap = Deck[rand];
+        let swap = Deck[rand];
         Deck[rand] = Deck[Deck.length - 1];
         Deck[Deck.length - 1] = swap;
 
-        var card = Deck.pop();
-
-        return card;
+        return Deck.pop();
     }
 
     discardToDeck() {
-        var topOfDiscard = DiscardPile.pop();
-        var secondOfDiscard = DiscardPile.pop();
+        let topOfDiscard = DiscardPile.pop();
+        let secondOfDiscard = DiscardPile.pop();
 
-        DiscardPile.forEach((value, index, array) => {
+        DiscardPile.forEach((value) => {
             Deck.push(value);
         });
 
@@ -536,8 +546,8 @@ class Game {
     }
 
     updatePlayerScore(playerID, score) {
-        var playerArray = Array.from(this.Players.keys());
-        var playerIndex = playerArray.indexOf(playerID);
+        let playerArray = Array.from(this.Players.keys());
+        let playerIndex = playerArray.indexOf(playerID);
         console.log("player index: " + playerIndex);
 
         //
@@ -598,3 +608,4 @@ class Game {
         this.roundOver = false;
     }
 }
+

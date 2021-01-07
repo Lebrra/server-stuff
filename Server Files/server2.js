@@ -219,7 +219,7 @@ io.sockets.on('connection', (socket) => {
             ...tempUsers
         }
 
-        console.log('--- Room ' + socket.adapter.rooms[Users.get(socket.id).room] + ' Details ---');
+        console.log('--- Room ' + Users.get(socket.id).room + ' Details ---');
         console.table(roomDetails);
         io.in(Users.get(socket.id).room).emit('roomUsers', roomDetails);        // sending to all users within a room
         return tempUsers;

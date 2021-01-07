@@ -120,6 +120,11 @@ public class nh_network : MonoBehaviour
         socket.Emit("updateUsername", test);
     }
 
+    public void getAllUsernames()
+    {
+        socket.Emit("loadAllUsernames");
+    }
+
     void loadUsers(SocketIOEvent evt)
     {
         if (!lf.inRoom) {

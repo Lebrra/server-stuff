@@ -24,6 +24,8 @@ public class LobbyFunctions : MonoBehaviour
     private void Awake()
     {
         inst = this;
+        // not the first time here
+        if (GameManager.instance) loadMainUserList();
     }
 
     public void createGameBtn()
@@ -70,6 +72,7 @@ public class LobbyFunctions : MonoBehaviour
             // load main lobby usernames
             inRoom = false;
             playButton.SetActive(false);
+            loadMainUserList();
         }
 
         lobbyButtons.SetActive(true);
@@ -107,5 +110,11 @@ public class LobbyFunctions : MonoBehaviour
     {
         errorAnim.GetComponent<TextMeshProUGUI>().text = error;
         errorAnim.SetTrigger("flash");
+    }
+
+    public void loadMainUserList()
+    {
+        GetComponent<UsernameActions>().removeAllUsernames();
+        nh_network.server.getAllUsernames();
     }
 }

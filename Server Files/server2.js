@@ -195,6 +195,10 @@ io.sockets.on('connection', (socket) => {
         }
     });
 
+    socket.on("loadAllUsernames", () => {
+        checkUsers();
+    });
+
 
 
 

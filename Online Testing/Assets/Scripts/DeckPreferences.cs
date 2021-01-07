@@ -67,6 +67,7 @@ public class DeckPreferences : MonoBehaviour
 
     public void openDeckPrefPanel()
     {
+        data = SaveLoad.Load();
         deckPanel.SetActive(true);
         demoCard.transform.GetChild(0).GetComponent<Image>().color = data.getColor();
         demoCard.transform.GetChild(1).GetComponent<Image>().sprite = backs[data.cardback];

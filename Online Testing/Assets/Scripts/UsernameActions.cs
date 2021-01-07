@@ -15,9 +15,16 @@ public class UsernameActions : MonoBehaviour
 
     public Animator message;
 
+    PlayerData data;
+    string myID;
+
     private void Start()
     {
         usernameTexts = new Dictionary<string, GameObject>();
+
+        data = SaveLoad.Load();
+        myID = "";
+        nameField.placeholder.GetComponent<TextMeshProUGUI>().text = data.username;
 
         //local testing
         //addUsername(nameField.placeholder.GetComponent<Text>().text);
@@ -32,7 +39,11 @@ public class UsernameActions : MonoBehaviour
             //addUsername(nameField.text);
 
             nh_network.server.newUsername(nameField.text);
-            PlayerPrefs.SetString("username", nameField.text);
+            //PlayerPrefs.SetString("username", nameField.text);
+
+            data = SaveLoad.Load();
+            data.username = nameField.text;
+            SaveLoad.Save(data);
 
             // maybe sets username here
             //nameField.placeholder.GetComponent<Text>().text = nameField.text;
@@ -49,21 +60,25 @@ public class UsernameActions : MonoBehaviour
     {
         if (usernameTexts.ContainsKey(id))
         {
-            //usernameTexts[id].GetComponent<Text>().text = name;
             usernameTexts[id].GetComponent<TextMeshProUGUI>().text = name;
         }
         else
         {
-            if (PlayerPrefs.HasKey("username") && name == "New Player")
+            GameObject newText = Instantiate(textPrefab, usernameList.transform);
+            usernameTexts.Add(id, newText);
+
+            if (myID == "")
             {
-                StartCoroutine(DelayUsernameUpdate(id, name));
+                // my name not set yet
+                Debug.Log("my username is not loaded yet");
+                myID = id;
+                StartCoroutine(DelayUsernameUpdate(data.username));
+                newText.GetComponent<TextMeshProUGUI>().text = "loading...";
             }
             else
             {
-                GameObject newText = Instantiate(textPrefab, usernameList.transform);
-                //newText.GetComponent<Text>().text = name;
+                // not my name, new user
                 newText.GetComponent<TextMeshProUGUI>().text = name;
-                usernameTexts.Add(id, newText);
             }
         }
     }
@@ -88,16 +103,10 @@ public class UsernameActions : MonoBehaviour
         usernameTexts = new Dictionary<string, GameObject>();
     }
 
-    IEnumerator DelayUsernameUpdate(string id, string name)
+    IEnumerator DelayUsernameUpdate(string name)
     {
         yield return new WaitForSeconds(0.3F);
-
-        // don't take this name, set it to my username
-        if (PlayerPrefs.GetString("username") == "New Player")
-        {
-            PlayerPrefs.DeleteKey("username");
-            addUsername(id, name);
-        }
-        else nh_network.server.newUsername(PlayerPrefs.GetString("username"));
+        
+        nh_network.server.newUsername(name);
     }
 }

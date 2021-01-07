@@ -147,6 +147,9 @@ public class nh_network : MonoBehaviour
             Debug.Log(jsonData.GetField("username"));
             ua.addUsername(jsonData.GetField("id").ToString().Trim('"'), jsonData.GetField("username").ToString().Trim('"'));
         }
+
+        Debug.Log("player room count: " + evt.data.Count);
+        LobbyFunctions.inst.playBtnInteraction(evt.data.Count > 1 && evt.data.Count < 7);
     }
 
 

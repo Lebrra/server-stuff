@@ -52,7 +52,7 @@ io.sockets.on('connection', (socket) => {
         changeUserProperty("room", newRoomName);
         changeUserProperty("state", states.ROOM);
         socket.emit('createdRoom', { name: newRoomName });
-        socket.emit('roomCount', { roomCount: 1});
+        //socket.emit('roomCount', { roomCount: 1});
         //send room name to unity of the creator only
         listRoomUsers();
     });
@@ -80,7 +80,7 @@ io.sockets.on('connection', (socket) => {
                     console.log(socket.adapter.rooms[Users.get(socket.id).room].sockets);
                     //console.table(Users.get(socket.id).room);
                     socket.emit('createdRoom', { name: roomName });
-                    socket.to(roomName).emit('roomCount', { roomCount: playerCount });
+                    //socket.to(roomName).emit('roomCount', { roomCount: playerCount });
                     console.log(Users.get(socket.id).username + ' joined room ' + roomName);
                     listRoomUsers();
                 }
@@ -244,7 +244,7 @@ io.sockets.on('connection', (socket) => {
             console.log('--- Room ' + formerRoom + ' Details ---');
             //console.table(roomDetails);
             socket.to(formerRoom).emit('roomUsers', roomDetails);
-            socket.to(formerRoom).emit('roomCount', { roomCount: tempUsers.length });
+            //socket.to(formerRoom).emit('roomCount', { roomCount: tempUsers.length });
             //io.emit('roomUsers', roomDetails);
         }
         else {

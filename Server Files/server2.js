@@ -119,7 +119,7 @@ io.sockets.on('connection', (socket) => {
         var playerCount = Object.keys(socket.adapter.rooms[Users.get(socket.id).room].sockets).length;
         if (playerCount < 2 || playerCount > 6) {
             console.log("invaild player count, attempting to update play button...");
-            socket.emit('roomCount', { roomCount: 1 });
+            socket.in(socket.adapter.rooms[Users.get(socket.id).room]).emit('roomCount', { roomCount: 1 });
         }
         else {
             console.log(Users.get(socket.id)['username'] + ' has started the game!');
@@ -228,7 +228,7 @@ io.sockets.on('connection', (socket) => {
             let _sockets = socket.adapter.rooms[formerRoom].sockets;
             let tempUsers = [];
             for (let _socket in _sockets) {
-                if (Users[_socket].state === states.ROOM) {
+                if (Users.get(_socket).state === states.ROOM) {
                     tempUsers.push(
                         {
                             username: getUsernameFromSocketID(_socket),

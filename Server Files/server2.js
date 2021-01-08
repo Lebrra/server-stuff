@@ -13,6 +13,7 @@ app.get('/', function (req, res) {
 let Users = new Map();  // declaring Users structure
 let Rooms = [];
 let Games = [];
+let IPS = [];
 
 let Animals = ['Possum', 'Frog', 'Zebra', 'Lizard', 'Beaver', 'Panda', 'Giraffe', 'Toucan', 'Pelican', 'Sloth', 'Alligator', 'Scorpion', 'Viper', 'Armadillo'];
 let Deck;
@@ -22,18 +23,42 @@ const
     states = {
         ROOM: 'room',
         LOBBY: 'lobby',
-        GAME: 'game'
+        GAME: 'game',
+        DC: 'disconnected',
+        QUIT: 'quit'
     }
 
 io.sockets.on('connection', (socket) => {
-    console.log('a user connected');
+    console.log('a user connected - ' + socket.request.connection.remoteAddress);
 
     socket.emit('connectionmessage', {
         id: socket.id
     });
 
-    // add new user to User Map
-    addUser(socket);
+    // check if user is re-connecting to an existing game
+    if(Users.size > 0) {
+        let DCs = Array.from(Users.values()).filter(dc => dc.state == states.DC);
+        console.log('disconnected users');
+        console.table(DCs);
+        console.log('checking if new user is reconnecting...')
+        let user = DCs.filter((DC) => DC.ip == socket.request.connection.remoteAddress);
+        if(user.length > 0){
+            console.log("user reconnected: " + user[0].id);
+            // add reconnected user a new user;
+            addUser(socket);
+            changeUserProperty('formerid', user[0].id);
+            // changeUserProperty('room', user[0].room);
+            changeUserProperty('username', user[0].username);
+            joinRoom(user[0].room);
+            console.log("does games still exist?" + Games[user[0].room]);
+            Games[user[0].room].reconnectPlayer(socket, user[0]);
+        } else {
+            addUser(socket);
+        }
+    } else {
+        // add new user to User Map
+        addUser(socket);
+    }
 
     socket.on('updateUsername', (newName) => {
         addUsername(newName);
@@ -42,11 +67,26 @@ io.sockets.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('user disconnected');
         io.emit('removeUser', { id: socket.id });
-        removeUser(socket);
+
+        if(Users.get(socket.id).state != states.QUIT) {
+            console.log("user disconnected but was in a game, initiating delayed quit protocol")
+            beginDelayedRemoveUser(socket);
+        } else {
+            console.log("user disconnected but had not joined a game, removing...")
+            removeUser(socket);
+        }
     });
 
     // socket event to intiate room creation
-    socket.on('createRoom', () => {
+    socket.on('createRoom', () =>{
+        createRoom();
+    });
+
+    socket.on('joinRoom', (roomName) => {
+        joinRoom(roomName);
+    });
+
+    function createRoom(){
         let newRoomName = generateRoomName();
         socket.join(newRoomName);
         changeUserProperty("room", newRoomName);
@@ -55,9 +95,9 @@ io.sockets.on('connection', (socket) => {
         //socket.emit('roomCount', { roomCount: 1});
         //send room name to unity of the creator only
         listRoomUsers();
-    });
+    }
 
-    socket.on('joinRoom', (roomName) => {
+    function joinRoom(roomName) {
         console.log('Room name given: ' + roomName);
 
         if (Rooms.includes(roomName)) {
@@ -96,7 +136,7 @@ io.sockets.on('connection', (socket) => {
             console.log("Cannot join; room does not exist.");
             socket.emit('roomError', { message: 'Room not found, try again' });
         }
-    });
+    }
 
     socket.on('leaveRoom', () => {
         console.log(Users.get(socket.id).username + ' left their room');
@@ -117,7 +157,7 @@ io.sockets.on('connection', (socket) => {
     socket.on('startGame', () => {
         //check player count one more time:
         var playerCount = Object.keys(socket.adapter.rooms[Users.get(socket.id).room].sockets).length;
-        if (playerCount < 2 || playerCount > 6) {
+        if (playerCount < 0 || playerCount > 6) {
             console.log("invaild player count, attempting to update play button...");
             socket.in(socket.adapter.rooms[Users.get(socket.id).room]).emit('roomCount', { roomCount: 1 });
         }
@@ -198,8 +238,6 @@ io.sockets.on('connection', (socket) => {
     socket.on("loadAllUsernames", () => {
         checkUsers();
     });
-
-
 
 
     // send usernames in our room
@@ -323,9 +361,28 @@ io.sockets.on('connection', (socket) => {
                     username: "New Player",
                     id: socket.id,
                     room: "",
-                    state: states.LOBBY
+                    state: states.LOBBY,
+                    ip: socket.request.connection.remoteAddress,
+                    formerid: ""
                 }
             );
+            checkUsers();
+        }
+    }
+
+    function beginDelayedRemoveUser(socket){
+        if (Users.has(socket.id)) {
+            Users.get(socket.id).state = states.DC;
+            console.log("starting delayed removal of user");
+            setTimeout(function(){delayDelayedRemoveUser(socket)}, 10000);
+            checkUsers();
+        }
+    }
+
+    function delayDelayedRemoveUser(socket){
+        if(Users.get(socket.id).state == states.DC){
+            console.log("removing user who disconnected");
+            Users.delete(socket.id);
             checkUsers();
         }
     }
@@ -338,7 +395,7 @@ io.sockets.on('connection', (socket) => {
     }
 
     function checkUsers() {
-        console.table(Users);
+        console.table(Array.from(Users.values()));
         listUsers();
     }
 
@@ -437,7 +494,8 @@ class Game {
                     hand: [],
                     out: 'false',
                     score: 0,
-                    ready: false
+                    ready: false,
+                    connected: true
                 }
             );
         });
@@ -469,6 +527,52 @@ class Game {
             tempObj[property] = value;
             this.Players.set(socketID, tempObj);
         }
+    }
+
+    //
+    reconnectPlayer(newInfo, formerid){
+        let newPlayers = new Map();
+
+        // rebuild players map
+        for(let playerid of this.Players.entries()){
+            if(playerid == formerid)
+            {
+                console.log ("inserting new users");
+                this.newPlayers.set(newInfo.id,
+                    {
+                        id: newInfo.id,
+                        username: playerid.username,
+                        hand: playerid.hand,
+                        out: playerid.out,
+                        score: playerid.score,
+                        ready: playerid.ready,
+                        connected: true
+                    }
+                    );
+
+                this.Players.set(user.id,
+                    {
+                        id: user.id,
+                        username: user.username,
+                        hand: [],
+                        out: 'false',
+                        score: 0,
+                        ready: false,
+                        connected: true
+                    }
+                    );
+            } else {
+                let oldPlayer = this.Players.get(playerid);
+                newPlayers.set(playerid,
+                    {
+                        ...oldPlayer
+                    });
+            }
+        }
+
+        console.log("replacing 'this.Players' map with reconnected users info");
+        this.Players = newPlayers;
+        console.table(this.Players);
     }
 
     setDeck() {
@@ -508,6 +612,10 @@ class Game {
             //round has ended!
             console.log("~~ the round has ended! ~~");
             this.roundOver = true;
+        }
+
+        if(!PlayersArray[this.Turn].connected){
+            this.declareRound(false);
         }
 
         console.log("Player turn: " + PlayersArray[this.Turn].username);
@@ -589,7 +697,7 @@ class Game {
         if (this.Round == 12){
             console.log("doubling score");
             score *= 2;
-        } else if(this.Round == 12){
+        } else if(this.Round == 13){
             console.log("tripling score");
             score *= 3;
         }

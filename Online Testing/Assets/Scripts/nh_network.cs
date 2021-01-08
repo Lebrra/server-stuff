@@ -401,5 +401,10 @@ public class nh_network : MonoBehaviour
         socket.Emit("deleteGame");
     }
 
+    public void quitGame()
+    {
+        
+    }
+
     #endregion
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class ScorecardLoader : MonoBehaviour
@@ -14,6 +15,9 @@ public class ScorecardLoader : MonoBehaviour
     [Header("Waiting")]
     public GameObject waitingPopup;
     public TextMeshProUGUI waitingScore;
+
+    public Button deckBtn;
+    public Button discBtn;
 
     [Header("Scorecard")]
     public GameObject scoreCard;
@@ -47,7 +51,10 @@ public class ScorecardLoader : MonoBehaviour
     public void EnableWait(int score)
     {
         waitingPopup.SetActive(true);
-        waitingScore.text = score.ToString();
+        waitingScore.text = "Your score this round: <#1D6820>" + score.ToString();
+
+        deckBtn.interactable = false;
+        discBtn.interactable = false;
     }
 
     public void DisableWait()
@@ -103,7 +110,7 @@ public class ScorecardLoader : MonoBehaviour
         currentColumn++;
 
         CalculateTotals(scores);
-        gameObject.GetComponent<UnityEngine.UI.Image>().enabled = false;
+        gameObject.GetComponent<Image>().enabled = false;
         StartCoroutine(DelayReadyButton());
     }
 
@@ -153,7 +160,9 @@ public class ScorecardLoader : MonoBehaviour
             {
                 nh_network.server.setReady();
                 readyText.text = "Waiting for other players...";
-                gameObject.GetComponent<UnityEngine.UI.Image>().enabled = true;
+                gameObject.GetComponent<Image>().enabled = true;
+                deckBtn.interactable = true;
+                discBtn.interactable = true;
             }
             else
             {
@@ -172,6 +181,8 @@ public class ScorecardLoader : MonoBehaviour
         gameObject.SetActive(false);
 
         if (!showScoreBtn.activeInHierarchy) showScoreBtn.SetActive(true);
+
+        gameObject.GetComponent<Image>().enabled = false;
     }
 
     IEnumerator DelayReadyButton()

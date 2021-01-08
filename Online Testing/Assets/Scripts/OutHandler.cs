@@ -81,12 +81,14 @@ public class OutHandler : MonoBehaviour
                     //remove all cards
                     foreach (CardButton c in d.cards) c.ReturnToHand();
                     d.clearDropZone();
+                    RemoveEmptyDrop();
                 }
                 else if (d.cards.Count > 0)
                 {
                     foreach (CardButton c in d.cards)
                         GameManager.instance.outDeckHandler.RemoveFromHand(c);
                 }
+                else RemoveEmptyDrop();
             }
         }
     }

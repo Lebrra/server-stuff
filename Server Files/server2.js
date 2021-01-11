@@ -10,14 +10,14 @@ app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');
 });
 
-let Users = new Map();  // declaring Users structure
-let Rooms = [];
-let Games = [];
-let IPS = [];
+var Users = new Map();  // declaring Users structure
+var Rooms = [];
+var Games = [];
 
-let Animals = ['Possum', 'Frog', 'Zebra', 'Lizard', 'Beaver', 'Panda', 'Giraffe', 'Toucan', 'Pelican', 'Sloth', 'Alligator', 'Scorpion', 'Viper', 'Armadillo'];
-let Deck;
-let DiscardPile;
+var Animals = ['Possum', 'Frog', 'Zebra', 'Lizard', 'Beaver', 'Panda', 'Giraffe', 'Toucan', 'Pelican', 'Sloth', 'Alligator', 'Scorpion', 'Viper', 'Armadillo'];
+var Deck;
+var DiscardPile;
+var dcTimeout;
 
 const
     states = {
@@ -25,11 +25,17 @@ const
         LOBBY: 'lobby',
         GAME: 'game',
         DC: 'disconnected',
-        QUIT: 'quit'
+        QUIT: 'quit',
+        RECONNECTING: 'reconnecting'
     }
 
 io.sockets.on('connection', (socket) => {
-    console.log('a user connected - ' + socket.request.connection.remoteAddress);
+    console.log('------------------------------------------------------------------------');
+    console.log('------------------------------------------------------------------------');
+    console.log('------------------------------------------------------------------------');
+    console.log('------------------------------------------------------------------------');
+
+    console.log('--- a user connected - ' + socket.request.connection.remoteAddress);
 
     socket.emit('connectionmessage', {
         id: socket.id
@@ -37,22 +43,31 @@ io.sockets.on('connection', (socket) => {
 
     // check if user is re-connecting to an existing game
     if(Users.size > 0) {
-        let DCs = Array.from(Users.values()).filter(dc => dc.state == states.DC);
-        console.log('disconnected users');
+        let DCs = Array.from(Users.values()).filter(user => user.state == states.DC);
+        console.log('disconnected users:');
         console.table(DCs);
-        console.log('checking if new user is reconnecting...')
-        let user = DCs.filter((DC) => DC.ip == socket.request.connection.remoteAddress);
-        if(user.length > 0){
-            console.log("user reconnected: " + user[0].id);
-            // add reconnected user a new user;
-            addUser(socket);
-            changeUserProperty('formerid', user[0].id);
-            // changeUserProperty('room', user[0].room);
-            changeUserProperty('username', user[0].username);
-            joinRoom(user[0].room);
-            console.log("does games still exist?" + Games[user[0].room]);
-            Games[user[0].room].reconnectPlayer(socket, user[0]);
+        console.log('checking if new user is a reconnecting old user...')
+        if(DCs.length > 0){
+            let matchedDCs = DCs.filter((DC) => DC.ip == socket.request.connection.remoteAddress)
+            console.log("Does user match old IP? " + user);
+            if(matchedDCs.length > 0) {
+                console.log("new user matches old user's ip: " + matchedDCs[0].id + "new users socket is " + socket.id);
+                // add reconnected user as a new user;
+                addUser(socket);
+                changeUserProperty('formerid', matchedDCs[0].id);
+                changeUserProperty('state', states.RECONNECTING);
+                changeUserProperty('username', matchedDCs[0].username);
+
+                console.log("does games still exist?" + Games[matchedDCs[0].room]);
+                if (Games[matchedDCs[0].room] != undefined || Games[matchedDCs[0].room] != null) {
+                    console.log("Reconnecting USER was in an ROOM with existing GAME: " + Games[matchedDCs[0].room]);
+                    Games[matchedDCs[0].room].reconnectPlayer(socket, matchedDCs[0]);
+                    // load game scene
+                    rejoinRoom(matchedDCs[0].room);
+                }
+            }
         } else {
+            console.log("No recent disconnects");
             addUser(socket);
         }
     } else {
@@ -68,7 +83,7 @@ io.sockets.on('connection', (socket) => {
         console.log('user disconnected');
         io.emit('removeUser', { id: socket.id });
 
-        if(Users.get(socket.id).state != states.QUIT) {
+        if(Users.get(socket.id).state == states.ROOM) {
             console.log("user disconnected but was in a game, initiating delayed quit protocol")
             beginDelayedRemoveUser(socket);
         } else {
@@ -138,6 +153,30 @@ io.sockets.on('connection', (socket) => {
         }
     }
 
+    function rejoinRoom(roomName) {
+        console.log('Reconnect to Room name: ' + roomName);
+
+        if (Rooms.includes(roomName)) {
+            //check for roomstate
+            socket.join(roomName);
+            changeUserProperty("room", roomName);
+
+            // changeUserProperty("state", states.ROOM);
+            console.log(socket.adapter.rooms[Users.get(socket.id).room].sockets);
+            //socket.to(roomName).emit('roomCount', { roomCount: playerCount });
+            console.log(Users.get(socket.id).username + ' joined room ' + roomName);
+
+            console.log("Loading GAME for reconnected player");
+            socket.emit('loadGame');
+        }
+        else {
+            // room does not exist
+            console.log("Cannot join; room does not exist.");
+            socket.emit('roomError', { message: 'Room not found, try again' });
+        }
+    }
+
+
     socket.on('leaveRoom', () => {
         console.log(Users.get(socket.id).username + ' left their room');
 
@@ -157,7 +196,7 @@ io.sockets.on('connection', (socket) => {
     socket.on('startGame', () => {
         //check player count one more time:
         var playerCount = Object.keys(socket.adapter.rooms[Users.get(socket.id).room].sockets).length;
-        if (playerCount < 0 || playerCount > 6) {
+        if (playerCount < 1 || playerCount > 6) {
             console.log("invaild player count, attempting to update play button...");
             socket.in(socket.adapter.rooms[Users.get(socket.id).room]).emit('roomCount', { roomCount: 1 });
         }
@@ -179,8 +218,13 @@ io.sockets.on('connection', (socket) => {
     });
 
     socket.on('setReady', () => {
-        console.log('checking for all ready...');
-        Games[Users.get(socket.id)['room']].readyCheck(socket.id);
+        if(Users.get(socket.id)['state'] == states.RECONNECTING) {
+            Games[Users.get(socket.id)['room']].updateReconnection(socket.id);
+            changeUserPropertyWithID(socket.id, 'state', states.GAME);
+        } else {
+            console.log('checking for all ready...');
+            Games[Users.get(socket.id)['room']].readyCheck(socket.id);
+        }
     });
 
     socket.on('drawCard', (fromDeck) => {
@@ -203,7 +247,6 @@ io.sockets.on('connection', (socket) => {
         Games[Users.get(socket.id)['room']].declareTurn(false);
     });
 
-
     socket.on("firstOut", () => {
         io.in(Users.get(socket.id)['room']).emit('firstOutPlayer', { player: Users.get(socket.id).username, playerIndex: Games[Users.get(socket.id)['room']].Turn });
         Games[Users.get(socket.id)['room']].OutPlayer = Games[Users.get(socket.id)['room']].Turn;
@@ -214,6 +257,8 @@ io.sockets.on('connection', (socket) => {
 
     socket.on("updateOutDeck", (outDeck) => {
         console.table(outDeck);
+        // cache outdeck to Game.OutDeck
+        this.OutDeck = outDeck;
         io.in(Users.get(socket.id)['room']).emit('updateOutDeck', outDeck);
     });
 
@@ -353,6 +398,7 @@ io.sockets.on('connection', (socket) => {
     }
 
     function addUser(socket) {
+        console.log("Adding new user");
         // create a new user mapping
         if (!Users.has(socket.id)) {
             Users.set(
@@ -374,14 +420,14 @@ io.sockets.on('connection', (socket) => {
         if (Users.has(socket.id)) {
             Users.get(socket.id).state = states.DC;
             console.log("starting delayed removal of user");
-            setTimeout(function(){delayDelayedRemoveUser(socket)}, 10000);
-            checkUsers();
+            setTimeout(function(){removeDisconnectedUser(socket)}, 30000);
+            // checkUsers();
         }
     }
 
-    function delayDelayedRemoveUser(socket){
+    function removeDisconnectedUser(socket){
         if(Users.get(socket.id).state == states.DC){
-            console.log("removing user who disconnected");
+            console.log("removing user who disconnected: " + socket.id);
             Users.delete(socket.id);
             checkUsers();
         }
@@ -395,6 +441,7 @@ io.sockets.on('connection', (socket) => {
     }
 
     function checkUsers() {
+        console.log("check users, table:");
         console.table(Array.from(Users.values()));
         listUsers();
     }
@@ -453,6 +500,7 @@ class Game {
         this.Turn;
         this.OutPlayer = -1;
         this.roundOver = false;
+        this.OutDeck;
 
         this.ScoreCard = [];
     }
@@ -515,9 +563,46 @@ class Game {
                     );
                 };*/
         console.log("Player map built.");
-        console.table(this.Players);
         console.log(this.Players.values());
     }
+
+    // send all recovery information to reconnected player
+    updateReconnection(socketid) {
+        console.log("updating reconnection - socketid:" + socketid)
+        console.table(Games[Users.get(socketid)['room']]);
+        // send score card -- without bringing up UI in client
+
+        // if FirstOutHappened
+        if(Games[Users.get(socketid)['room']].OutPlayer > 0){
+            // send first out turn/player
+            console.log("first out has happened");
+            let outPlayerUsername = Array.from(Games[Users.get(socketid)['room']].Players.keys())[Users.get(socketid)['room']].OutPlayer;
+            io.to(socket.id).emit('firstOutPlayer', { player: outPlayerUsername, playerIndex: Games[Users.get(socketid)['room']].OutPlayer });
+
+            // send outdeck
+            console.log("outdeck: " + Games[Users.get(socket.id)['room']].OutDeck);
+            // LEAH the socket event is 'reconnectOutDeck'
+            io.to(socketid).emit('reconnectOutDeck', Games[Users.get(socketid)['room']].OutDeck);
+        } else {
+            // --- resend hand
+            console.log("reconnected player hand: " + this.Players.get(socketid));
+            Games[Users.get(socketid)['room']].resendPlayerHand(socketid);
+        }
+
+        // change Users and Players status to ROOM and ready
+        this.changePlayerPropertyWithID(socketid, 'ready', true);
+
+        // --- cancel DC-turn timeout
+        if(dcTimeout){
+            console.log("Does dcTimeout exist? " + dcTimeout);
+            clearTimeout(dcTimeout);
+        }
+
+        // --- turn info
+        console.log("completed played reconnection");
+
+    }
+
 
     changePlayerPropertyWithID(socketID, property, value) {
         // users properties: id, username, observeallcontrol, observeallevents
@@ -530,48 +615,48 @@ class Game {
     }
 
     //
-    reconnectPlayer(newInfo, formerid){
-        let newPlayers = new Map();
+    reconnectPlayer(newSocket, formerSocket){
+        console.log("------ reconnecting Player to Players List in Game -----");
+        console.log("OLD this.PLayers");
+        console.table(this.Players);
+        if(this.Players.has(formerSocket.id)) {
+            console.log("Former player id's hand found:")
+            console.table(this.Players.get(formerSocket.id).hand);
+        }
 
+        var newPlayers = new Map();
+
+        console.log("formerSocketId " + formerSocket.id);
         // rebuild players map
-        for(let playerid of this.Players.entries()){
-            if(playerid == formerid)
+        for(let [key, value] of this.Players.entries()){
+            console.log("comparing old PLayers id: " + key);
+            if(formerSocket.id == key)
             {
-                console.log ("inserting new users");
-                this.newPlayers.set(newInfo.id,
+                console.log ("inserting new user");
+                newPlayers.set(newSocket.id,
                     {
-                        id: newInfo.id,
-                        username: playerid.username,
-                        hand: playerid.hand,
-                        out: playerid.out,
-                        score: playerid.score,
-                        ready: playerid.ready,
+                        id: newSocket.id,
+                        username: value.username,
+                        hand: value.hand,
+                        out: value.out,
+                        score: value.score,
+                        ready: value.ready,
                         connected: true
                     }
-                    );
-
-                this.Players.set(user.id,
-                    {
-                        id: user.id,
-                        username: user.username,
-                        hand: [],
-                        out: 'false',
-                        score: 0,
-                        ready: false,
-                        connected: true
-                    }
-                    );
+                );
             } else {
-                let oldPlayer = this.Players.get(playerid);
-                newPlayers.set(playerid,
-                    {
-                        ...oldPlayer
-                    });
+                let oldPlayer = this.Players.get(key).id;
+                console.log("old player: "+ oldPlayer);
+                console.log("not a match-- using exsiting player data");
+                newPlayers.set(oldPlayer,
+                    this.Players.get(key)
+                );
             }
         }
 
         console.log("replacing 'this.Players' map with reconnected users info");
         this.Players = newPlayers;
+        console.log("Updated this.PLayers table");
         console.table(this.Players);
     }
 
@@ -615,7 +700,10 @@ class Game {
         }
 
         if(!PlayersArray[this.Turn].connected){
-            this.declareRound(false);
+            console.log("this player has disconnected, waiting 10 seconds until moving to next turn")
+            dcTimeout = setTimeout(() => {
+                this.declareTurn(false);
+            }, 10000);
         }
 
         console.log("Player turn: " + PlayersArray[this.Turn].username);
@@ -639,6 +727,14 @@ class Game {
             console.log(player.username + "'s hand:");
             console.table(player.hand);
         }*/
+    }
+
+    resendPlayerHand(socketid){
+        // console.log()
+        console.log("reconnected player's hand: " + this.Players.get(socketid));
+        // possible error in unity?
+        let hand = { ...this.Players.get(socketid).hand };
+        io.to(socketid).emit('playerHand', hand);
     }
 
     clearPlayerHands(){

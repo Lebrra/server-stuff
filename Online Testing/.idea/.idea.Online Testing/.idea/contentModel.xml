@@ -5,8 +5,6 @@
       <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
       <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
       <e p="Assets" t="Include">
-        <e p="ConnectionIndicator.cs" t="Include" />
-        <e p="DropContextController.cs" t="Include" />
         <e p="Fonts" t="Include">
           <e p="Alex_Brush" t="Include">
             <e p="OFL.txt" t="Include" />
@@ -21,20 +19,30 @@
             <e p="OFL.txt" t="Include" />
           </e>
         </e>
-        <e p="LayoutController.cs" t="Include" />
-        <e p="nh_network.cs" t="Include" />
-        <e p="NotificationManager.cs" t="Include" />
         <e p="Scripts" t="Include">
           <e p="CardButton.cs" t="Include" />
           <e p="CardParser.cs" t="Include" />
           <e p="CardPooler.cs" t="Include" />
+          <e p="ConnectionIndicator.cs" t="Include" />
+          <e p="DeckPreferences.cs" t="Include" />
           <e p="DiscardHandler.cs" t="Include" />
+          <e p="DropContextController.cs" t="Include" />
           <e p="DropHandler.cs" t="Include" />
           <e p="GameManager.cs" t="Include" />
+          <e p="HelpMenu.cs" t="Include" />
+          <e p="LayoutController.cs" t="Include" />
           <e p="LobbyFunctions.cs" t="Include" />
+          <e p="nh_network.cs" t="Include" />
+          <e p="NotificationManager.cs" t="Include" />
           <e p="OutDeckHandler.cs" t="Include" />
           <e p="OutDropHandler.cs" t="Include" />
           <e p="OutHandler.cs" t="Include" />
+          <e p="PlayerData.cs" t="Include" />
+          <e p="QuittingGame.cs" t="Include" />
+          <e p="RoundNotifier.cs" t="Include" />
+          <e p="SaveLoad.cs" t="Include" />
+          <e p="ScorecardLoader.cs" t="Include" />
+          <e p="tabbedMenus.cs" t="Include" />
           <e p="UsernameActions.cs" t="Include" />
         </e>
         <e p="SocketIO" t="Include">

@@ -44,3 +44,6 @@ TagManager:
   - name: Buttons
     uniqueID: 987604889
     locked: 0
+  - name: Moving
+    uniqueID: 3152093755
+    locked: 0

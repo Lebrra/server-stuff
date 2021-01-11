@@ -80,7 +80,7 @@ io.sockets.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        console.log('user disconnected');
+        console.log('****************** user disconnected');
         io.emit('removeUser', { id: socket.id });
 
         if(Users.get(socket.id).state == states.ROOM) {
@@ -571,13 +571,24 @@ class Game {
         console.log("updating reconnection - socketid:" + socketid)
         console.table(Games[Users.get(socketid)['room']]);
         // send score card -- without bringing up UI in client
+        console.log("sending reconnection an updateEntireScoreCard");
+
+        // send player names to all clients
+        // get only the playernames
+        let playerNames = Array.from(this.Players.values()).map(player => player['username']);
+        io.to(socketid).emit('playernamesInRoom', {'players': playerNames});
+        console.log("Sending Player Names: ");
+        console.table(playerNames);
+
+        // send score card to all room clients
+        io.to(socketid).emit('updateEntireScoreCard', {'scorecard': Games[Users.get(socketid)['room']].ScoreCard});
 
         // if FirstOutHappened
         if(Games[Users.get(socketid)['room']].OutPlayer > 0){
             // send first out turn/player
             console.log("first out has happened");
             let outPlayerUsername = Array.from(Games[Users.get(socketid)['room']].Players.keys())[Users.get(socketid)['room']].OutPlayer;
-            io.to(socket.id).emit('firstOutPlayer', { player: outPlayerUsername, playerIndex: Games[Users.get(socketid)['room']].OutPlayer });
+            io.to(socketid).emit('firstOutPlayer', { player: outPlayerUsername, playerIndex: Games[Users.get(socketid)['room']].OutPlayer });
 
             // send outdeck
             console.log("outdeck: " + Games[Users.get(socket.id)['room']].OutDeck);
@@ -585,7 +596,6 @@ class Game {
             io.to(socketid).emit('updateOutDeck', Games[Users.get(socketid)['room']].OutDeck);
         } else {
             // --- resend hand
-            console.log("reconnected player hand: " + this.Players.get(socketid));
             Games[Users.get(socketid)['room']].resendPlayerHand(socketid);
         }
 
@@ -599,8 +609,7 @@ class Game {
         }
 
         // --- turn info
-        console.log("completed played reconnection");
-
+        console.log("completed player reconnection");
     }
 
 
@@ -616,13 +625,13 @@ class Game {
 
     //
     reconnectPlayer(newSocket, formerSocket){
-        console.log("------ reconnecting Player to Players List in Game -----");
+        console.log("------ reconnecting Player to Players List inside Game -----");
         console.log("OLD this.PLayers");
         console.table(this.Players);
-        if(this.Players.has(formerSocket.id)) {
-            console.log("Former player id's hand found:")
-            console.table(this.Players.get(formerSocket.id).hand);
-        }
+        // if(this.Players.has(formerSocket.id)) {
+        //     console.log("Former player id's hand found:")
+        //     console.table(this.Players.get(formerSocket.id).hand);
+        // }
 
         var newPlayers = new Map();
 
@@ -632,7 +641,7 @@ class Game {
             console.log("comparing old PLayers id: " + key);
             if(formerSocket.id == key)
             {
-                console.log ("inserting new user");
+                console.log ("inserting new connection to players");
                 newPlayers.set(newSocket.id,
                     {
                         id: newSocket.id,
@@ -657,7 +666,9 @@ class Game {
         console.log("replacing 'this.Players' map with reconnected users info");
         this.Players = newPlayers;
         console.log("Updated this.PLayers table");
-        console.table(this.Players);
+        console.table(Array.from(this.Players.values()));
+        console.log("new players hand");
+        console.table(this.Players.get(newSocket.id).hand);
     }
 
     setDeck() {
@@ -731,7 +742,7 @@ class Game {
 
     resendPlayerHand(socketid){
         // console.log()
-        console.log("reconnected player's hand: " + this.Players.get(socketid));
+        console.log("reconnected player's hand: " + this.Players.get(socketid).hand);
         // possible error in unity?
         let hand = { ...this.Players.get(socketid).hand };
         io.to(socketid).emit('playerHand', hand);

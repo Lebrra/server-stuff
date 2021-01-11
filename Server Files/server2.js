@@ -582,7 +582,7 @@ class Game {
             // send outdeck
             console.log("outdeck: " + Games[Users.get(socket.id)['room']].OutDeck);
             // LEAH the socket event is 'reconnectOutDeck'
-            io.to(socketid).emit('reconnectOutDeck', Games[Users.get(socketid)['room']].OutDeck);
+            io.to(socketid).emit('updateOutDeck', Games[Users.get(socketid)['room']].OutDeck);
         } else {
             // --- resend hand
             console.log("reconnected player hand: " + this.Players.get(socketid));

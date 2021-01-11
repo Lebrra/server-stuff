@@ -58,6 +58,7 @@ public class nh_network : MonoBehaviour
         socket.On("firstOutPlayer", firstOutPlayer);
         socket.On("playernamesInRoom", scorecardNames);
         socket.On("updateScoreCard", scorecardValues);
+        socket.On("updateEntireScoreCard", loadEntireScorecard);
         socket.On("gameover", gameOver);
         
         socket.On("ping", ping);
@@ -370,7 +371,7 @@ public class nh_network : MonoBehaviour
         Debug.Log("loading scores...");
 
         var scorecard = evt.data.GetField("scorecard");
-        int[][] allValues = new int[scorecard.Count][];
+        /*int[][] allValues = new int[scorecard.Count][];
 
         for(int i = 0; i < scorecard.Count; i++)
         {
@@ -386,7 +387,36 @@ public class nh_network : MonoBehaviour
             }
         }
 
-        ScorecardLoader.inst.LoadScores(allValues);
+        ScorecardLoader.inst.LoadScores(allValues);*/
+        ScorecardLoader.inst.LoadScores(getScoreValues(scorecard));
+    }
+
+    void loadEntireScorecard(SocketIOEvent evt)
+    {
+        Debug.Log("loading all scores...");
+        var scorecard = evt.data.GetField("scorecard");
+        ScorecardLoader.inst.LoadAllScores(getScoreValues(scorecard));
+    }
+
+    int[][] getScoreValues(JSONObject json)
+    {
+        int[][] allValues = new int[json.Count][];
+
+        for (int i = 0; i < json.Count; i++)
+        {
+            if (!json[i].IsArray) break;
+
+            allValues[i] = new int[json[i].Count];
+            for (int j = 0; j < json[i].Count; j++)
+            {
+                int parsedNum;
+                if (int.TryParse(json[i][j].ToString().Trim('"'), out parsedNum))
+                    allValues[i][j] = parsedNum;
+                else allValues[i][j] = -2;
+            }
+        }
+
+        return allValues;
     }
     #endregion
 

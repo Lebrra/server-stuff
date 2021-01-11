@@ -114,6 +114,28 @@ public class ScorecardLoader : MonoBehaviour
         StartCoroutine(DelayReadyButton());
     }
 
+    public void LoadAllScores(int[][] scores)
+    {
+        for (int i = 0; i < scores.Length; i++)
+        {
+            if (scores[i] == null) break;
+
+            for (int j = 0; j < scores[i].Length; j++)
+            {
+                if (scores[i][j] == 0)
+                {
+                    // for now just loading - for all 0s
+                    scorecardTexts[i].roundRow[j].text = "-";
+                }
+                else scorecardTexts[i].roundRow[j].text = scores[i][j].ToString();
+            }
+
+            showScoreBtn.SetActive(true);
+        }
+
+        CalculateTotals(scores);
+    }
+
     public void CalculateTotals(int[][] scores)
     {
         foreach (TextMeshProUGUI t in totalScores) t.color = defaultColor;

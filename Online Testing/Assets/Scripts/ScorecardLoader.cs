@@ -36,7 +36,7 @@ public class ScorecardLoader : MonoBehaviour
 
     [Header("Game Over")]
     public bool gameover = false;
-    public GameObject gameoverScreen;
+    //public GameObject gameoverScreen;
 
     int[][] loadedScores;
 
@@ -119,6 +119,7 @@ public class ScorecardLoader : MonoBehaviour
         for (int i = 0; i < scores.Length; i++)
         {
             if (scores[i] == null) break;
+            if (scores[i][i] == -2) break;
 
             for (int j = 0; j < scores[i].Length; j++)
             {
@@ -131,9 +132,11 @@ public class ScorecardLoader : MonoBehaviour
             }
 
             showScoreBtn.SetActive(true);
+            currentColumn++;
         }
 
         CalculateTotals(scores);
+        scoreCard.SetActive(false);
     }
 
     public void CalculateTotals(int[][] scores)
@@ -151,7 +154,8 @@ public class ScorecardLoader : MonoBehaviour
 
             for (int j = 0; j < scores[0].Length; j++)
             {
-                totals[j] += scores[i][j];
+                if(scores[i][j] > -1)
+                    totals[j] += scores[i][j];
             }
         }
 
@@ -182,6 +186,7 @@ public class ScorecardLoader : MonoBehaviour
             {
                 nh_network.server.setReady();
                 readyText.text = "Waiting for other players...";
+                readyText.GetComponent<WaitingTextAnim>().AnimateText();
                 gameObject.GetComponent<Image>().enabled = true;
                 deckBtn.interactable = true;
                 discBtn.interactable = true;
@@ -212,6 +217,7 @@ public class ScorecardLoader : MonoBehaviour
         yield return new WaitForSeconds(5F);
 
         readycheck.SetActive(true);
+        readyText.GetComponent<WaitingTextAnim>().UnanimateText();
         if (!gameover) readyText.text = "Tap anywhere to start next round!";
         else readyText.text = "The game has ended, tap anywhere to continue...";
     }

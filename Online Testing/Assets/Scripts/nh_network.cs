@@ -71,6 +71,13 @@ public class nh_network : MonoBehaviour
     void onConnectionEstabilished(SocketIOEvent evt)
     {
         Debug.Log("Player is connected: " + evt.data.GetField("id"));
+        StartCoroutine(DelayScreenRemove());
+    }
+
+    IEnumerator DelayScreenRemove()
+    {
+        yield return new WaitUntil(() => { return ConnectionLoader.inst != null; });
+        ConnectionLoader.inst?.DisableScreen();
     }
 
     public void createNewLobby()
@@ -184,6 +191,8 @@ public class nh_network : MonoBehaviour
 
     void roundInfo(SocketIOEvent evt)
     {
+        ConnectionLoader.inst?.DisableScreen();
+
         int round;
         int.TryParse(evt.data.GetField("round").ToString().Trim('"'), out round);
         GameManager.instance.round = round;

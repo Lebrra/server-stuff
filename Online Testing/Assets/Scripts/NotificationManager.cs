@@ -38,6 +38,7 @@ public class NotificationManager : MonoBehaviour
     //public Text notificationsText;
     public TextMeshProUGUI notificationsText;
     public TextMeshProUGUI myTurnText;
+    public GameObject turnImage;
     
     public float duration;
 
@@ -94,7 +95,8 @@ public class NotificationManager : MonoBehaviour
 
     public void myTurn(bool state)
     {
-        myTurnText.enabled = state;
+        //myTurnText.enabled = state;
+        turnImage.SetActive(state);
     }
     
     

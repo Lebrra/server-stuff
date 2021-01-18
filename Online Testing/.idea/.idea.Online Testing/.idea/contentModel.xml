@@ -20,10 +20,12 @@
           </e>
         </e>
         <e p="Scripts" t="Include">
+          <e p="AudioManager.cs" t="Include" />
           <e p="CardButton.cs" t="Include" />
           <e p="CardParser.cs" t="Include" />
           <e p="CardPooler.cs" t="Include" />
           <e p="ConnectionIndicator.cs" t="Include" />
+          <e p="ConnectionLoader.cs" t="Include" />
           <e p="DeckPreferences.cs" t="Include" />
           <e p="DiscardHandler.cs" t="Include" />
           <e p="DropContextController.cs" t="Include" />
@@ -39,11 +41,13 @@
           <e p="OutHandler.cs" t="Include" />
           <e p="PlayerData.cs" t="Include" />
           <e p="QuittingGame.cs" t="Include" />
+          <e p="ResolutionManager.cs" t="Include" />
           <e p="RoundNotifier.cs" t="Include" />
           <e p="SaveLoad.cs" t="Include" />
           <e p="ScorecardLoader.cs" t="Include" />
           <e p="tabbedMenus.cs" t="Include" />
           <e p="UsernameActions.cs" t="Include" />
+          <e p="WaitingTextAnim.cs" t="Include" />
         </e>
         <e p="SocketIO" t="Include">
           <e p="JSONObject" t="Include">

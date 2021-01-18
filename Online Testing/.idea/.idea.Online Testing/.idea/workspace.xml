@@ -22,12 +22,7 @@
     <list default="true" id="99022977-17a8-4c7c-b947-2c8216240d1f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Online Testing/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Online Testing/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Online Testing/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Online Testing/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/ConnectionIndicator.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/ConnectionIndicator.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/GraphicsSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/GraphicsSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/TagManager.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Server Files/server2.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server Files/server2.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,6 +43,7 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/DeckPreferences.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/54F20CA0-13D7-4A1F-9CF6-2CFA1D3ED12F/fd/14dce282/IDropHandler.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/AudioManager.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$USER_HOME$/Dropbox (Personal)/download sweep 2020/Downloads/Tapping Music/Assets/SaveLoad.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/PlayerData.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/OutDropHandler.cs" root0="FORCE_HIGHLIGHTING" />
@@ -75,6 +71,7 @@
       <option value="$PROJECT_DIR$/Assets/Scripts/DiscardHandler.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/NotificationManager.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/nh_network.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/AudioManager.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1l9x0otkLMiRt0OACNgH6gmKMcb" />
@@ -136,7 +133,7 @@
       <workItem from="1609875151312" duration="20093000" />
       <workItem from="1610050152465" duration="4525000" />
       <workItem from="1610257735336" duration="166000" />
-      <workItem from="1610397118194" duration="927000" />
+      <workItem from="1610397118194" duration="8231000" />
     </task>
     <servers />
   </component>

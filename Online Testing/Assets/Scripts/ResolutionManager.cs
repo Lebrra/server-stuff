@@ -8,8 +8,6 @@ using UnityEngine.UI;
 /// </summary>
 public class ResolutionManager : MonoBehaviour
 {
-    public List<CanvasScaler> canvasToScale;
-
     private void Awake()
     {
         Debug.Log("Screen resolution: " + Screen.currentResolution);

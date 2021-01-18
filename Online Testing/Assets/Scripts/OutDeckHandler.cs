@@ -126,7 +126,7 @@ public class OutDeckHandler : MonoBehaviour
             OutDeck.AddField("out" + i, cardArr);
         }
 
-        nh_network.server.SendFirstOut(OutDeck);
+        nh_network.server.UpdateFirstOut(OutDeck);
     }
 
     public int CalculateScore()

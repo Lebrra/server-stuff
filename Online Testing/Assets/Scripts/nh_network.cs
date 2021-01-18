@@ -306,6 +306,11 @@ public class nh_network : MonoBehaviour
         socket.Emit("updateOutDeck", outDeck);
     }
 
+    public void UpdateFirstOut(JSONObject outDeck)
+    {
+        socket.Emit("updateOutDeck", outDeck);
+    }
+
     void updateOutDeck(SocketIOEvent evt)
     {
         Out[] outTypes = new Out[4];

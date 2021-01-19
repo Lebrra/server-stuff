@@ -809,6 +809,7 @@ MonoBehaviour:
   waitingScore: {fileID: 2038203545}
   deckBtn: {fileID: 266223987}
   discBtn: {fileID: 423184837}
+  outBtn: {fileID: 998809154}
   scoreCard: {fileID: 1185665169}
   nameTexts:
   - {fileID: 1225686314}
@@ -10821,7 +10822,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -19.599976, y: -138.4}
+  m_AnchoredPosition: {x: -19.600098, y: -138.40002}
   m_SizeDelta: {x: 186.1, y: 149.8}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &926120255

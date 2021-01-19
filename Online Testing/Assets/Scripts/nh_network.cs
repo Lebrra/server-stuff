@@ -29,8 +29,7 @@ public class nh_network : MonoBehaviour
 
     void Start()
     {
-        ua = FindObjectOfType<UsernameActions>();
-        lf = FindObjectOfType<LobbyFunctions>();
+        findLobbyScripts();
         socket = GetComponent<SocketIOComponent>();
 
         //playerManager = GameObject.Find("Player Manager").GetComponent<playerManager>();
@@ -72,6 +71,15 @@ public class nh_network : MonoBehaviour
     {
         Debug.Log("Player is connected: " + evt.data.GetField("id"));
         StartCoroutine(DelayScreenRemove());
+    }
+
+    public void findLobbyScripts()
+    {
+        if (!ua)
+        {
+            ua = FindObjectOfType<UsernameActions>();
+            lf = FindObjectOfType<LobbyFunctions>();
+        }
     }
 
     IEnumerator DelayScreenRemove()
@@ -137,6 +145,7 @@ public class nh_network : MonoBehaviour
     {
         if (!lf.inRoom) {
             Debug.Log("loading usernames...");
+            findLobbyScripts();
 
             for (int i = 0; i < evt.data.Count; i++)
             {
@@ -151,6 +160,7 @@ public class nh_network : MonoBehaviour
     void loadRoomUsers(SocketIOEvent evt)
     {
         Debug.Log("loading room usernames...");
+        findLobbyScripts();
         ua.removeAllUsernames();
 
         for (int i = 0; i < evt.data.Count; i++)
@@ -168,7 +178,7 @@ public class nh_network : MonoBehaviour
 
     void removeUser(SocketIOEvent evt)
     {
-        ua.removeUsername(evt.data.GetField("id").ToString().Trim('"'));
+        ua?.removeUsername(evt.data.GetField("id").ToString().Trim('"'));
     }
     #endregion
     #region Game Functions
@@ -186,6 +196,10 @@ public class nh_network : MonoBehaviour
     void loadGame(SocketIOEvent evt)
     {
         Debug.Log("The game has been started!");
+
+        ua = null;
+        lf = null;
+
         UnityEngine.SceneManagement.SceneManager.LoadScene(1);
     }
 
@@ -204,6 +218,8 @@ public class nh_network : MonoBehaviour
     {
         string player = evt.data.GetField("player").ToString().Trim('"');
         Debug.Log("It is " + player + "'s turn.");
+        var notification = new Notification("It is " + player + "'s turn.", 3, true, Color.black);
+        NotificationManager.instance.addNotification(notification);
     }
 
     void myTurn(SocketIOEvent evt)

@@ -24,7 +24,8 @@ public class UsernameActions : MonoBehaviour
 
         data = SaveLoad.Load();
         myID = "";
-        nameField.placeholder.GetComponent<TextMeshProUGUI>().text = data.username;
+        if (data.newUser) ;
+        else nameField.placeholder.GetComponent<TextMeshProUGUI>().text = data.username;
 
         //local testing
         //addUsername(nameField.placeholder.GetComponent<Text>().text);
@@ -72,7 +73,7 @@ public class UsernameActions : MonoBehaviour
                 // my name not set yet
                 Debug.Log("my username is not loaded yet");
                 myID = id;
-                StartCoroutine(DelayUsernameUpdate(data.username));
+                StartCoroutine(DelayUsernameUpdate());
                 newText.GetComponent<TextMeshProUGUI>().text = "loading...";
             }
             else
@@ -103,10 +104,18 @@ public class UsernameActions : MonoBehaviour
         usernameTexts = new Dictionary<string, GameObject>();
     }
 
-    IEnumerator DelayUsernameUpdate(string name)
+    IEnumerator DelayUsernameUpdate()
     {
         yield return new WaitForSeconds(0.3F);
+
+        if (data.newUser)
+        {
+            data = SaveLoad.Load();
+            data.username = "New Player";
+            data.setNewUser(false);
+            SaveLoad.Save(data);
+        }
         
-        nh_network.server.newUsername(name);
+        nh_network.server.newUsername(data.username);
     }
 }

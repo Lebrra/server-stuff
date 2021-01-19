@@ -18,6 +18,7 @@ public class ScorecardLoader : MonoBehaviour
 
     public Button deckBtn;
     public Button discBtn;
+    public GameObject outBtn;
 
     [Header("Scorecard")]
     public GameObject scoreCard;
@@ -55,6 +56,8 @@ public class ScorecardLoader : MonoBehaviour
 
         deckBtn.interactable = false;
         discBtn.interactable = false;
+        outBtn.SetActive(false);
+        GameManager.instance.disableHandCards();
     }
 
     public void DisableWait()
@@ -206,6 +209,7 @@ public class ScorecardLoader : MonoBehaviour
         readycheck.SetActive(false);
         scoreCard.SetActive(false);
         gameObject.SetActive(false);
+        outBtn.SetActive(true);
 
         if (!showScoreBtn.activeInHierarchy) showScoreBtn.SetActive(true);
 

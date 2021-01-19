@@ -216,4 +216,9 @@ public class GameManager : MonoBehaviour
             NotificationManager.instance.clearNotifications();
         }
     }
+
+    public void disableHandCards()
+    {
+        foreach (CardButton c in myHand) c.interactable = false;
+    }
 }

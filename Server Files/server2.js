@@ -83,12 +83,14 @@ io.sockets.on('connection', (socket) => {
         console.log('****************** user disconnected');
         io.emit('removeUser', { id: socket.id });
 
-        if(Users.get(socket.id).state == states.ROOM) {
-            console.log("user disconnected but was in a game, initiating delayed quit protocol")
-            beginDelayedRemoveUser(socket);
-        } else {
-            console.log("user disconnected but had not joined a game, removing...")
-            removeUser(socket);
+        if(Users.has(socket.id)){
+            if(Users.get(socket.id).state == states.ROOM) {
+                console.log("user disconnected but was in a game, initiating delayed quit protocol")
+                beginDelayedRemoveUser(socket);
+            } else {
+                console.log("user disconnected but had not joined a game, removing...")
+                removeUser(socket);
+            }
         }
     });
 
@@ -250,6 +252,7 @@ io.sockets.on('connection', (socket) => {
     socket.on("firstOut", () => {
         io.in(Users.get(socket.id)['room']).emit('firstOutPlayer', { player: Users.get(socket.id).username, playerIndex: Games[Users.get(socket.id)['room']].Turn });
         Games[Users.get(socket.id)['room']].OutPlayer = Games[Users.get(socket.id)['room']].Turn;
+        console.log("this.outPlayer: " + Games[Users.get(socket.id)['room']].OutPlayer);
 
         //send firstout index to all players:
         //io.in(Users.get(socket.id)['room']).emit('firstOutPlayerIndex', { playerIndex: Games[Users.get(socket.id)['room']].OutPlayer });
@@ -418,7 +421,7 @@ io.sockets.on('connection', (socket) => {
 
     function beginDelayedRemoveUser(socket){
         if (Users.has(socket.id)) {
-            Users.get(socket.id).state = states.DC;
+            changeUserPropertyWithID(socket.id, 'state', states.DC);
             console.log("starting delayed removal of user");
             setTimeout(function(){removeDisconnectedUser(socket)}, 30000);
             // checkUsers();
@@ -704,10 +707,13 @@ class Game {
             if (this.Turn == PlayersArray.length) this.Turn = 0;
         }
 
+        console.log("this.Turn: " + this.Turn);
+
         if (this.Turn == this.OutPlayer) {
             //round has ended!
             console.log("~~ the round has ended! ~~");
             this.roundOver = true;
+            return;
         }
 
         if(!PlayersArray[this.Turn].connected){

@@ -20,9 +20,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="99022977-17a8-4c7c-b947-2c8216240d1f" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Online Testing/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Online Testing/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Online Testing/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Online Testing/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/NotificationManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/NotificationManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/GraphicsSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/GraphicsSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Server Files/server2.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Server Files/server2.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,9 +70,9 @@
       <option value="$PROJECT_DIR$/Assets/Scripts/DropHandler.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/OutDropHandler.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/DiscardHandler.cs" />
-      <option value="$PROJECT_DIR$/Assets/Scripts/NotificationManager.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/nh_network.cs" />
       <option value="$PROJECT_DIR$/Assets/Scripts/AudioManager.cs" />
+      <option value="$PROJECT_DIR$/Assets/Scripts/NotificationManager.cs" />
     </changedPaths>
   </component>
   <component name="ProjectId" id="1l9x0otkLMiRt0OACNgH6gmKMcb" />
@@ -134,6 +135,7 @@
       <workItem from="1610050152465" duration="4525000" />
       <workItem from="1610257735336" duration="166000" />
       <workItem from="1610397118194" duration="8231000" />
+      <workItem from="1611003549056" duration="2287000" />
     </task>
     <servers />
   </component>

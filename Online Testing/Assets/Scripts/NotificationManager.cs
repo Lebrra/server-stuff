@@ -21,6 +21,7 @@ public class Notification
         this.Duration = duration;
         this.Interrupt = interrupt;
         this.Color = color;
+        this.Turn = false;
     }
 
     public Notification(string message, float duration, bool interrupt, Color color, bool turn)

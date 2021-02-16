@@ -1,5 +1,5 @@
 {
-  "name": "heroku_server",
+  "name": "wisconsin-server",
   "version": "1.0.0",
   "description": "starting server stuff",
   "main": "server2.js",

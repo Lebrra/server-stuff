@@ -29,8 +29,8 @@ public class UsernameActions : MonoBehaviour
             nameField.placeholder.GetComponent<TextMeshProUGUI>().text = data.username;
         }
 
-        Debug.Log("My last ID is: " + data.lastID);
-        nh_network.server.connectToServer(data.lastID);
+        //Debug.Log("My last ID is: " + data.lastID);
+        //nh_network.server.connectToServer(data.lastID);
 
         //local testing
         //addUsername(nameField.placeholder.GetComponent<Text>().text);
@@ -43,6 +43,12 @@ public class UsernameActions : MonoBehaviour
         {
             SaveLoad.Save(SaveLoad.Restart());
         }
+    }
+
+    public void sendOldID()
+    {
+        Debug.Log("My last ID is: " + data.lastID);
+        nh_network.server.connectToServer(data.lastID);
     }
 
     public void acceptName()

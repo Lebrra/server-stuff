@@ -24,11 +24,25 @@ public class UsernameActions : MonoBehaviour
 
         data = SaveLoad.Load();
         myID = "";
-        if (data.newUser) ;
-        else nameField.placeholder.GetComponent<TextMeshProUGUI>().text = data.username;
+        if (!data.newUser)
+        {
+            nameField.placeholder.GetComponent<TextMeshProUGUI>().text = data.username;
+        }
+
+        Debug.Log("My last ID is: " + data.lastID);
+        nh_network.server.connectToServer(data.lastID);
 
         //local testing
         //addUsername(nameField.placeholder.GetComponent<Text>().text);
+    }
+
+    private void Update()
+    {
+        // reset data
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Plus))
+        {
+            SaveLoad.Save(SaveLoad.Restart());
+        }
     }
 
     public void acceptName()
@@ -73,7 +87,7 @@ public class UsernameActions : MonoBehaviour
                 // my name not set yet
                 Debug.Log("my username is not loaded yet");
                 myID = id;
-                StartCoroutine(DelayUsernameUpdate());
+                StartCoroutine(DelayUsernameUpdate(id));
                 newText.GetComponent<TextMeshProUGUI>().text = "loading...";
             }
             else
@@ -104,18 +118,20 @@ public class UsernameActions : MonoBehaviour
         usernameTexts = new Dictionary<string, GameObject>();
     }
 
-    IEnumerator DelayUsernameUpdate()
+    IEnumerator DelayUsernameUpdate(string id)
     {
         yield return new WaitForSeconds(0.3F);
 
+        data = SaveLoad.Load();
+        data.lastID = id;
+
         if (data.newUser)
         {
-            data = SaveLoad.Load();
             data.username = "New Player";
             data.setNewUser(false);
-            SaveLoad.Save(data);
         }
-        
+
+        SaveLoad.Save(data);
         nh_network.server.newUsername(data.username);
     }
 }

@@ -73,6 +73,11 @@ public class nh_network : MonoBehaviour
         StartCoroutine(DelayScreenRemove());
     }
 
+    public void connectToServer(string oldID)
+    {
+        socket.Emit("connectID", new JSONObject(quote + oldID + quote));
+    }
+
     public void findLobbyScripts()
     {
         if (!ua)

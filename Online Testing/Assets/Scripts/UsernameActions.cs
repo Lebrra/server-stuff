@@ -129,9 +129,11 @@ public class UsernameActions : MonoBehaviour
         yield return new WaitForSeconds(0.3F);
 
         data = SaveLoad.Load();
-        //if (myID == id) 
-        data.lastID = id;
-        Debug.Log("updating id: " + id);
+        if (myID == id)
+        {
+            data.lastID = id;
+            Debug.Log("updating id: " + id);
+        }
 
         if (data.newUser)
         {

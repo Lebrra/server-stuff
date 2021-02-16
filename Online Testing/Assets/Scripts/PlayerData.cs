@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerData
 {
     public string username;
+    public string lastID;
     public float R, G, B;
     public int cardback;
 
@@ -13,7 +14,7 @@ public class PlayerData
 
     public PlayerData()
     {
-        username = "";
+        username = lastID = "";
         R = 0;
         G = 0;
         B = 255;

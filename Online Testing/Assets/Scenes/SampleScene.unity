@@ -6622,6 +6622,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 292774366, guid: 71c8327112a63a540bf4b7a7ea605f4d, type: 3}
+      propertyPath: m_text
+      value: Nick is an interactive artist and interested in collaborative systems
+        like multiplayer games, interactive art, and ultimate frisbee.
+      objectReference: {fileID: 0}
     - target: {fileID: 636591290, guid: 71c8327112a63a540bf4b7a7ea605f4d, type: 3}
       propertyPath: m_IsActive
       value: 0

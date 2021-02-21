@@ -6,6 +6,6 @@ public class HelpMenu : MonoBehaviour
 {
     public void openHelp()
     {
-        Application.OpenURL("https://docs.google.com/document/d/1hxhRMJ8DZuVupBb7lUnX9keg15R6joyLKB0o1mP54mI/edit?usp=sharing");
+        Application.OpenURL("https://docs.google.com/document/d/1yyO-Cp7HMQz_q47TtxaQQTiRe_V_ol31NvanZg7xlHs/edit?usp=sharing");
     }
 }

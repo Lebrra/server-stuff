@@ -133,11 +133,8 @@ public class ScorecardLoader : MonoBehaviour
                     {
                         scorecardTexts[i].roundRow[k].text = "";
 
-                        if (currentColumn != 0)
-                        {
-                            CalculateTotals(scores);
-                            scoreCard.SetActive(false);
-                        }
+                        if (currentColumn != 0) CalculateTotals(scores);
+                        scoreCard.SetActive(false);
                         return;
                     }
                 }

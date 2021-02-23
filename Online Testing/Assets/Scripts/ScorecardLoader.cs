@@ -119,6 +119,8 @@ public class ScorecardLoader : MonoBehaviour
 
     public void LoadAllScores(int[][] scores)
     {
+        gameObject.SetActive(true);
+
         for (int i = 0; i < scores.Length; i++)
         {
             if (scores[i] == null) break;
@@ -152,6 +154,7 @@ public class ScorecardLoader : MonoBehaviour
 
         CalculateTotals(scores);
         scoreCard.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     public void CalculateTotals(int[][] scores)

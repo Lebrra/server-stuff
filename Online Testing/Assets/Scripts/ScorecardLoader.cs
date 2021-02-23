@@ -122,10 +122,25 @@ public class ScorecardLoader : MonoBehaviour
         for (int i = 0; i < scores.Length; i++)
         {
             if (scores[i] == null) break;
-            if (scores[i][i] == -2) break;
 
             for (int j = 0; j < scores[i].Length; j++)
             {
+                if (scores[i][j] == -2)
+                {
+                    // likely the score tried to load mid round-end; reset loading this column.
+                    Debug.Log("This round has not finished yet, I will stop loading it");
+                    for (int k = j; k >= 0; k--)
+                    {
+                        scorecardTexts[i].roundRow[k].text = "";
+
+                        if (currentColumn != 0)
+                        {
+                            CalculateTotals(scores);
+                            scoreCard.SetActive(false);
+                        }
+                        return;
+                    }
+                }
                 if (scores[i][j] == 0)
                 {
                     // for now just loading - for all 0s

@@ -92,8 +92,7 @@ public class UsernameActions : MonoBehaviour
             if (myID == id)
             {
                 // my name not set yet
-                Debug.Log("my username is not loaded yet");
-                myID = id;
+                Debug.Log("my username is changing");
                 StartCoroutine(DelayUsernameUpdate(id));
                 newText.GetComponent<TextMeshProUGUI>().text = "loading...";
             }

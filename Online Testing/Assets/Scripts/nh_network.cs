@@ -70,7 +70,9 @@ public class nh_network : MonoBehaviour
     void onConnectionEstabilished(SocketIOEvent evt)
     {
         Debug.Log("Player is connected: " + evt.data.GetField("id"));
-        ua?.sendOldID(evt.data.GetField("id").ToString().Trim('"'));
+        if (ua) ua.sendOldID(evt.data.GetField("id").ToString().Trim('"'));
+
+        updateLastID(evt.data.GetField("id").ToString().Trim('"'));
 
         StartCoroutine(DelayScreenRemove());
     }
@@ -208,6 +210,14 @@ public class nh_network : MonoBehaviour
         lf = null;
 
         UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+    }
+
+    void updateLastID(string id)
+    {
+        PlayerData data = SaveLoad.Load();
+        data.lastID = id;
+        Debug.Log("updating id: " + id);
+        SaveLoad.Save(data);
     }
 
     void roundInfo(SocketIOEvent evt)

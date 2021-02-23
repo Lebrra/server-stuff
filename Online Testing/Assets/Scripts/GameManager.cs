@@ -149,7 +149,7 @@ public class GameManager : MonoBehaviour
         firstOutPanel.SetActive(open);
     }
 
-    public void sendOutDeck(List<string>[] cards, Out[] outTypes)
+    public void recieveOutDeck(List<string>[] cards, Out[] outTypes)
     {
         firstOutButton.SetActive(true);
 
@@ -159,6 +159,7 @@ public class GameManager : MonoBehaviour
         openFirstOutPanel(false);
 
         lastTurn = true;
+        Debug.Break();
         Debug.Log("finished");
     }
 
@@ -194,6 +195,7 @@ public class GameManager : MonoBehaviour
         if (lastTurn)   // reset if needed
         {
             myTurn = myDraw = myDiscard = lastTurn = false;
+            NotificationManager.instance.myTurn(false);
 
             cardInDiscard.GetComponent<CardButton>().enabled = true;
             CardPooler.instance.PushCard(cardInDiscard);

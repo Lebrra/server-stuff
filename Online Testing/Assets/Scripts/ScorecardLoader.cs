@@ -52,7 +52,8 @@ public class ScorecardLoader : MonoBehaviour
     public void EnableWait(int score)
     {
         waitingPopup.SetActive(true);
-        waitingScore.text = "Your score this round: <#1D6820>" + score.ToString();
+        if (score != -2) waitingScore.text = "Your score this round: <#1D6820>" + score.ToString();
+        else waitingScore.text = "";
 
         deckBtn.interactable = false;
         discBtn.interactable = false;

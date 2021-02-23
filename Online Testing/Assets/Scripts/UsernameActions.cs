@@ -94,7 +94,7 @@ public class UsernameActions : MonoBehaviour
                 // my name not set yet
                 Debug.Log("my username is changing");
                 StartCoroutine(DelayUsernameUpdate(id));
-                newText.GetComponent<TextMeshProUGUI>().text = "loading...";
+                newText.GetComponent<TextMeshProUGUI>().text = data.username;
             }
             else
             {

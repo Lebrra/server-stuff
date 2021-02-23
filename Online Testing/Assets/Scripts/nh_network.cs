@@ -70,7 +70,7 @@ public class nh_network : MonoBehaviour
     void onConnectionEstabilished(SocketIOEvent evt)
     {
         Debug.Log("Player is connected: " + evt.data.GetField("id"));
-        ua?.sendOldID();
+        ua?.sendOldID(evt.data.GetField("id").ToString().Trim('"'));
 
         StartCoroutine(DelayScreenRemove());
     }

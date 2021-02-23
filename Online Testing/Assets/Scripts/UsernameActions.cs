@@ -45,10 +45,11 @@ public class UsernameActions : MonoBehaviour
         }
     }
 
-    public void sendOldID()
+    public void sendOldID(string currentID)
     {
         Debug.Log("My last ID is: " + data.lastID);
         nh_network.server.connectToServer(data.lastID);
+        myID = currentID;
     }
 
     public void acceptName()
@@ -88,7 +89,7 @@ public class UsernameActions : MonoBehaviour
             GameObject newText = Instantiate(textPrefab, usernameList.transform);
             usernameTexts.Add(id, newText);
 
-            if (myID == "")
+            if (myID == id)
             {
                 // my name not set yet
                 Debug.Log("my username is not loaded yet");

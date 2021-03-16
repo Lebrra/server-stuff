@@ -191,8 +191,8 @@ public class GameManager : MonoBehaviour
 
     public void resetAll()
     {
-        if (lastTurn)   // reset if needed
-        {
+        //if (lastTurn)   // reset if needed
+        //{
             myTurn = myDraw = myDiscard = lastTurn = false;
             NotificationManager.instance.myTurn(false);
 
@@ -215,7 +215,7 @@ public class GameManager : MonoBehaviour
             outPanel.GetComponent<OutHandler>().resetOut();
             ScorecardLoader.inst.reset();
             NotificationManager.instance.clearNotifications();
-        }
+        //}
     }
 
     public void disableHandCards()

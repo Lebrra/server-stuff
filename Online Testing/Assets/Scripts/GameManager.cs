@@ -159,7 +159,6 @@ public class GameManager : MonoBehaviour
         openFirstOutPanel(false);
 
         lastTurn = true;
-        Debug.Break();
         Debug.Log("finished");
     }
 

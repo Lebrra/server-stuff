@@ -52,6 +52,7 @@ public class nh_network : MonoBehaviour
         socket.On("yourTurn", myTurn);
         socket.On("drewFromDeck", drewFromDeck);
         socket.On("drewFromDiscard", drewFromDiscard);
+        socket.On("disableDraw", disableDraw);
 
         socket.On("updateOutDeck", updateOutDeck);
         socket.On("firstOutPlayer", firstOutPlayer);
@@ -306,6 +307,12 @@ public class nh_network : MonoBehaviour
         NotificationManager.instance.addNotification(notification);
 
         GameManager.instance.updateDiscardPile();
+    }
+
+    void disableDraw(SocketIOEvent evt)
+    {
+        GameManager.instance.myDraw = false;
+        GameManager.instance.myDiscard = true;
     }
 
     public void discardCard(string cardname)

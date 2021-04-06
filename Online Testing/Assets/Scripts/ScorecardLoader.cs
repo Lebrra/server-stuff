@@ -102,7 +102,7 @@ public class ScorecardLoader : MonoBehaviour
 
         for (int j = 0; j < scores[currentColumn].Length; j++)
         {
-            if (scores[currentColumn][j] == 0)
+            if (scores[currentColumn][j] == 0 || scores[currentColumn][j] == -2)
             {
                 Debug.Log("who was first out? " + firstoutplayer);
                 if (firstoutplayer == j) scorecardTexts[currentColumn].roundRow[j].text = "X";

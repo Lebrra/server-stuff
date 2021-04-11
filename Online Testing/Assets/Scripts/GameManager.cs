@@ -190,32 +190,31 @@ public class GameManager : MonoBehaviour
     }
 
     public void resetAll()
-    {
-        //if (lastTurn)   // reset if needed
-        //{
-            myTurn = myDraw = myDiscard = lastTurn = false;
-            NotificationManager.instance.myTurn(false);
+    {    
+        myTurn = myDraw = myDiscard = lastTurn = false;
+        NotificationManager.instance.myTurn(false);
 
-            cardInDiscard.GetComponent<CardButton>().enabled = true;
-            CardPooler.instance.PushCard(cardInDiscard);
-            previousCard = "";
-            cardInDiscard = null;
+        cardInDiscard.GetComponent<CardButton>().enabled = true;
+        CardPooler.instance.PushCard(cardInDiscard);
+        previousCard = "";
+        cardInDiscard = null;
 
-            foreach(CardButton c in myHand)
-            {
-                CardPooler.instance.PushCard(c.gameObject);
-            }
-            myHand.Clear();
+        foreach(CardButton c in myHand)
+        {
+            CardPooler.instance.PushCard(c.gameObject);
+        }
+        myHand.Clear();
 
-            outDeckHandler.resetOutPanel();
-            firstOutButton.SetActive(false);
-            outButton.SetActive(true);
+        outDeckHandler.resetOutPanel();
+        firstOutButton.SetActive(false);
+        outButton.SetActive(true);
 
-            openOutPanel(true);
-            outPanel.GetComponent<OutHandler>().resetOut();
-            ScorecardLoader.inst.reset();
-            NotificationManager.instance.clearNotifications();
-        //}
+        openOutPanel(true);
+        outPanel.GetComponent<OutHandler>().resetOut();
+        ScorecardLoader.inst.reset();
+        NotificationManager.instance.clearNotifications();
+        
+        RoundCounter.inst?.setRound(round);
     }
 
     public void disableHandCards()

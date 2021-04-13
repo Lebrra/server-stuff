@@ -90,6 +90,15 @@ io.sockets.on('connection', (socket) => {
             if (Users.get(socket.id).state == states.GAME) {
                 console.log("user disconnected but was in a game, initiating delayed quit protocol")
                 beginDelayedRemoveUser(socket);
+
+                // check if this player just went out: 1. discard remaining card 2. advance turn
+                let PlayersArray = Array.from(Games[Users.get(socket.id)['room']].Players.values());
+                if (socket.id == PlayersArray[Games[Users.get(socket.id)['room']].OutPlayer].id) {
+                    console.table(Games[Users.get(socket.id)['room']].Players.get(socket.id).hand);
+                    Games[Users.get(socket.id)['room']].Players.get(socket.id).addToDiscard(Games[Users.get(socket.id)['room']].Players.get(socket.id).hand.pop());
+                    Games[Users.get(socket.id)['room']].declareTurn(false);
+                }
+
             } else {
                 console.log("user disconnected but had not joined a game, removing...")
                 removeUser(socket);
@@ -235,21 +244,23 @@ io.sockets.on('connection', (socket) => {
     });
 
     socket.on('drawCard', (fromDeck) => {
-        let newCard;
         if (fromDeck === true) {
-            newCard = Games[Users.get(socket.id)['room']].drawCard();
+            Games[Users.get(socket.id)['room']].drawnCard = Games[Users.get(socket.id)['room']].drawCard();
             io.in(Users.get(socket.id)['room']).emit('drewFromDeck', { player: Users.get(socket.id).username });
         }
         else {
-            newCard = Games[Users.get(socket.id)['room']].drawFromDiscard();
+            Games[Users.get(socket.id)['room']].drawnCard = Games[Users.get(socket.id)['room']].drawFromDiscard();
             io.in(Users.get(socket.id)['room']).emit('drewFromDiscard', { player: Users.get(socket.id).username });
         }
-        console.log(newCard);
-        socket.emit('newCard', { card: newCard });
+        console.log(Games[Users.get(socket.id)['room']].drawnCard);
+        Games[Users.get(socket.id)['room']].Players.get(socket.id).hand.push(Games[Users.get(socket.id)['room']].drawnCard);
+        socket.emit('newCard', { card: Games[Users.get(socket.id)['room']].drawnCard });
     })
 
     socket.on('discardCard', (discardInfo) => {
         console.log(getUsernameFromSocketID(socket.id) + " discarded " + discardInfo);
+        Games[Users.get(socket.id)['room']].Players.get(socket.id).hand.splice(Games[Users.get(socket.id)['room']].Players.get(socket.id).hand.indexOf(discardInfo), 1);
+        Games[Users.get(socket.id)['room']].drawnCard = null;
         Games[Users.get(socket.id)['room']].addToDiscard(discardInfo);
         Games[Users.get(socket.id)['room']].declareTurn(false);
     });
@@ -268,6 +279,21 @@ io.sockets.on('connection', (socket) => {
         // cache outdeck to Game.OutDeck
         Games[Users.get(socket.id)['room']].OutDeck = outDeck;
         io.in(Users.get(socket.id)['room']).emit('updateOutDeck', outDeck);
+
+        // Updating outplayer hand
+
+        let outdeckcards = [];
+        for (const outRow in outDeck) {
+            outdeckcards = outdeckcards.concat(outDeck[outRow]);
+        }
+
+        let PlayersArray = Array.from(Games[Users.get(socket.id)['room']].Players.values());
+
+        var player = PlayersArray[Games[Users.get(socket.id)['room']].OutPlayer];
+        player.hand = player.hand.filter(card => !outdeckcards.includes(card));
+        Games[Users.get(socket.id)['room']].Players.get(player.id).hand = player.hand;
+        console.table(outdeckcards);
+        console.table(player.hand);
     });
 
     socket.on("receiveScore", (score) => {
@@ -513,6 +539,7 @@ class Game {
         this.OutPlayer = -1;
         this.roundOver = false;
         this.OutDeck;
+        this.drawnCard = null;
 
         this.ScoreCard = [];
     }
@@ -607,10 +634,17 @@ class Game {
         // resend turn info
         let PlayersArray = Array.from(this.Players.values());
         io.to(socketid).emit('currentTurn', { 'player': PlayersArray[this.Turn].username });
-        if(socketid == PlayersArray[this.Turn].id){
-            if(socketid != PlayersArray[this.OutPlayer].id){
+        if (socketid == PlayersArray[this.Turn].id && this.OutPlayer != -1) {
+            if (socketid != PlayersArray[this.OutPlayer].id) {
                 console.log("we're on the outplayer's turn-- who might be reconnecting");
                 io.to(PlayersArray[this.Turn].id).emit('yourTurn');
+            }
+        } else if (socketid == PlayersArray[this.Turn].id) {
+            io.to(PlayersArray[this.Turn].id).emit('yourTurn');
+            // check if player drew while still their turn
+            if (this.Players.get(socketid).hand.length > this.Round) {
+                //new emit disabling myDraw bool and enabling myDiscard bool
+                io.to(socketid).emit('disableDraw');
             }
         }
 

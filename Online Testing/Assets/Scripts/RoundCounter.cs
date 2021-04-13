@@ -12,6 +12,9 @@ public class RoundCounter : MonoBehaviour
     {
         inst = this;
         myText = GetComponent<TextMeshProUGUI>();
+
+        if (GameManager.instance)
+            setRound(GameManager.instance.round);
     }
 
     public void setRound(int round)

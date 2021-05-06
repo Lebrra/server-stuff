@@ -117,4 +117,9 @@ public class LobbyFunctions : MonoBehaviour
         GetComponent<UsernameActions>().removeAllUsernames();
         nh_network.server.getAllUsernames();
     }
+
+    public void quitGame()
+    {
+        Application.Quit();
+    }
 }

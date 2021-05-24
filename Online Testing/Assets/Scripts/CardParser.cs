@@ -70,8 +70,8 @@ public struct Card
     public new string ToString()
     {
         if (suit == Suit.Joker) return suit.ToString();
-        else if (number == 10) return "10 of " + suit.ToString();
-        return CardParser.valueToChar(number) + " of " + suit.ToString();
+        else if (number == 10) return "10 of " + suit.ToString() + "s";
+        return CardParser.valueToChar(number) + " of " + suit.ToString() + "s";
     }
 }
 

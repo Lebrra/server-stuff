@@ -71,16 +71,19 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
             transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().color = Color.red;
             transform.GetChild(3).GetComponent<Image>().color = Color.red;
         }
-        else
+        else if (myCard.suit == Suit.Club || myCard.suit == Suit.Spade)
         {
             // make texts black
             transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().color = Color.black;
             transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().color = Color.black;
-
-            if (myCard.suit == Suit.Joker)
-                transform.GetChild(3).GetComponent<Image>().color = Color.white;
-            else
-                transform.GetChild(3).GetComponent<Image>().color = Color.black;
+            transform.GetChild(3).GetComponent<Image>().color = Color.black;
+        }
+        else
+        {
+            // make texts different
+            transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().color = Color.gray;
+            transform.GetChild(2).GetComponent<TMPro.TextMeshProUGUI>().color = Color.gray;
+            transform.GetChild(3).GetComponent<Image>().color = Color.white;
         }
     }
 

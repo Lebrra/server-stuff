@@ -19,4 +19,11 @@ public class ConnectionLoader : MonoBehaviour
         myScreen.SetActive(false);
         inst = null;
     }
+
+    IEnumerator ShowError()
+    {
+        yield return new WaitForSecondsRealtime(30F);
+
+        // not connecting, show message 'it looks like the server might be down, please try again later!' and a quit button
+    }
 }

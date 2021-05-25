@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using Random = System.Random;
 
 [System.Serializable]
@@ -30,7 +31,10 @@ public class AudioManager : MonoBehaviour
 
     public AudioObject [] Soundtracks;
     public int lastRandomInt = -1;
-    
+
+    public AudioMixer mixer;
+    public AudioMixerGroup SoundtrackGroup;
+    public AudioMixerGroup FXGroup;
 
     private void Awake()
     {

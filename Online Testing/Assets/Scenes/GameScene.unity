@@ -13955,6 +13955,49 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1055159235}
   m_CullTransparentMesh: 0
+--- !u!1 &1082146800
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1082146802}
+  - component: {fileID: 1082146801}
+  m_Layer: 0
+  m_Name: TESTING OBJECT
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1082146801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1082146800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb69a60111842c24893c6f2dfd35fb50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1082146802
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1082146800}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 956.87854, y: 738.6624, z: -1000.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1087653052
 GameObject:
   m_ObjectHideFlags: 0
@@ -17136,11 +17179,15 @@ MonoBehaviour:
   cardPrefab: {fileID: 2824774552956895402, guid: 30fa56892e9e48240beccfb0cbbf8c43,
     type: 3}
   suitIcons:
-  - {fileID: 21300000, guid: 7a1a26300adb242478ba516b442cbf48, type: 3}
-  - {fileID: 21300000, guid: e1086cb4959fc4e158b98e155cc8afdc, type: 3}
-  - {fileID: 21300000, guid: 13871953734144a96a2d1ded0a7092eb, type: 3}
-  - {fileID: 21300000, guid: 2a88e99b0e8914742b71fd9d62c1528c, type: 3}
-  - {fileID: 21300000, guid: a051acda48b504fab96d181464d4a8ee, type: 3}
+  - {fileID: 21300000, guid: b32458621f883b746901dbf152061bbd, type: 3}
+  - {fileID: 21300000, guid: fd35944325441424dbdefca81f568a32, type: 3}
+  - {fileID: 21300000, guid: 5ed4891627f7b0e408079948d4efc124, type: 3}
+  - {fileID: 21300000, guid: f3a51c7423a97e64e88003edf1ba55e7, type: 3}
+  - {fileID: 21300000, guid: 1c55274e704b0fd4c847d83768ef42ce, type: 3}
+  crownIcons:
+  - {fileID: 21300000, guid: 69d4da4a6b4bf534086906d3a1975d12, type: 3}
+  - {fileID: 21300000, guid: a8667690f87e11840a9e14b7dcb52eee, type: 3}
+  - {fileID: 21300000, guid: 9ba565bb26941314bbda47b9eca05268, type: 3}
 --- !u!4 &1379727557
 Transform:
   m_ObjectHideFlags: 0

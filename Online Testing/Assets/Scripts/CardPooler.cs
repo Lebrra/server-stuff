@@ -14,6 +14,7 @@ public class CardPooler : MonoBehaviour
     public GameObject cardPrefab;
 
     public Sprite[] suitIcons;
+    public Sprite[] crownIcons;
 
     private void Awake()
     {
@@ -59,6 +60,7 @@ public class CardPooler : MonoBehaviour
         if (cardPool.Contains(card)) return;
 
         card.GetComponent<CardButton>().interactable = true;
+        card.GetComponent<CardButton>().UpdateCardImage(true);
         card.SetActive(false);
         cardPool.Add(card);
     }
@@ -67,22 +69,37 @@ public class CardPooler : MonoBehaviour
     /// <summary>
     /// Returns Sprite for corresponding suit
     /// </summary>
-    public Sprite GetSuitImage(Suit suit)
+    public (Sprite, Color) GetSuitImage(Suit suit)
     {
         switch (suit)
         {
             default:
-                return null;
+                return (null, Color.black);
             case Suit.Club:
-                return suitIcons[0];
+                return (suitIcons[0], Color.black);
             case Suit.Diamond:
-                return suitIcons[1];
+                return (suitIcons[1], Color.red);
             case Suit.Heart:
-                return suitIcons[2];
+                return (suitIcons[2], Color.red);
             case Suit.Spade:
-                return suitIcons[3];
+                return (suitIcons[3], Color.black);
             case Suit.Joker:
-                return suitIcons[4];
+                return (suitIcons[4], Color.gray);
+        }
+    }
+
+    public Sprite GetCrownImage(int value)
+    {
+        switch (value)
+        {
+            default:
+                return null;
+            case 11:
+                return crownIcons[0];
+            case 12:
+                return crownIcons[1];
+            case 13:
+                return crownIcons[2];
         }
     }
 }

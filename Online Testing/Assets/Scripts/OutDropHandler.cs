@@ -282,6 +282,7 @@ public class OutDropHandler : DropHandler, IDropHandler, IComparer<CardButton>
         cards.Clear();
         wildCards.Clear();
         outState = Out.None;
+        if (!canDrop) ContextDisable();
         canDrop = true;
     }
 }

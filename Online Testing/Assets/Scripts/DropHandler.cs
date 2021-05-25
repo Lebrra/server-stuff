@@ -456,6 +456,11 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
 
     public virtual void clearDropZone()
     {
+        if (!canDrop)
+        {
+            // a wild card is using context buttons
+            ContextDisable();
+        }
         cards.Clear();
         wildCards.Clear();
         outState = Out.None;

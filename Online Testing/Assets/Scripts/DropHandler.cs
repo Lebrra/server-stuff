@@ -359,6 +359,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
                     cards[0].myCard.usedAsWild = false;
                     cards.Remove(cards[0]);
                     outState = Out.None;
+                    outHandler.RemoveEmptyDrop();
                 }
 
                 return true;

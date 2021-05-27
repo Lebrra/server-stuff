@@ -122,7 +122,7 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
         if (wasInteracted)
         {
             // just snap back to where you came from
-            //transform.SetParent(parentObject);
+            transform.SetParent(parentObject);
             return;
         }
         

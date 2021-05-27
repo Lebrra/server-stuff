@@ -19,6 +19,7 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
     bool waitForClick = false;
 
     public bool interactable = true;
+    bool wasInteracted = false;
 
     Image[] cardIconSprites = null;
     Image crownSprite = null;
@@ -83,7 +84,11 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (!interactable) return;
+        if (!interactable)
+        {
+            wasInteracted = true;
+            return;
+        }
 
         gameObject.AddComponent<Canvas>().overrideSorting = true;
         
@@ -114,6 +119,12 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
     {
         if (!interactable) return;
 
+        if (wasInteracted)
+        {
+            // just snap back to where you came from
+            //transform.SetParent(parentObject);
+            return;
+        }
         
         if (GetComponent<Canvas>())
         {

@@ -84,13 +84,17 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        gameObject.AddComponent<Canvas>().overrideSorting = true;
+        GetComponent<Canvas>().sortingOrder = 10;
+
         if (!interactable)
         {
             wasInteracted = true;
             return;
         }
 
-        gameObject.AddComponent<Canvas>().overrideSorting = true;
+        //gameObject.AddComponent<Canvas>().overrideSorting = true;
+        //GetComponent<Canvas>().sortingOrder = 10;
         
         GetComponent<Image>().raycastTarget = false;
         
@@ -117,17 +121,22 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (!interactable) return;
-        
         if (GetComponent<Canvas>())
         {
             Destroy(GetComponent<Canvas>());
         }
 
+        if (!interactable)
+        {
+            wasInteracted = false;
+            return;
+        }
+
         if (wasInteracted)
         {
             // just snap back to where you came from
-            transform.SetParent(parentObject);
+            ReturnToLastParent();
+            wasInteracted = false;
             return;
         }
 
@@ -226,10 +235,24 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
     public void ReturnToHand()
     {
-        print("Returned to hand");
+        Debug.Log("Returned to hand", gameObject);
         parentObject = handObject;
         transform.SetParent(parentObject);
         
+        if (transform.parent.GetComponent<HorizontalOrVerticalLayoutGroup>())
+        {
+            transform.parent.GetComponent<HorizontalOrVerticalLayoutGroup>().enabled = false;
+            transform.parent.GetComponent<HorizontalOrVerticalLayoutGroup>().enabled = true;
+        }
+
+        interactable = true;
+    }
+
+    public void ReturnToLastParent()
+    {
+        Debug.Log($"Returned to {parentObject.gameObject}", gameObject);
+        transform.SetParent(parentObject);
+
         if (transform.parent.GetComponent<HorizontalOrVerticalLayoutGroup>())
         {
             transform.parent.GetComponent<HorizontalOrVerticalLayoutGroup>().enabled = false;

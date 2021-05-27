@@ -24351,7 +24351,7 @@ MonoBehaviour:
   discardTransform: {fileID: 604723576}
   cardInDiscard: {fileID: 0}
   previousCard: 
-  outPanel: {fileID: 362191950}
+  outPanel: {fileID: 362191952}
   firstOutPanel: {fileID: 926284772}
   firstOutButton: {fileID: 1139792342}
   outButton: {fileID: 998809154}

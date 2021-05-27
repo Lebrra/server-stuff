@@ -349,6 +349,18 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
                 outHandler.ReturnToHand(card);
                 print($"Removed {card} from CheckPile on {gameObject.name}");
                 cards.Sort(Compare);
+
+                // check if remaining outpile has one card which is a wild card
+                if(cards.Count == 1 && cards[0].myCard.usedAsWild)
+                {
+                    outHandler.ReturnToHand(cards[0]);
+                    cards[0].ReturnToHand();
+                    wildCards.Remove(cards[0]);
+                    cards[0].myCard.usedAsWild = false;
+                    cards.Remove(cards[0]);
+                    outState = Out.None;
+                }
+
                 return true;
             }
 

@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 using Random = System.Random;
+using System.Linq;
 
 [System.Serializable]
 public class AudioObject
 {
     public AudioCategory type;
+    public AudioEffect effect;
     public AudioClip clip;
     public float loudness;
     public bool active;
@@ -21,6 +23,13 @@ public enum  AudioCategory
 }
 
 
+[System.Serializable]
+public enum AudioEffect
+{
+    CardDraw, CardPlacement, CardPickUp, GoingOut, RoundEnd, YourTurn, LobbySound, GameStart, ButtonPress
+}
+
+
 public class AudioManager : MonoBehaviour
 {
     
@@ -30,6 +39,7 @@ public class AudioManager : MonoBehaviour
     public AudioSource IncidentalSource;
 
     public AudioObject [] Soundtracks;
+    public AudioObject[] Effects;
     public int lastRandomInt = -1;
 
     public AudioMixer mixer;
@@ -88,6 +98,12 @@ public class AudioManager : MonoBehaviour
         SoundtrackSource.Play();
         
         yield return true;
+    }
+
+    public void PlayEffect(AudioEffect e)
+    {
+        var clip = Array.Find(Effects, element => element.effect == e).clip;
+        IncidentalSource.PlayOneShot(clip);
     }
     
     

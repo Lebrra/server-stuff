@@ -118,6 +118,11 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
     public void OnEndDrag(PointerEventData eventData)
     {
         if (!interactable) return;
+        
+        if (GetComponent<Canvas>())
+        {
+            Destroy(GetComponent<Canvas>());
+        }
 
         if (wasInteracted)
         {
@@ -125,13 +130,7 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
             transform.SetParent(parentObject);
             return;
         }
-        
-        if (GetComponent<Canvas>())
-        {
-            Destroy(GetComponent<Canvas>());
-        }
 
-        
         bool hitHand = false;
         bool drop = false;
         

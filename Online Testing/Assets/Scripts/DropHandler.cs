@@ -220,7 +220,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
 
     IEnumerator disableDropCards()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(0.5f);
         var _cards = GetComponentsInChildren<CardButton>(false);
         // print("cards? " + _cards.Length);
         foreach (var _card in _cards)
@@ -233,7 +233,7 @@ public class DropHandler : MonoBehaviour, IDropHandler, IComparer<CardButton>
     IEnumerator enableDropCards()
     {
         
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(0.5f);
         var _cards = GetComponentsInChildren<CardButton>();
         if (_cards.Length < 1)
             StopCoroutine(enableDropCards());

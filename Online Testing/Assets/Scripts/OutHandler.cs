@@ -23,13 +23,13 @@ public class OutHandler : MonoBehaviour
             goOutBtn.gameObject.SetActive(false);
         }
 
-        OpenOutMenu();
+        //OpenOutMenu();
     }
 
-    private void OnDisable()
+    /*private void OnDisable()
     {
         CloseOutMenu();
-    }
+    }*/
 
     public void OpenOutMenu()
     {

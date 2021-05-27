@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     public string previousCard;
 
     [Header("Panels")]
-    public GameObject outPanel;
+    public OutHandler outPanel;
     public GameObject firstOutPanel;
 
     [Header("Out Objects")]
@@ -141,7 +141,16 @@ public class GameManager : MonoBehaviour
 
     public void openOutPanel(bool open)
     {
-        outPanel.SetActive(open);
+        if (open)
+        {
+            outPanel.gameObject.SetActive(open);
+            outPanel.OpenOutMenu();
+        }
+        else
+        {
+            outPanel.CloseOutMenu();
+            outPanel.gameObject.SetActive(open);
+        }
     }
 
     public void openFirstOutPanel(bool open)

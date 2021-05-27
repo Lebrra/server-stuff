@@ -225,6 +225,8 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
             transform.parent.GetComponent<HorizontalOrVerticalLayoutGroup>().enabled = false;
             transform.parent.GetComponent<HorizontalOrVerticalLayoutGroup>().enabled = true;
         }
+
+        interactable = true;
     }
 
     void ShrinkCard()
@@ -386,6 +388,7 @@ public class CardButton : MonoBehaviour, IPointerClickHandler, IBeginDragHandler
 
                 cardIconSprites[0].sprite = cardCustomization.Item1;
                 cardIconSprites[0].color = cardCustomization.Item2;
+                cardIconSprites[0].transform.localScale = Vector3.one * scaler;
             }
             else
             {

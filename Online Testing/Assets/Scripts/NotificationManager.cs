@@ -59,6 +59,8 @@ public class NotificationManager : MonoBehaviour
 
     public List<Notification> Notifications;
 
+    NotificationsPanel myPanel;
+
     private void Awake()
     {
         if (instance == null)
@@ -72,10 +74,14 @@ public class NotificationManager : MonoBehaviour
         
         image = GetComponent<Image>();
         color = image.color;
+
+        myPanel = transform.parent.GetComponentInChildren<NotificationsPanel>(true);
+        if (!myPanel) Debug.LogWarning("myPanel not found!", gameObject);
+        else myPanel.RoundReset();
     }
     
     // Update is called once per frame
-    void Update()
+   /* void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -92,7 +98,7 @@ public class NotificationManager : MonoBehaviour
         // {
         //     myTurn();
         // }
-    }
+    }*/
 
     public void myTurn(bool state)
     {
@@ -103,6 +109,12 @@ public class NotificationManager : MonoBehaviour
     
     public bool addNotification(Notification newNotification)
     {
+        // send notification to log
+        if(myPanel)
+        {
+            myPanel.AddMessage("<#" + ColorUtility.ToHtmlStringRGBA(newNotification.Color) + ">" + newNotification.Message);
+        }
+
         if (newNotification.Turn)
         {
             myTurn(true);
@@ -166,5 +178,11 @@ public class NotificationManager : MonoBehaviour
     {
         StopAllCoroutines();
         Notifications = new List<Notification>();
+        myPanel?.RoundReset();
+    }
+
+    public void OpenPanel()
+    {
+        myPanel.gameObject.SetActive(true);
     }
 }

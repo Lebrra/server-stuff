@@ -8,6 +8,8 @@ using UnityEngine.UI;
 /// </summary>
 public class ResolutionManager : MonoBehaviour
 {
+    public float convertionRatio = -1F;
+
     private void Awake()
     {
         Debug.Log("Screen resolution: " + Screen.currentResolution);
@@ -18,19 +20,24 @@ public class ResolutionManager : MonoBehaviour
             //if(Screen.currentResolution.width < 2000)
             //    canvas.referenceResolution = new Vector2(Screen.currentResolution.width, Screen.currentResolution.height);
 
+            float widthComparator;
+
             if (Screen.currentResolution.width / Screen.currentResolution.height <= 1.5F)
             {
-                float height = Screen.currentResolution.height * 1920F / Screen.currentResolution.width;
-                canvas.referenceResolution = new Vector2(1920F, height);
+                widthComparator = 1920F;
             }
             else
             {
-                float height = Screen.currentResolution.height * 2220F / Screen.currentResolution.width;
-                canvas.referenceResolution = new Vector2(2220F, height);
+                widthComparator = 2220F;
             }
+
+            float height = Screen.currentResolution.height * widthComparator / Screen.currentResolution.width;
+            canvas.referenceResolution = new Vector2(widthComparator, height);
+            convertionRatio = height / 2220F * 2F;
 
             canvasCount++;
         }
         Debug.Log("Canvases altered: " + canvasCount);
+        Debug.Log("conversion ratio: " + convertionRatio);
     }
 }

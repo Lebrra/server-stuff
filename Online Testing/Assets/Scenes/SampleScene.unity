@@ -3009,7 +3009,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 961346d7e16a445ff93777573e78efd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  url: ws://michigan-server.herokuapp.com/socket.io/?EIO=4&transport=websocket
+  url: ws://localhost:3000/socket.io/?EIO=4&transport=websocket
   autoConnect: 1
   reconnectDelay: 5000
   ackExpirationTime: 1800
@@ -3775,7 +3775,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -27.5, y: -41.19995}
+  m_AnchoredPosition: {x: -27.5, y: -41.200195}
   m_SizeDelta: {x: 472.5, y: -153.3}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1401278235
@@ -5510,7 +5510,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 127.9}
+  m_AnchoredPosition: {x: 0, y: 127.8999}
   m_SizeDelta: {x: 0, y: 127.9}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &1955394206
